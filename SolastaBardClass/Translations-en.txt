@@ -1,0 +1,88 @@
+Class/&BardClassTitle Bard
+Class/&BardClassDescription Whether scholar, skald, or scoundrel, a bard weaves magic through words and music to inspire allies, demoralize foes, manipulate minds, create illusions, and even heal wounds. The bard is a master of song, speech, and the magic they contain.
+Subclass/&BardSubclassPathTitle	Path
+Subclass/&BardSubclassPathDescription	Select a Bard path
+Subclass/&BardSubclassPathOfTheBearTitle	Path of the Bear
+Subclass/&BardSubclassPathOfTheBearDescription You follow the path of the bear to mightily stand against all foes and resist all damage while raging.
+Feature/&BardWeaponProficiencyTitle Bard Weapon Proficiencies
+Feature/&BardArmorProficiencyTitle Bard Armor Proficiencies
+Feature/&BardToolsProficiencyTitle Bard Tool Proficiencies
+Feature/&BardClassSkillPointPoolTitle	Bard skills
+Feature/&BardClassSkillPointPoolDescription	Choose any 3 skills
+Feature/&BardClassSpellcastingTitle Bard Spellcasting
+Feature/&BardClassSpellcastingDescription Can cast spells from Bard Spells list
+Feature/&BardClassRitualCastingDescription You can cast a known spell as a ritual if the spell has the ritual tag.
+Feature/&BardClassDangerSenseDexteritySavingThrowAffinityTitle	Danger Sense
+Feature/&BardClassDangerSenseDexteritySavingThrowAffinityDescription	Advantage on Dexterity Saving Throws.
+Feature/&BardClassFastMovementMovementAffinityTitle	Fast movement
+Feature/&BardClassFastMovementMovementAffinityDescription Your walking speed increases 10 ft
+Feature/&BardClassRageClassPowerTitle	Rage
+Feature/&BardClassRageClassPowerDescription You start with two rages per long rest.  As a bonus action you can enter a rage for one minute and gain the following: Advantage on Strength checks and Strength saving throws, a bonus to damage rolls of +2, and resistance to bludgeoning, piercing, and slashing damage.  Your number of rages per long rest increases to 3 at level 3 and 4 at level 6.  The damage bonus becomes +3 at level 9.
+Feature/&BardClassPathOfBearRageClassPowerTitle Bear Path Rage
+Feature/&BardClassPathOfBearRageClassPowerDescription You get 3 rages per long rest.  While in a Bear rage you gain the following: Advantage on Strength checks and Strength saving throws, a bonus to damage rolls of +2 (+3 at level 9), and resistance to all damage.
+Feature/&BardClassPathOfBearRageClassPowerLevel6Title Bear Path Level 6
+Feature/&BardClassPathOfBearRageClassPowerLevel6Description Your carrying capacity doubles at all times.  You get 4 rages per long rest.  While in a Bear rage you gain the following: Advantage on Strength checks and Strength saving throws, a bonus to damage rolls of +2 (+3 at level 9), and resistance to all damage.
+Feature/&BardClassPathOfBearRageClassPowerLevel9Title Bear Path Level 9
+Feature/&BardClassPathOfBearRageClassPowerLevel9Description You get 4 rages per long rest.  While in a Bear rage you gain the following: Advantage on Strength checks and Strength saving throws, a bonus to damage rolls of +3, and resistance to all damage.
+Feature/&BardClassRageClassConditionTitle	Raging
+Feature/&BardClassRageClassConditionDescription While in a rage you gain the following: Advantage on Strength checks and Strength saving throws, a bonus to damage rolls of +2 (+3 at level 9), and resistance to bludgeoning, piercing, and slashing damage.
+Feature/&BardClassRageClassBearConditionTitle Raging (Bear)
+Feature/&BardClassRageClassBearConditionDescription While in a Bear rage you gain the following: Advantage on Strength checks and Strength saving throws, a bonus to damage rolls of +2 (+3 at level 9), and resistance to all damage.
+Feature/&BardClassRageClassStrengthSavingThrowAffinityTitle	Strength Save Advantage
+Feature/&BardClassRageClassStrengthSavingThrowAffinityDescription Advantage on Strength saves due to a condition (e.g. Raging)
+Feature/&BardClassRageClassDamageBonusAttackModifierTitle Rage Damage
+Feature/&BardClassRageClassDamageBonusAttackModifierDescription	Rage damage bonus of +2 (+3 at level 9)
+Feature/&BardClassInitiativeAdvantageTitle Feral Instinct
+Feature/&BardClassInitiativeAdvantageDescription Your instincts are so honed that you have advantage on initiative rolls.
+Feature/&BardClassUnarmoredDefenseTitle	Fighting Style: Unarmored Defense
+Stage/&SubclassSelectionStagePathHeader Bard Paths
+Stage/&SubclassSelectionStagePathTitle Bard Path
+Stage/&SubclassSelectionStagePathFeatures Path features
+Subclass/&BardSubclassPathOfFrenzyTitle	Path of Frenzy 
+Subclass/&BardSubclassPathOfFrenzyDescription For some Bards, rage is a means to an end – that end being violence. The Path of Frenzy is a path of untrammeled fury, slick with blood. As you enter the berserker's rage, you thrill in the chaos of battle, heedless of your own health or well-being.
+Feature/&BardClassPathOfFrenzyRageClassPowerTitle	Frenzy Rage
+Feature/&BardClassPathOfFrenzyRageClassPowerDescription	You get 3 rages per long rest.  While in a Frenzy rage you gain the following: An extra attack, Advantage on Strength checks and Strength saving throws, a bonus to damage rolls of +2 (+3 at level 9), and resistance to bludgeoning, piercing, and slashing damage.  The damage bonus becomes +3 at level 9.  After your rage ends, you become hindered and your movement speed is reduced by 2 hexes (10 ft) and your strength is sapped (Disadvantage on Strength Abilities and Saves) for 10 minutes.  Entering another rage removes this hindrance effect.
+Feature/&BardClassPathOfFrenzyRageClassPowerLevel6Title Frenzy Rage
+Feature/&BardClassPathOfFrenzyRageClassPowerLevel6Description You get 4 rages per long rest.  While in a Frenzy rage you gain the following: An extra attack, Immunity to being Charmed or Frightened, Advantage on Strength checks and Strength saving throws, a bonus to damage rolls of +2 (+3 at level 9), and resistance to bludgeoning, piercing, and slashing damage.  The damage bonus becomes +3 at level 9.  After your rage ends, you become hindered and your movement speed is reduced by 2 hexes (10 ft) and your strength is sapped (Disadvantage on Strength Abilities and Saves) for 10 minutes.  Entering another rage removes this hindrance effect.
+Feature/&BardClassPathOfFrenzyRageClassPowerLevel9Title Frenzy Rage
+Feature/&BardClassPathOfFrenzyRageClassPowerLevel9Description You get 4 rages per long rest.  While in a Frenzy rage you gain the following: An extra attack, Immunity to being Charmed or Frightened, Advantage on Strength checks and Strength saving throws, a bonus to damage rolls of +3, and resistance to bludgeoning, piercing, and slashing damage.  After your rage ends, you become hindered and your movement speed is reduced by 2 hexes (10 ft) and your strength is sapped (Disadvantage on Strength Abilities and Saves)  for 10 minutes.  Entering another rage removes this hindrance effect.
+Feature/&BardPathOfFrenzyRageClassConditionTitle Raging (Frenzy)
+Feature/&BardPathOfFrenzyRageClassConditionDescription While in a Frenzied rage gain the following: An extra attack, Advantage on Strength checks and Strength saving throws, a bonus to damage rolls of +2 (+3 at level 9), and resistance to bludgeoning, piercing, and slashing damage.  The damage bonus becomes +3 at level 9.  After your rage ends, you become hindered and your movement speed is reduced by 2 hexes (10 ft) and your strength is sapped (Disadvantage on Strength Abilities and Saves) for 10 minutes.  Entering another rage removes this hindrance effect.
+Feature/&BardPathOfFrenzyRageClassConditionLevel6Title Raging (Frenzy)
+Feature/&BardPathOfFrenzyRageClassConditionLevel6Description While in a Frenzied rage gain the following: An extra attack, Immunity to being Charmed or Frightened, Advantage on Strength checks and Strength saving throws, a bonus to damage rolls of +2 (+3 at level 9), and resistance to bludgeoning, piercing, and slashing damage.  The damage bonus becomes +3 at level 9.  After your rage ends, you become hindered and your movement speed is reduced by 2 hexes (10 ft) and your strength is sapped (Disadvantage on Strength Abilities and Saves)  for 10 minutes.  Entering another rage removes this hindrance effect.
+Feature/&BardPathOfFrenzyRageClassConditionLevel9Title Raging (Frenzy)
+Feature/&BardPathOfFrenzyRageClassConditionLevel9Description While in a Frenzied rage gain the following: An extra attack, Immunity to being Charmed or Frightened, Advantage on Strength checks and Strength saving throws, a bonus to damage rolls of +3, and resistance to bludgeoning, piercing, and slashing damage.  After your rage ends, you become hindered and your movement speed is reduced by 2 hexes (10 ft) and your strength is sapped (Disadvantage on Strength Abilities and Saves)  for 10 minutes.  Entering another rage removes this hindrance effect.
+Feature/&BardPathOfFrenzyRageClassHinderedConditionTitle Hindered (Rage end)
+Feature/&BardPathOfFrenzyRageClassHinderedConditionDescription You have become hindered from your Frenzied rage and lose 2 movement (10 ft of movement) and your strength is sapped (Disadvantage on Strength Abilities and Saves) for 10 minutes.
+Feature/&BardPathOfFrenzyExtraAttackConditionTitle Extra Frenzy Attack
+Feature/&BardPathOfFrenzyExtraAttackConditionDescription You get an extra attack while in a Frenzied Rage.
+Feature/&IntimidatePowerTitle	Intimidate Foe
+Feature/&IntimidatePowerDescription	You can use your action to frighten someone with your menacing presence. When you do so, choose one creature that you can see within 30 feet of you. It must succeed on a Wisdom saving throw (DC equal to 8 + your proficiency bonus + your Strength modifier) or be frightened of you for two rounds. 
+Subclass/&BardSubclassPathOfTheReaverTitle Path of the Death Reaver
+Subclass/&BardSubclassPathOfTheReaverDescription	Death follows in your wake and you have learned to harness its power.  You have learned to channel the force of death into your own blows and are fueled by felling enemies.
+Feature/&BardClassPathOfTheReaverRageClassPowerTitle Rage (Death Reaver)
+Feature/&BardClassPathOfTheReaverRageClassPowerDescription You get 3 rages per long rest.  While in a Death Reaver rage you gain the following: A damage bonus of d4 necrotic damage on each attack, Advantage on Strength checks and Strength saving throws, a bonus to damage rolls of +2 (+3 at level 9), and resistance to necrotic, bludgeoning, piercing, and slashing damage.  The main rage damage bonus becomes +3 at level 9 and the necrotic damage increases to a d6 at level 6 and a d8 at level 10.
+Feature/&BardClassPathOfTheReaverRageClassPowerLevel6Title Rage (Death Reaver)
+Feature/&BardClassPathOfTheReaverRageClassPowerLevel6Description You get 4 rages per long rest.  While in a Death Reaver rage you gain the following: A damage bonus of d6 necrotic damage on each attack, Advantage on Strength checks and Strength saving throws, a bonus to damage rolls of +2 (+3 at level 9), and resistance to necrotic, bludgeoning, piercing, and slashing damage.  The main rage damage bonus becomes +3 at level 9 and the necrotic damage increases to a d8 at level 10.
+Feature/&BardClassPathOfTheReaverRageClassPowerLevel9Title  Rage (Death Reaver)
+Feature/&BardClassPathOfTheReaverRageClassPowerLevel9Description You get 4 rages per long rest.  While in a Death Reaver rage you gain the following: A damage bonus of d6 necrotic damage on each attack, Advantage on Strength checks and Strength saving throws, a bonus to damage rolls of +3, and resistance to necrotic, bludgeoning, piercing, and slashing damage.  The necrotic damage increases to a d8 at level 10.
+Feature/&BardClassPathOfTheReaverRageClassPowerLevel10Title Rage (Death Reaver)
+Feature/&BardClassPathOfTheReaverRageClassPowerLevel10Description You get 4 rages per long rest.  While in a Death Reaver rage you gain the following: A damage bonus of d8 necrotic damage on each attack, Advantage on Strength checks and Strength saving throws, a bonus to damage rolls of +3, and resistance to necrotic, bludgeoning, piercing, and slashing damage.  The necrotic damage increases to a d8 at level 10.
+Feature/&BardPathOfTheReaverRageClassConditionTitle Death Reaver Rage
+Feature/&BardPathOfTheReaverRageClassConditionDescription While in a Death Reaver rage you gain the following: A damage bonus of d4 (d6 at level 6, d8 at level 10) necrotic damage on each attack, Advantage on Strength checks and Strength saving throws, a bonus to damage rolls of +2 (+3 at level 9), and resistance to necrotic, bludgeoning, piercing, and slashing damage.
+Feature/&BardPathOfTheReaverRageClassConditionLevel6Title Death Reaver Rage
+Feature/&BardPathOfTheReaverRageClassConditionLevel6Description While in a Death Reaver rage you gain the following: A damage bonus of d4 (d6 at level 6, d8 at level 10) necrotic damage on each attack, Advantage on Strength checks and Strength saving throws, a bonus to damage rolls of +2 (+3 at level 9), and resistance to necrotic, bludgeoning, piercing, and slashing damage.
+Feature/&BardPathOfTheReaverRageClassConditionLevel9Title Death Reaver Rage
+Feature/&BardPathOfTheReaverRageClassConditionLevel9Description While in a Death Reaver rage you gain the following: A damage bonus of d4 (d6 at level 6, d8 at level 10) necrotic damage on each attack, Advantage on Strength checks and Strength saving throws, a bonus to damage rolls of +3, and resistance to necrotic, bludgeoning, piercing, and slashing damage.
+Feature/&BardPathOfTheReaverExtraAttackOnKillTitle Zealous Execution
+Feature/&BardPathOfTheReaverExtraAttackOnKillDescription Felling an enemy gives you extra zeal and energy, you can attack again after landing a killing blow.
+Feature/&BardPathOfTheReaverDeathsFearPowerTitle Death's Fear
+Feature/&BardPathOfTheReaverDeathsFearPowerDescription Once per long rest, you can put the fear of death into your enemies.  All enemies within range 6 (30 ft) must must succeed on a Wisdom saving throw (DC equal to 8 + your proficiency bonus + your Strength modifier) or be frightened of you for one minute (with additional saves at the end of their turns). 
+Feature/&BardPathOfTheReaverExtraDamageTitle Death Reaver Damage
+Feature/&BardPathOfTheReaverExtraDamageDescription Do an extra d4 necrotic damage on each hit.
+Feature/&BardPathOfTheReaverExtraDamageLevel6Title Death Reaver Damage
+Feature/&BardPathOfTheReaverExtraDamageLevel6Description Do an extra d6 necrotic damage on each hit.
+Feature/&BardPathOfTheReaverExtraDamageLevel10Title Death Reaver Damage
+Feature/&BardPathOfTheReaverExtraDamageLevel10Description Do an extra d8 necrotic damage on each hit.
+Feedback/&AdditionalDamageDeathsTouchLine Death's touch does additional necrotic damage!
+Feedback/&AdditionalDamageDeathsTouchFormat Death's touch!
