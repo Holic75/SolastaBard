@@ -358,7 +358,7 @@ namespace SolastaBardClass.Helpers
                                              int dice_number,
                                              RuleDefinitions.DieType die_type,
                                              List<string> stats,
-                                             List<string> proficiencies) : base(DatabaseHelper.FeatureDefinitionAbilityCheckAffinitys.AbilityCheckAffinityDomainInsightDivineIntuition, name, guid)
+                                             List<string> proficiencies) : base(DatabaseHelper.FeatureDefinitionAbilityCheckAffinitys.AbilityCheckAffinityGuided, name, guid)
         {
             if (title_string != "")
             {
@@ -372,6 +372,7 @@ namespace SolastaBardClass.Helpers
             {
                 Definition.GuiPresentation.SetSpriteReference(sprite);
             }
+
 
             Definition.AffinityGroups.Clear();
             for (int i = 0; i < stats.Count; i++)

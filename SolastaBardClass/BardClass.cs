@@ -88,7 +88,8 @@ namespace SolastaBardClass
             this.AddEquipmentRow(new List<CharacterClassDefinition.HeroEquipmentOption>
             {
                 EquipmentOptionsBuilder.Option(DatabaseHelper.ItemDefinitions.Dagger, EquipmentDefinitions.OptionWeapon, 1),
-                EquipmentOptionsBuilder.Option(DatabaseHelper.ItemDefinitions.Leather, EquipmentDefinitions.OptionArmor, 1)
+                EquipmentOptionsBuilder.Option(DatabaseHelper.ItemDefinitions.Leather, EquipmentDefinitions.OptionArmor, 1),
+                EquipmentOptionsBuilder.Option(DatabaseHelper.ItemDefinitions.ComponentPouch, EquipmentDefinitions.OptionFocus, 1)
             });
 
             var saving_throws = Helpers.ProficiencyBuilder.CreateSavingthrowProficiency("BardSavingthrowProficiency",
@@ -295,15 +296,13 @@ namespace SolastaBardClass
                                                                                                          Helpers.Stats.getAllStats().ToArray()
                                                                                                          );
 
-                var inspiration_attack = Helpers.AbilityCheckAffinityBuilder.createAbilityCheckAffinity("BardClassInspirationAttackBonus" + dice[i].ToString(),
+                var inspiration_attack = Helpers.AttackBonusBuilder.createAttackBonus("BardClassInspirationAttackBonus" + dice[i].ToString(),
                                                                                                          "",
                                                                                                          "",
                                                                                                          "",
                                                                                                          null,
-                                                                                                         RuleDefinitions.CharacterAbilityCheckAffinity.None,
                                                                                                          1,
-                                                                                                         dice[i],
-                                                                                                         Helpers.Stats.getAllStats().ToArray()
+                                                                                                         dice[i]
                                                                                                          );
                 var inspiration_condition = Helpers.ConditionBuilder.createConditionWithInterruptions("BardClassInspirationCondition" + dice[i].ToString(),
                                                                                                       "",
@@ -326,6 +325,7 @@ namespace SolastaBardClass
                 effect.DurationParameter = 10;
                 effect.DurationType = RuleDefinitions.DurationType.Minute;
                 effect.EffectForms.Clear();
+                effect.SetTargetFilteringTag((RuleDefinitions.TargetFilteringTag)ExtraTargetFilteringTag.NonCaster);
 
                 var effect_form = new EffectForm();
                 effect_form.ConditionForm = new ConditionForm();
