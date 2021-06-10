@@ -13,6 +13,8 @@ namespace SolastaBardClass
         const string BardClassNameGuid = "274106b8-0376-4bcd-bd1b-440633a394ae";
         const string BardClassSubclassesGuid = "be865126-d7c3-45f3-b891-e77bd8b00cb1";
 
+        static public Dictionary<RuleDefinitions.DieType, FeatureDefinitionPower> inspiration_powers = new Dictionary<RuleDefinitions.DieType, FeatureDefinitionPower>();
+
         protected BardClassBuilder(string name, string guid) : base(name, guid)
         {
             var rogue = DatabaseHelper.CharacterClassDefinitions.Rogue;
@@ -28,23 +30,33 @@ namespace SolastaBardClass
             Definition.SetRequiresDeity(false);
 
             Definition.AbilityScoresPriority.Clear();
-            Definition.AbilityScoresPriority.AddRange(new List<string> {"Charisma", "Dexterity", "Constitution", "Intelligence", "Strength", "Wisdom" });
+            Definition.AbilityScoresPriority.AddRange(new List<string> {Helpers.Stats.Charisma,
+                                                                        Helpers.Stats.Dexterity,
+                                                                        Helpers.Stats.Constitution,
+                                                                        Helpers.Stats.Intelligence,
+                                                                        Helpers.Stats.Strength,
+                                                                        Helpers.Stats.Wisdom});
 
             Definition.FeatAutolearnPreference.AddRange(rogue.FeatAutolearnPreference);
             Definition.PersonalityFlagOccurences.AddRange(rogue.PersonalityFlagOccurences);
 
             Definition.SkillAutolearnPreference.Clear();
-            Definition.SkillAutolearnPreference.AddRange(new List<string>{"Persuasion", "Deception", "Intimidation", "Stealth", "Acrobatics", "Investigation", "Arcana", "History", "Insight" });
+            Definition.SkillAutolearnPreference.AddRange(new List<string> { Helpers.Skills.Persuasion,
+                                                                            Helpers.Skills.Deception,
+                                                                            Helpers.Skills.Acrobatics,
+                                                                            Helpers.Skills.Stealth,
+                                                                            Helpers.Skills.Intimidation,
+                                                                            Helpers.Skills.Arcana,
+                                                                            Helpers.Skills.History,
+                                                                            Helpers.Skills.Insight });
 
             Definition.ToolAutolearnPreference.Clear();
-            Definition.ToolAutolearnPreference.AddRange(new List<string> { "ThievesToolsType",  "EnchantingToolType" });
+            Definition.ToolAutolearnPreference.AddRange(new List<string> { Helpers.Tools.ThievesTool, Helpers.Tools.EnchantingTool });
 
 
             Definition.EquipmentRows.AddRange(rogue.EquipmentRows);
             Definition.EquipmentRows.Clear();
-            List<CharacterClassDefinition.HeroEquipmentOption> list = new List<CharacterClassDefinition.HeroEquipmentOption>();
-            List<CharacterClassDefinition.HeroEquipmentOption> list2 = new List<CharacterClassDefinition.HeroEquipmentOption>();
-            List<CharacterClassDefinition.HeroEquipmentOption> list22 = new List<CharacterClassDefinition.HeroEquipmentOption>();
+
             this.AddEquipmentRow(new List<CharacterClassDefinition.HeroEquipmentOption>
                                     {
                                         EquipmentOptionsBuilder.Option(DatabaseHelper.ItemDefinitions.Rapier, EquipmentDefinitions.OptionWeapon, 1),
@@ -79,14 +91,139 @@ namespace SolastaBardClass
                 EquipmentOptionsBuilder.Option(DatabaseHelper.ItemDefinitions.Leather, EquipmentDefinitions.OptionArmor, 1)
             });
 
+            var saving_throws = Helpers.ProficiencyBuilder.CreateSavingthrowProficiency("BardSavingthrowProficiency",
+                                                                                        "88d8752b-4956-4daf-91fc-84e6196c3985",
+                                                                                        Helpers.Stats.Charisma, Helpers.Stats.Dexterity);
+
+            var armor_proficiency = Helpers.ProficiencyBuilder.createCopy("BardArmorProficiency",
+                                                                          "06d31b31-69db-40d7-8701-a8547c4dd063",
+                                                                          "Feature/&BardArmorProficiencyTitle",
+                                                                          "",
+                                                                          DatabaseHelper.FeatureDefinitionProficiencys.ProficiencyRogueArmor
+                                                                          );
+
+            var weapon_proficiency = Helpers.ProficiencyBuilder.createCopy("BardWeaponProficiency",
+                                                                          "9a0ef52f-052a-4838-b3d4-2096ab67453e",
+                                                                          "Feature/&BardWeaponProficiencyTitle",
+                                                                          "",
+                                                                          DatabaseHelper.FeatureDefinitionProficiencys.ProficiencyRogueWeapon
+                                                                          );
+
+            var tools_proficiency = Helpers.ProficiencyBuilder.CreateToolsProficiency("BardToolsProficiency",
+                                                                                      "96d8987b-e682-44a6-afdb-763cbe5361ad",
+                                                                                      "Feature/&BardToolsProficiencyTitle",
+                                                                                      Helpers.Tools.EnchantingTool, Helpers.Tools.ThievesTool
+                                                                                      );
+
+            var skills = Helpers.PoolBuilder.createSkillProficiency("BardSkillProficiency",
+                                                                    "029f6c7e-f1fc-4030-9012-9c698c714f00",
+                                                                    "Feature/&BardClassSkillPointPoolTitle",
+                                                                    "Feature/&BardClassSkillPointPoolDescription",
+                                                                    3,
+                                                                    Helpers.Skills.getAllSkills());
+
+
+            var ritual_spellcasting = Helpers.RitualSpellcastingBuilder.createRitualSpellcasting("BardRitualSpellcasting", "25c48b9b-e2e9-4ea7-8a80-e6c413275980", "Feature/&BardClassRitualCastingDescription");
+
+            var bard_spelllist = Helpers.SpelllistBuilder.create9LevelSpelllist("BardClassSpelllist", "0f3d14a7-f9a1-41ec-a164-f3e0f3800104", "",
+                                                                                new List<SpellDefinition>
+                                                                                {
+                                                                                    DatabaseHelper.SpellDefinitions.AnnoyingBee,
+                                                                                    DatabaseHelper.SpellDefinitions.DancingLights,
+                                                                                    DatabaseHelper.SpellDefinitions.Dazzle,
+                                                                                    DatabaseHelper.SpellDefinitions.Light,
+                                                                                    DatabaseHelper.SpellDefinitions.ShadowArmor,
+                                                                                    DatabaseHelper.SpellDefinitions.ShadowDagger,
+                                                                                    DatabaseHelper.SpellDefinitions.Shine,
+                                                                                    DatabaseHelper.SpellDefinitions.Sparkle,
+                                                                                    DatabaseHelper.SpellDefinitions.TrueStrike
+                                                                                },
+                                                                                new List<SpellDefinition>
+                                                                                {
+                                                                                    DatabaseHelper.SpellDefinitions.AnimalFriendship,
+                                                                                    DatabaseHelper.SpellDefinitions.Bane,
+                                                                                    DatabaseHelper.SpellDefinitions.CharmPerson,
+                                                                                    DatabaseHelper.SpellDefinitions.ColorSpray,
+                                                                                    DatabaseHelper.SpellDefinitions.Command,
+                                                                                    DatabaseHelper.SpellDefinitions.ComprehendLanguages,
+                                                                                    DatabaseHelper.SpellDefinitions.CureWounds,
+                                                                                    DatabaseHelper.SpellDefinitions.DetectMagic,
+                                                                                    DatabaseHelper.SpellDefinitions.FaerieFire,
+                                                                                    DatabaseHelper.SpellDefinitions.FeatherFall,
+                                                                                    DatabaseHelper.SpellDefinitions.HealingWord,
+                                                                                    DatabaseHelper.SpellDefinitions.Heroism,
+                                                                                    DatabaseHelper.SpellDefinitions.Identify,
+                                                                                    DatabaseHelper.SpellDefinitions.Longstrider,
+                                                                                    DatabaseHelper.SpellDefinitions.Sleep,
+                                                                                    DatabaseHelper.SpellDefinitions.HideousLaughter,
+                                                                                    DatabaseHelper.SpellDefinitions.Thunderwave
+                                                                                },
+                                                                                new List<SpellDefinition>
+                                                                                {
+                                                                                    DatabaseHelper.SpellDefinitions.Aid,
+                                                                                    DatabaseHelper.SpellDefinitions.Blindness,
+                                                                                    DatabaseHelper.SpellDefinitions.CalmEmotions,
+                                                                                    DatabaseHelper.SpellDefinitions.EnhanceAbility,
+                                                                                    DatabaseHelper.SpellDefinitions.HoldPerson,
+                                                                                    DatabaseHelper.SpellDefinitions.Invisibility,
+                                                                                    DatabaseHelper.SpellDefinitions.Knock,
+                                                                                    DatabaseHelper.SpellDefinitions.LesserRestoration,
+                                                                                    DatabaseHelper.SpellDefinitions.MirrorImage,
+                                                                                    DatabaseHelper.SpellDefinitions.SeeInvisibility,
+                                                                                    DatabaseHelper.SpellDefinitions.Shatter,
+                                                                                    DatabaseHelper.SpellDefinitions.Silence
+                                                                                },
+                                                                                new List<SpellDefinition>
+                                                                                {
+                                                                                    DatabaseHelper.SpellDefinitions.BestowCurse,
+                                                                                    DatabaseHelper.SpellDefinitions.DispelMagic,
+                                                                                    DatabaseHelper.SpellDefinitions.Fear,
+                                                                                    DatabaseHelper.SpellDefinitions.HypnoticPattern,
+                                                                                    DatabaseHelper.SpellDefinitions.MassHealingWord,
+                                                                                    DatabaseHelper.SpellDefinitions.Slow,
+                                                                                    DatabaseHelper.SpellDefinitions.StinkingCloud,
+                                                                                    DatabaseHelper.SpellDefinitions.Tongues
+                                                                                },
+                                                                                new List<SpellDefinition>
+                                                                                {
+                                                                                    DatabaseHelper.SpellDefinitions.Confusion,
+                                                                                    DatabaseHelper.SpellDefinitions.DimensionDoor,
+                                                                                    DatabaseHelper.SpellDefinitions.FreedomOfMovement,
+                                                                                    DatabaseHelper.SpellDefinitions.GreaterInvisibility,
+                                                                                    DatabaseHelper.SpellDefinitions.PhantasmalKiller
+                                                                                },
+                                                                                new List<SpellDefinition>
+                                                                                {
+                                                                                    DatabaseHelper.SpellDefinitions.DominatePerson,
+                                                                                    DatabaseHelper.SpellDefinitions.GreaterRestoration,
+                                                                                    DatabaseHelper.SpellDefinitions.HoldMonster,
+                                                                                    DatabaseHelper.SpellDefinitions.MassCureWounds,
+                                                                                    DatabaseHelper.SpellDefinitions.RaiseDead
+                                                                                }
+                                                                                );
+
+            var bard_spellcasting = Helpers.SpellcastingBuilder.create9LevelSpontSpellcasting("BardClassSpellcasting",
+                                                                                              "f720edaf-92c4-43e3-8228-c48c0b41b93b",
+                                                                                              "Feature/&BardClassSpellcastingTitle",
+                                                                                              "Feature/&BardClassSpellcastingDescription",
+                                                                                              bard_spelllist,
+                                                                                              Helpers.Stats.Charisma,
+                                                                                              new List<int> {4,  5,  6,  7,  8,  9,  10, 11, 12, 14,
+                                                                                                             15, 15, 16, 18, 19, 19, 20, 22, 22, 22}
+                                                                                              );
+
+            createInspiration();
             Definition.FeatureUnlocks.Clear();
-            Definition.FeatureUnlocks.Add(new FeatureUnlockByLevel(BardClassSavingthrowProficiencyBuilder.BardClassSavingthrowProficiency, 1)); 
-            Definition.FeatureUnlocks.Add(new FeatureUnlockByLevel(BardClassArmorProficiencyBuilder.BardClassArmorProficiency, 1)); //Same armor as rogue
-            Definition.FeatureUnlocks.Add(new FeatureUnlockByLevel(BardClassWeaponProficiencyBuilder.BardClassWeaponProficiency, 1)); //Same weapons as rogue
-            Definition.FeatureUnlocks.Add(new FeatureUnlockByLevel(BardClassSkillPointPoolBuilder.BardClassSkillPointPool, 1)); //any 3 skills
-            Definition.FeatureUnlocks.Add(new FeatureUnlockByLevel(BardClassToolsProficiencyBuilder.BardClassToolsProficiency, 1)); //thieving tools and enchanting tools
-            Definition.FeatureUnlocks.Add(new FeatureUnlockByLevel(BardClassSpellcastingBuilder.BardClassSpellCasting, 1));
-            Definition.FeatureUnlocks.Add(new FeatureUnlockByLevel(BardClassRitualSpellcastingBuilder.BardClassRitualSpellcasting, 1)); //same as any other caster
+            Definition.FeatureUnlocks.Add(new FeatureUnlockByLevel(saving_throws, 1)); 
+            Definition.FeatureUnlocks.Add(new FeatureUnlockByLevel(armor_proficiency, 1));
+            Definition.FeatureUnlocks.Add(new FeatureUnlockByLevel(weapon_proficiency, 1));
+            Definition.FeatureUnlocks.Add(new FeatureUnlockByLevel(skills, 1));
+            Definition.FeatureUnlocks.Add(new FeatureUnlockByLevel(tools_proficiency, 1)); 
+            Definition.FeatureUnlocks.Add(new FeatureUnlockByLevel(bard_spellcasting, 1));
+            Definition.FeatureUnlocks.Add(new FeatureUnlockByLevel(ritual_spellcasting, 1));
+            Definition.FeatureUnlocks.Add(new FeatureUnlockByLevel(inspiration_powers[RuleDefinitions.DieType.D6], 1));
+            Definition.FeatureUnlocks.Add(new FeatureUnlockByLevel(inspiration_powers[RuleDefinitions.DieType.D8], 5));
+            Definition.FeatureUnlocks.Add(new FeatureUnlockByLevel(inspiration_powers[RuleDefinitions.DieType.D10], 10));
 
             //Level 3 Additional rage use - Add additional uses through subclasses since most times the subclass alters the rage power anyways.
             //Subclass feature at level 3
@@ -124,6 +261,102 @@ namespace SolastaBardClass
             //Level 20 	Primal Champion
             //Level 20 Unlimited Rages
 
+        }
+
+        static void createInspiration()
+        {
+            string inspiration_title_string = "Feature/&BardClassInspirationPowerTitle";
+            string inspiration_description_string = "Feature/&BardClassInspirationPowerDescription";
+
+
+            FeatureDefinitionPower previous_power = null;
+            var dice = new RuleDefinitions.DieType[] { RuleDefinitions.DieType.D6, RuleDefinitions.DieType.D8, RuleDefinitions.DieType.D10 };
+            for (int i = 0; i < dice.Length; i++)
+            {
+                var inspiration_saves = Helpers.SavingThrowAffinityBuilder.createSavingthrowAffinity("BardClassInspirationSavingthrowBonus" + dice[i].ToString(),
+                                                                                                     "",
+                                                                                                     "",
+                                                                                                     "",
+                                                                                                     null,
+                                                                                                     RuleDefinitions.CharacterSavingThrowAffinity.None,
+                                                                                                     1,
+                                                                                                     dice[i],
+                                                                                                     Helpers.Stats.getAllStats().ToArray()
+                                                                                                     );
+
+                var inspiration_skills = Helpers.AbilityCheckAffinityBuilder.createAbilityCheckAffinity("BardClassInspirationSkillsBonus" + dice[i].ToString(),
+                                                                                                         "",
+                                                                                                         "",
+                                                                                                         "",
+                                                                                                         null,
+                                                                                                         RuleDefinitions.CharacterAbilityCheckAffinity.None,
+                                                                                                         1,
+                                                                                                         dice[i],
+                                                                                                         Helpers.Stats.getAllStats().ToArray()
+                                                                                                         );
+
+                var inspiration_attack = Helpers.AbilityCheckAffinityBuilder.createAbilityCheckAffinity("BardClassInspirationAttackBonus" + dice[i].ToString(),
+                                                                                                         "",
+                                                                                                         "",
+                                                                                                         "",
+                                                                                                         null,
+                                                                                                         RuleDefinitions.CharacterAbilityCheckAffinity.None,
+                                                                                                         1,
+                                                                                                         dice[i],
+                                                                                                         Helpers.Stats.getAllStats().ToArray()
+                                                                                                         );
+                var inspiration_condition = Helpers.ConditionBuilder.createConditionWithInterruptions("BardClassInspirationCondition" + dice[i].ToString(),
+                                                                                                      "",
+                                                                                                      inspiration_title_string,
+                                                                                                      inspiration_description_string,
+                                                                                                      null,
+                                                                                                      DatabaseHelper.ConditionDefinitions.ConditionGuided,
+                                                                                                      new RuleDefinitions.ConditionInterruption[] {RuleDefinitions.ConditionInterruption.AbilityCheck,
+                                                                                                                                               RuleDefinitions.ConditionInterruption.Attacks,
+                                                                                                                                               RuleDefinitions.ConditionInterruption.SavingThrow },
+                                                                                                      inspiration_saves,
+                                                                                                      inspiration_skills,
+                                                                                                      inspiration_attack
+                                                                                                      );
+
+                var effect = new EffectDescription();
+                effect.Copy(DatabaseHelper.SpellDefinitions.Guidance.EffectDescription);
+                effect.SetRangeType(RuleDefinitions.RangeType.Distance);
+                effect.SetRangeParameter(60);
+                effect.DurationParameter = 10;
+                effect.DurationType = RuleDefinitions.DurationType.Minute;
+                effect.EffectForms.Clear();
+
+                var effect_form = new EffectForm();
+                effect_form.ConditionForm = new ConditionForm();
+                effect_form.FormType = EffectForm.EffectFormType.Condition;
+                effect_form.ConditionForm.Operation = ConditionForm.ConditionOperation.Add;
+                effect_form.ConditionForm.ConditionDefinition = inspiration_condition;
+                effect.EffectForms.Add(effect_form);
+
+                var inspiration_power = Helpers.PowerBuilder.createPower("BardInspirationPower" + dice[i].ToString(),
+                                                                     "",
+                                                                     inspiration_title_string + (i + 1).ToString(),
+                                                                     inspiration_description_string,
+                                                                     DatabaseHelper.SpellDefinitions.Guidance.GuiPresentation.SpriteReference,
+                                                                     DatabaseHelper.FeatureDefinitionPowers.PowerPaladinLayOnHands,
+                                                                     effect,
+                                                                     RuleDefinitions.ActivationTime.BonusAction,
+                                                                     0,
+                                                                     RuleDefinitions.UsesDetermination.AbilityBonusPlusFixed,
+                                                                     RuleDefinitions.RechargeRate.LongRest,
+                                                                     Helpers.Stats.Charisma,
+                                                                     Helpers.Stats.Charisma
+                                                                     );
+                inspiration_power.SetShortTitleOverride(inspiration_title_string);
+
+                if (previous_power != null)
+                {
+                    inspiration_power.SetOverriddenPower(previous_power);
+                }
+                previous_power = inspiration_power;
+                inspiration_powers.Add(dice[i], inspiration_power);
+            }
         }
 
         public static void BuildAndAddClassToDB()
@@ -168,260 +401,6 @@ namespace SolastaBardClass
         }
     }
 
-    internal class BardClassSavingthrowProficiencyBuilder : BaseDefinitionBuilder<FeatureDefinitionProficiency>
-    {
-        const string BardClassSavingthrowProficiencyName = "BardSavingthrowProficiency";
-        const string BardClassSavingthrowProficiencyGuid = "4eeb641f-e5a5-46ca-902e-a504b50c0247";
-
-        protected BardClassSavingthrowProficiencyBuilder(string name, string guid) : base(DatabaseHelper.FeatureDefinitionProficiencys.ProficiencyRogueSavingThrow, name, guid)
-        {
-            Definition.Proficiencies.Clear();
-            Definition.Proficiencies.AddRange(new List<string> { "Dexterity", "Charisma" });
-        }
-
-        public static FeatureDefinitionProficiency CreateAndAddToDB(string name, string guid)
-            => new BardClassSavingthrowProficiencyBuilder(name, guid).AddToDB();
-
-        public static FeatureDefinitionProficiency BardClassSavingthrowProficiency= CreateAndAddToDB(BardClassSavingthrowProficiencyName, BardClassSavingthrowProficiencyGuid);
-    }
-
-
-    internal class BardClassWeaponProficiencyBuilder : BaseDefinitionBuilder<FeatureDefinitionProficiency>
-    {
-        const string BardClassWeaponProficiencyName = "BardWeaponProficiency";
-        const string BardClassWeaponProficiencyGuid = "9a0ef52f-052a-4838-b3d4-2096ab67453e";
-
-        protected BardClassWeaponProficiencyBuilder(string name, string guid) : base(DatabaseHelper.FeatureDefinitionProficiencys.ProficiencyRogueWeapon, name, guid)
-        {
-            Definition.GuiPresentation.Title = "Feature/&BardWeaponProficiencyTitle";
-            Definition.GuiPresentation.Description = "Feature/&WeaponTrainingShortDescription";
-        }
-
-        public static FeatureDefinitionProficiency CreateAndAddToDB(string name, string guid)
-            => new BardClassWeaponProficiencyBuilder(name, guid).AddToDB();
-
-        public static FeatureDefinitionProficiency BardClassWeaponProficiency = CreateAndAddToDB(BardClassWeaponProficiencyName, BardClassWeaponProficiencyGuid);
-    }
-
-
-    internal class BardClassArmorProficiencyBuilder : BaseDefinitionBuilder<FeatureDefinitionProficiency>
-    {
-        const string BardClassArmorProficiencyName = "BardArmorProficiency";
-        const string BardClassArmorProficiencyGuid = "06d31b31-69db-40d7-8701-a8547c4dd063";
-
-        protected BardClassArmorProficiencyBuilder(string name, string guid) : base(DatabaseHelper.FeatureDefinitionProficiencys.ProficiencyRogueArmor, name, guid)
-        {
-            Definition.GuiPresentation.Title = "Feature/&BardArmorProficiencyTitle";
-            Definition.GuiPresentation.Description = "Feature/&ArmorTrainingShortDescription";
-        }
-
-        public static FeatureDefinitionProficiency CreateAndAddToDB(string name, string guid)
-            => new BardClassArmorProficiencyBuilder(name, guid).AddToDB();
-
-        public static FeatureDefinitionProficiency BardClassArmorProficiency = CreateAndAddToDB(BardClassArmorProficiencyName, BardClassArmorProficiencyGuid);
-    }
-
-
-    internal class BardClassToolsProficiencyBuilder : BaseDefinitionBuilder<FeatureDefinitionProficiency>
-    {
-        const string BardClassArmorProficiencyName = "BardToolsProficiency";
-        const string BardClassArmorProficiencyGuid = "798b8e47-4205-4fce-ba90-0b3ea772e15e";
-
-        protected BardClassToolsProficiencyBuilder(string name, string guid) : base(DatabaseHelper.FeatureDefinitionProficiencys.ProficiencyRogueTools, name, guid)
-        {
-            Definition.GuiPresentation.Title = "Feature/&BardToolsProficiencyTitle";
-            Definition.GuiPresentation.Description = "Feature/&ToolProficiencyPluralShortDescription";
-
-            Definition.Proficiencies.Clear();
-            Definition.Proficiencies.AddRange(new List<string> { "ThievesToolsType", "EnchantingToolType" });
-        }
-
-        public static FeatureDefinitionProficiency CreateAndAddToDB(string name, string guid)
-            => new BardClassToolsProficiencyBuilder(name, guid).AddToDB();
-
-        public static FeatureDefinitionProficiency BardClassToolsProficiency = CreateAndAddToDB(BardClassArmorProficiencyName, BardClassArmorProficiencyGuid);
-    }
-
-
-    internal class BardClassSkillPointPoolBuilder : BaseDefinitionBuilder<FeatureDefinitionPointPool>
-    {
-        const string BardClassSkillPoolName = "BardClassSkillPointPool";
-        const string BardClassSkillPoolNameGuid = "0bdd06ab-32a4-493d-9c0f-2b14b1357ee0";
-
-        protected BardClassSkillPointPoolBuilder(string name, string guid) : base(DatabaseHelper.FeatureDefinitionPointPools.PointPoolRogueSkillPoints, name, guid)
-        {
-            Definition.GuiPresentation.Title = "Feature/&BardClassSkillPointPoolTitle";
-            Definition.GuiPresentation.Description = "Feature/&BardClassSkillPointPoolDescription";
-
-            Definition.SetPoolAmount(3);
-            Definition.SetPoolType(HeroDefinitions.PointsPoolType.Skill);
-            Definition.RestrictedChoices.AddRange(new string[] { "AnimalHandling", "Survival", "Medecine", "Religion" });
-            Definition.RestrictedChoices.Sort();
-        }
-
-        public static FeatureDefinitionPointPool CreateAndAddToDB(string name, string guid)
-            => new BardClassSkillPointPoolBuilder(name, guid).AddToDB();
-
-        public static FeatureDefinitionPointPool BardClassSkillPointPool = CreateAndAddToDB(BardClassSkillPoolName, BardClassSkillPoolNameGuid);
-    }
-
-
-    internal class BardClassRitualSpellcastingBuilder : BaseDefinitionBuilder<FeatureDefinitionFeatureSet>
-    {
-        const string BardClassRitualSpellcastingName = "BardClassRitualSpellcasting";
-        const string BardClassRitualSpellcastingNameGuid = "25c48b9b-e2e9-4ea7-8a80-e6c413275980";
-
-        protected BardClassRitualSpellcastingBuilder(string name, string guid) : base(DatabaseHelper.FeatureDefinitionFeatureSets.FeatureSetWizardRitualCasting, name, guid)
-        {
-            Definition.GuiPresentation.Description = "Feature/&BardClassRitualCastingDescription";
-        }
-
-        public static FeatureDefinitionFeatureSet CreateAndAddToDB(string name, string guid)
-            => new BardClassRitualSpellcastingBuilder(name, guid).AddToDB();
-
-        public static FeatureDefinitionFeatureSet BardClassRitualSpellcasting = CreateAndAddToDB(BardClassRitualSpellcastingName, BardClassRitualSpellcastingNameGuid);
-    }
-
-
-    internal class BardClassSpelllistBuilder : BaseDefinitionBuilder<SpellListDefinition>
-    {
-        const string BardClassSpelllistName = "BardClassSpelllist";
-        const string BardClassSpelllistNameGuid = "0f3d14a7-f9a1-41ec-a164-f3e0f3800104";
-
-        protected BardClassSpelllistBuilder(string name, string guid) : base(DatabaseHelper.SpellListDefinitions.SpellListWizard, name, guid)
-        {
-            Definition.SpellsByLevel[0].Spells.Clear();
-            Definition.SpellsByLevel[0].Spells.AddRange(
-                new List<SpellDefinition>
-                {
-                    DatabaseHelper.SpellDefinitions.AnnoyingBee,
-                    DatabaseHelper.SpellDefinitions.DancingLights,
-                    DatabaseHelper.SpellDefinitions.Dazzle,
-                    DatabaseHelper.SpellDefinitions.Light,
-                    DatabaseHelper.SpellDefinitions.ShadowArmor,
-                    DatabaseHelper.SpellDefinitions.ShadowDagger,
-                    DatabaseHelper.SpellDefinitions.Shine,
-                    DatabaseHelper.SpellDefinitions.Sparkle,
-                    DatabaseHelper.SpellDefinitions.TrueStrike
-                }
-            );
-
-            Definition.SpellsByLevel[1].Spells.Clear();
-            Definition.SpellsByLevel[1].Spells.AddRange(
-                new List<SpellDefinition>
-                {
-                    DatabaseHelper.SpellDefinitions.AnimalFriendship,
-                    DatabaseHelper.SpellDefinitions.Bane,
-                    DatabaseHelper.SpellDefinitions.CharmPerson,
-                    DatabaseHelper.SpellDefinitions.ColorSpray,
-                    DatabaseHelper.SpellDefinitions.Command,
-                    DatabaseHelper.SpellDefinitions.ComprehendLanguages,
-                    DatabaseHelper.SpellDefinitions.CureWounds,
-                    DatabaseHelper.SpellDefinitions.DetectMagic,
-                    DatabaseHelper.SpellDefinitions.FaerieFire,
-                    DatabaseHelper.SpellDefinitions.FeatherFall,
-                    DatabaseHelper.SpellDefinitions.HealingWord,
-                    DatabaseHelper.SpellDefinitions.Heroism,
-                    DatabaseHelper.SpellDefinitions.Identify,
-                    DatabaseHelper.SpellDefinitions.Longstrider,
-                    DatabaseHelper.SpellDefinitions.Sleep,
-                    DatabaseHelper.SpellDefinitions.HideousLaughter,
-                    DatabaseHelper.SpellDefinitions.Thunderwave
-                }
-            );
-
-            Definition.SpellsByLevel[2].Spells.Clear();
-            Definition.SpellsByLevel[2].Spells.AddRange(
-                new List<SpellDefinition>
-                {
-                    DatabaseHelper.SpellDefinitions.Aid,
-                    DatabaseHelper.SpellDefinitions.Blindness,
-                    DatabaseHelper.SpellDefinitions.CalmEmotions,
-                    DatabaseHelper.SpellDefinitions.EnhanceAbility,
-                    DatabaseHelper.SpellDefinitions.HoldPerson,
-                    DatabaseHelper.SpellDefinitions.Invisibility,
-                    DatabaseHelper.SpellDefinitions.Knock,
-                    DatabaseHelper.SpellDefinitions.LesserRestoration,
-                    DatabaseHelper.SpellDefinitions.MirrorImage,
-                    DatabaseHelper.SpellDefinitions.SeeInvisibility,
-                    DatabaseHelper.SpellDefinitions.Shatter,
-                    DatabaseHelper.SpellDefinitions.Silence
-                }
-            );
-
-            Definition.SpellsByLevel[3].Spells.Clear();
-            Definition.SpellsByLevel[3].Spells.AddRange(
-                new List<SpellDefinition>
-                {
-                    DatabaseHelper.SpellDefinitions.BestowCurse,
-                    DatabaseHelper.SpellDefinitions.DispelMagic,
-                    DatabaseHelper.SpellDefinitions.Fear,
-                    DatabaseHelper.SpellDefinitions.HypnoticPattern,
-                    DatabaseHelper.SpellDefinitions.MassHealingWord,
-                    DatabaseHelper.SpellDefinitions.Slow,
-                    DatabaseHelper.SpellDefinitions.StinkingCloud,
-                    DatabaseHelper.SpellDefinitions.Tongues
-                }
-            );
-
-            Definition.SpellsByLevel[4].Spells.Clear();
-            Definition.SpellsByLevel[4].Spells.AddRange(
-                new List<SpellDefinition>
-                {
-                    DatabaseHelper.SpellDefinitions.Confusion,
-                    DatabaseHelper.SpellDefinitions.DimensionDoor,
-                    DatabaseHelper.SpellDefinitions.FreedomOfMovement,
-                    DatabaseHelper.SpellDefinitions.GreaterInvisibility,
-                    DatabaseHelper.SpellDefinitions.PhantasmalKiller
-                }
-            );
-
-            Definition.SpellsByLevel[5].Spells.Clear();
-            Definition.SpellsByLevel[5].Spells.AddRange(
-                new List<SpellDefinition>
-                {
-                    DatabaseHelper.SpellDefinitions.DominatePerson,
-                    DatabaseHelper.SpellDefinitions.GreaterRestoration,
-                    DatabaseHelper.SpellDefinitions.HoldMonster,
-                    DatabaseHelper.SpellDefinitions.MassCureWounds,
-                    DatabaseHelper.SpellDefinitions.RaiseDead
-                }
-            );
-        }
-
-        public static SpellListDefinition CreateAndAddToDB(string name, string guid)
-            => new BardClassSpelllistBuilder(name, guid).AddToDB();
-
-        public static SpellListDefinition BardClassSpelllist = CreateAndAddToDB(BardClassSpelllistName, BardClassSpelllistNameGuid);
-    }
-
-
-    internal class BardClassSpellcastingBuilder : BaseDefinitionBuilder<FeatureDefinitionCastSpell>
-    {
-        const string BardClassSpellcastingName = "BardClassSpellcasting";
-        const string BardClassSpellcastingNameGuid = "f720edaf-92c4-43e3-8228-c48c0b41b93b";
-
-        protected BardClassSpellcastingBuilder(string name, string guid) : base(DatabaseHelper.FeatureDefinitionCastSpells.CastSpellWizard, name, guid)
-        {
-            Definition.GuiPresentation.Title = "Feature/&BardClassSpellcastingTitle";
-            Definition.GuiPresentation.Description = "Feature/&BardClassSpellcastingDescription";
-
-            Definition.SetSpellcastingAbility("Charisma");
-            Definition.SetSpellKnowledge(RuleDefinitions.SpellKnowledge.Selection);
-            Definition.SetSpellReadyness(RuleDefinitions.SpellReadyness.AllKnown);
-            Definition.ScribedSpells.Clear();
-            Definition.ScribedSpells.AddRange(Enumerable.Repeat(0, 20));
-            Definition.KnownSpells.Clear();
-            Definition.KnownSpells.AddRange(new List<int> {4,  5,  6,  7,  8,  9,  10, 11, 12, 14,
-                                                           15, 15, 16, 18, 19, 19, 20, 22, 22, 22});
-            Definition.SetSpellListDefinition(BardClassSpelllistBuilder.BardClassSpelllist);
-        }
-
-        public static FeatureDefinitionCastSpell CreateAndAddToDB(string name, string guid)
-            => new BardClassSpellcastingBuilder(name, guid).AddToDB();
-
-        public static FeatureDefinitionCastSpell BardClassSpellCasting = CreateAndAddToDB(BardClassSpellcastingName, BardClassSpellcastingNameGuid);
-    }
 
     internal class BardClassDangerSenseDexteritySavingThrowAffinityBuilder : BaseDefinitionBuilder<FeatureDefinitionSavingThrowAffinity>
     {

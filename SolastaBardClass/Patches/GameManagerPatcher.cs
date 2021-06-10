@@ -1,4 +1,5 @@
 using HarmonyLib;
+using UnityModManagerNet;
 
 namespace SolastaBardClass.Patches
 {
@@ -9,7 +10,19 @@ namespace SolastaBardClass.Patches
         {
             internal static void Postfix()
             {
+#if DEBUG
+                bool allow_guid_generation = true;
+#else
+                bool allow_guid_generation = false; //no guids should be ever generated in release
+#endif
+                GuidStorage.load(Properties.Resources.blueprints, allow_guid_generation);
                 Main.ModEntryPoint();
+
+#if DEBUG
+                    string guid_file_name = ProjectPath.ProjectPath.Path + "blueprints.txt";
+                    GuidStorage.dump(guid_file_name);
+#endif
+                GuidStorage.dump($@"{UnityModManager.modsPath}/SolastaBardClass/loaded_blueprints.txt");
             }
         }
     }
