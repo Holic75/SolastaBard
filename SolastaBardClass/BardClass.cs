@@ -13,11 +13,14 @@ namespace SolastaBardClass
         const string BardClassNameGuid = "274106b8-0376-4bcd-bd1b-440633a394ae";
         const string BardClassSubclassesGuid = "be865126-d7c3-45f3-b891-e77bd8b00cb1";
 
+        static public CharacterClassDefinition bard_class;
         static public Dictionary<RuleDefinitions.DieType, FeatureDefinitionPower> inspiration_powers = new Dictionary<RuleDefinitions.DieType, FeatureDefinitionPower>();
         static public FeatureDefinition font_of_inspiration;
         static public FeatureDefinitionPointPool expertise;
         static public FeatureDefinitionAbilityCheckAffinity jack_of_all_trades;
         static public Dictionary<RuleDefinitions.DieType, FeatureDefinitionExtraHealingDieOnShortRest> song_of_rest = new Dictionary<RuleDefinitions.DieType, FeatureDefinitionExtraHealingDieOnShortRest>();
+        static public SpellListDefinition bard_spelllist;
+        static public FeatureDefinition magical_secrets;
         //TODO
         //Countercharm
         //magical secrets
@@ -27,6 +30,7 @@ namespace SolastaBardClass
         protected BardClassBuilder(string name, string guid) : base(name, guid)
         {
             var rogue = DatabaseHelper.CharacterClassDefinitions.Rogue;
+            bard_class = Definition;
             Definition.GuiPresentation.Title = "Class/&BardClassTitle";
             Definition.GuiPresentation.Description = "Class/&BardClassDescription";
             Definition.GuiPresentation.SetSpriteReference(rogue.GuiPresentation.SpriteReference);
@@ -144,7 +148,7 @@ namespace SolastaBardClass
 
             var ritual_spellcasting = Helpers.RitualSpellcastingBuilder.createRitualSpellcasting("BardRitualSpellcasting", "25c48b9b-e2e9-4ea7-8a80-e6c413275980", "Feature/&BardClassRitualCastingDescription");
 
-            var bard_spelllist = Helpers.SpelllistBuilder.create9LevelSpelllist("BardClassSpelllist", "0f3d14a7-f9a1-41ec-a164-f3e0f3800104", "",
+            bard_spelllist = Helpers.SpelllistBuilder.create9LevelSpelllist("BardClassSpelllist", "0f3d14a7-f9a1-41ec-a164-f3e0f3800104", "",
                                                                                 new List<SpellDefinition>
                                                                                 {
                                                                                     DatabaseHelper.SpellDefinitions.AnnoyingBee,
@@ -221,14 +225,16 @@ namespace SolastaBardClass
                                                                                 }
                                                                                 );
 
-            var bard_spellcasting = Helpers.SpellcastingBuilder.create9LevelSpontSpellcasting("BardClassSpellcasting",
+            var bard_spellcasting = Helpers.SpellcastingBuilder.createSpontaneousSpellcasting("BardClassSpellcasting",
                                                                                               "f720edaf-92c4-43e3-8228-c48c0b41b93b",
                                                                                               "Feature/&BardClassSpellcastingTitle",
                                                                                               "Feature/&BardClassSpellcastingDescription",
                                                                                               bard_spelllist,
                                                                                               Helpers.Stats.Charisma,
-                                                                                              new List<int> {4,  5,  6,  7,  8,  9,  10, 11, 12, 14,
-                                                                                                             15, 15, 16, 18, 19, 19, 20, 22, 22, 22}
+                                                                                              DatabaseHelper.FeatureDefinitionCastSpells.CastSpellWizard.KnownCantrips,
+                                                                                              new List<int> {4,  5,  6,  7,  8,  9,  10, 11, 12, 12,
+                                                                                                                         13, 13, 14, 14, 15, 15, 16, 16, 16, 16},
+                                                                                              DatabaseHelper.FeatureDefinitionCastSpells.CastSpellWizard.SlotsPerLevels
                                                                                               );
 
             jack_of_all_trades = Helpers.AbilityCheckAffinityBuilder.createAbilityCheckAffinity("BardClassJackOfAllTradesFeature",
@@ -246,6 +252,7 @@ namespace SolastaBardClass
 
             createInspiration();
             createSongOfRest();
+            createMagicalSecrets();
             Definition.FeatureUnlocks.Clear();
             Definition.FeatureUnlocks.Add(new FeatureUnlockByLevel(saving_throws, 1)); 
             Definition.FeatureUnlocks.Add(new FeatureUnlockByLevel(armor_proficiency, 1));
@@ -258,6 +265,8 @@ namespace SolastaBardClass
             Definition.FeatureUnlocks.Add(new FeatureUnlockByLevel(song_of_rest[RuleDefinitions.DieType.D6], 2));
             Definition.FeatureUnlocks.Add(new FeatureUnlockByLevel(jack_of_all_trades, 3));
             Definition.FeatureUnlocks.Add(new FeatureUnlockByLevel(expertise, 3));
+            Definition.FeatureUnlocks.Add(new FeatureUnlockByLevel(magical_secrets, 3));
+
             Definition.FeatureUnlocks.Add(new FeatureUnlockByLevel(inspiration_powers[RuleDefinitions.DieType.D8], 5));
             Definition.FeatureUnlocks.Add(new FeatureUnlockByLevel(font_of_inspiration, 5));
             Definition.FeatureUnlocks.Add(new FeatureUnlockByLevel(song_of_rest[RuleDefinitions.DieType.D8], 9));
@@ -302,6 +311,61 @@ namespace SolastaBardClass
 
         }
 
+
+        static void createMagicalSecrets()
+        {
+            var spelllist = Helpers.SpelllistBuilder.createCombinedSpellList("BardClassMagicalSecretSpelllist", "", "",
+                                                                             bard_spelllist,
+                                                                             DatabaseHelper.SpellListDefinitions.SpellListWizard,
+                                                                             DatabaseHelper.SpellListDefinitions.SpellListCleric,
+                                                                             DatabaseHelper.SpellListDefinitions.SpellListPaladin,
+                                                                             DatabaseHelper.SpellListDefinitions.SpellListRanger
+                                                                             );
+
+            List<FeatureDefinition> features = new List<FeatureDefinition>();
+            foreach (var sl in spelllist.SpellsByLevel)
+            {
+                if (sl.Level <= 2 && sl.Level >= 1)
+                {
+                    foreach (var s in sl.Spells)
+                    {
+                        var feature = Helpers.AutoPrepareSpellBuilder.createAutoPrepareSpell("BardClassMagicalSecret" + s.name,
+                                                                                              "",
+                                                                                              s.GuiPresentation.Title,
+                                                                                              s.GuiPresentation.Description,
+                                                                                              bard_class,
+                                                                                              new FeatureDefinitionAutoPreparedSpells.AutoPreparedSpellsGroup()
+                                                                                              {
+                                                                                                  ClassLevel = 1,
+                                                                                                  SpellsList = new List<SpellDefinition> {s}
+                                                                                              }
+                                                                                              );
+                        features.Add(feature);
+                    }
+                }
+                else if (sl.Level == 0)
+                {
+                    foreach (var s in sl.Spells)
+                    {
+                        var feature = Helpers.BonusCantripsBuilder.createAutoPrepareSpell("BardClassMagicalSecret" + s.name,
+                                                                      "",
+                                                                      s.GuiPresentation.Title,
+                                                                      s.GuiPresentation.Description,
+                                                                      s
+                                                                      );
+                        features.Add(feature);
+                    }
+                }
+            }
+
+            magical_secrets = Helpers.FeatureSetBuilder.createFeatureSet("BardClassMagicalSecrets",
+                                                                         "",
+                                                                         "Feature/&BardClassMagicalSecretsTitle",
+                                                                         "Feature/&BardClassMagicalSecretsDescription",
+                                                                         false, FeatureDefinitionFeatureSet.FeatureSetMode.Exclusion, true,
+                                                                         features.ToArray()
+                                                                         );
+        }
 
         static void createSongOfRest()
         {

@@ -6,6 +6,7 @@ using System.Reflection;
 using UnityEngine.AddressableAssets;
 using static FeatureDefinitionAbilityCheckAffinity;
 using static FeatureDefinitionSavingThrowAffinity;
+using static SpellListDefinition;
 
 namespace SolastaBardClass.Helpers
 {
@@ -260,6 +261,47 @@ namespace SolastaBardClass.Helpers
         {
             return new SpelllistBuilder(name, guid, title_string, DatabaseHelper.SpellListDefinitions.SpellListWizard, spells_by_level).AddToDB();
         }
+
+
+        public static SpellListDefinition createCombinedSpellList(string name, string guid, string title_string, params SpellListDefinition[] spell_lists)
+        {
+            List<SpellsByLevelDuplet> spells_by_level = new List<SpellsByLevelDuplet>();
+            Dictionary<SpellDefinition, int> min_spell_levels = new Dictionary<SpellDefinition, int>();
+            for (int i = 0; i < 10; i++)
+            {
+                spells_by_level.Add(new SpellsByLevelDuplet());
+                spells_by_level[i].Level = i;
+                spells_by_level[i].Spells = new List<SpellDefinition>();
+            }
+
+            foreach (var sl in spell_lists)
+            {
+                foreach (var sll in sl.SpellsByLevel)
+                {
+                    foreach (var s in sll.Spells)
+                    {
+                        if (!min_spell_levels.ContainsKey(s) || min_spell_levels[s] > sll.Level)
+                        {
+                            min_spell_levels[s] = sll.Level;
+                        }
+                    }
+                }
+            }
+
+            foreach (var kv in min_spell_levels)
+            {
+                spells_by_level[kv.Value].Spells.Add(kv.Key);
+            }
+
+            spells_by_level.RemoveAll(e => e.Spells.Count == 0);
+
+            foreach (var sl in spells_by_level)
+            {
+                sl.Spells.Sort((a, b) => a.name.CompareTo(b.name));
+            }
+
+            return create9LevelSpelllist(name, guid, title_string, spells_by_level.Select(s => s.Spells).ToArray());
+        }
     }
 
 
@@ -269,6 +311,7 @@ namespace SolastaBardClass.Helpers
         protected SpellcastingBuilder(string name, string guid, string title_string, string description_string, SpellListDefinition spelllist,
                                       string spell_stat, RuleDefinitions.SpellKnowledge spell_knowledge, RuleDefinitions.SpellReadyness spell_readyness,
                                       List<int> scribed_spells, List<int> cantrips_per_level, List<int> known_spells,
+                                      List<FeatureDefinitionCastSpell.SlotsByLevelDuplet> slots_pre_level,
                                       FeatureDefinitionCastSpell base_feature) : base(base_feature, name, guid)
         {
             Definition.GuiPresentation.Title = title_string;
@@ -282,18 +325,25 @@ namespace SolastaBardClass.Helpers
             Definition.KnownSpells.Clear();
             Definition.KnownSpells.AddRange(known_spells);
             Definition.SetSpellListDefinition(spelllist);
+            Definition.KnownCantrips.Clear();
+            Definition.KnownCantrips.AddRange(cantrips_per_level);
+            Definition.SlotsPerLevels.Clear();
+            Definition.SlotsPerLevels.AddRange(slots_pre_level);
         }
 
-        public static FeatureDefinitionCastSpell create9LevelSpontSpellcasting(string name, string guid, string title_string, string description_string,
-                                                                               SpellListDefinition spelllist, string spell_stat,
-                                                                               List<int> known_spells)
+        public static FeatureDefinitionCastSpell createSpontaneousSpellcasting(string name, string guid, string title_string, string description_string,
+                                                                                SpellListDefinition spelllist, string spell_stat,
+                                                                                List<int> cantrips_per_level, List<int> known_spells,
+                                                                                List<FeatureDefinitionCastSpell.SlotsByLevelDuplet> slots_pre_level)
         {
             Stats.assertAllStats(new string[] { spell_stat });
             return new SpellcastingBuilder(name, guid, title_string, description_string, spelllist, spell_stat,
                                            RuleDefinitions.SpellKnowledge.Selection, RuleDefinitions.SpellReadyness.AllKnown,
                                            Enumerable.Repeat(0, 20).ToList(),
-                                           DatabaseHelper.FeatureDefinitionCastSpells.CastSpellWizard.KnownCantrips,
-                                           known_spells, DatabaseHelper.FeatureDefinitionCastSpells.CastSpellWizard).AddToDB();
+                                           cantrips_per_level,
+                                           known_spells,
+                                           slots_pre_level,
+                                           DatabaseHelper.FeatureDefinitionCastSpells.CastSpellWizard).AddToDB();
         }
     }
 
@@ -645,6 +695,86 @@ namespace SolastaBardClass.Helpers
         public static TDefinition createFeature(string name, string guid, string title_string, string description_string, AssetReferenceSprite sprite)
         {
             return new FeatureBuilder<TDefinition>(name, guid, title_string, description_string, sprite).AddToDB();
+        }
+    }
+
+
+    public class AutoPrepareSpellBuilder: BaseDefinitionBuilderWithGuidStorage<FeatureDefinitionAutoPreparedSpells>
+    {
+        protected AutoPrepareSpellBuilder(string name, string guid, string title_string, string description_string,
+                                          CharacterClassDefinition caster_class, 
+                                          params FeatureDefinitionAutoPreparedSpells.AutoPreparedSpellsGroup[] spells_at_level)
+                : base(DatabaseHelper.FeatureDefinitionAutoPreparedSpellss.AutoPreparedSpellsDomainBattle, name, guid)
+        {
+
+            Definition.GuiPresentation.Title = title_string;
+            Definition.GuiPresentation.Description = description_string;
+
+            Definition.SetSpellcastingClass(caster_class);
+            Definition.AutoPreparedSpellsGroups.Clear();
+            Definition.AutoPreparedSpellsGroups.AddRange(spells_at_level);
+
+        }
+
+
+        public static FeatureDefinitionAutoPreparedSpells createAutoPrepareSpell(string name, string guid, string title_string, string description_string,
+                                                                                  CharacterClassDefinition caster_class,
+                                                                                  params FeatureDefinitionAutoPreparedSpells.AutoPreparedSpellsGroup[] spells_at_level)
+        {
+            return new AutoPrepareSpellBuilder(name, guid, title_string, description_string, caster_class, spells_at_level).AddToDB();
+        }
+    }
+
+
+    public class BonusCantripsBuilder : BaseDefinitionBuilderWithGuidStorage<FeatureDefinitionBonusCantrips>
+    {
+        protected BonusCantripsBuilder(string name, string guid, string title_string, string description_string,
+                                          params SpellDefinition[] cantrips)
+                : base(DatabaseHelper.FeatureDefinitionBonusCantripss.BonusCantripsDomainSun, name, guid)
+        {
+
+            Definition.GuiPresentation.Title = title_string;
+            Definition.GuiPresentation.Description = description_string;
+
+
+            Definition.BonusCantrips.Clear();
+            Definition.BonusCantrips.AddRange(cantrips);
+
+        }
+
+
+        public static FeatureDefinitionBonusCantrips createAutoPrepareSpell(string name, string guid, string title_string, string description_string,
+                                                                            params SpellDefinition[] cantrips)
+        {
+            return new BonusCantripsBuilder(name, guid, title_string, description_string, cantrips).AddToDB();
+        }
+    }
+
+
+    public class FeatureSetBuilder : BaseDefinitionBuilderWithGuidStorage<FeatureDefinitionFeatureSet>
+    {
+        protected FeatureSetBuilder(string name, string guid, string title_string, string description_string,
+                                     bool enumerate_in_description, FeatureDefinitionFeatureSet.FeatureSetMode set_mode,
+                                     bool unique_choices,
+                                     params FeatureDefinition[] features)
+            : base(DatabaseHelper.FeatureDefinitionFeatureSets.FeatureSetHunterDefensiveTactics, name, guid)
+        {
+            Definition.GuiPresentation.Description = description_string;
+            Definition.GuiPresentation.Title = title_string;
+
+            Definition.FeatureSet.Clear();
+            Definition.FeatureSet.AddRange(features);
+            Definition.SetEnumerateInDescription(enumerate_in_description);
+            Definition.SetMode(set_mode);
+            Definition.SetUniqueChoices(unique_choices);
+        }
+
+        public static FeatureDefinitionFeatureSet createFeatureSet(string name, string guid, string title_string, string description_string,
+                                                                             bool enumerate_in_description, FeatureDefinitionFeatureSet.FeatureSetMode set_mode,
+                                                                             bool unique_choices,
+                                                                             params FeatureDefinition[] features)
+        {
+            return new FeatureSetBuilder(name, guid, title_string, description_string, enumerate_in_description, set_mode, unique_choices, features).AddToDB();
         }
     }
 }

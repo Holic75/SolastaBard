@@ -26,6 +26,8 @@ Feature/&BardClassJackOfAllTradesFeatureDescription Starting at 2nd level, you c
 Feature/&BardClassSongOfRestTitle1 Song of Rest (d6)
 Feature/&BardClassSongOfRestTitle2 Song of Rest (d8)
 Feature/&BardClassSongOfRestDescription Beginning at 2nd level, you can use soothing music or oration to help revitalize your wounded allies during a short rest. If you or any friendly creatures who can hear your performance spend one or more Hit Dice to regain hit points at the end of the short rest, each of those creatures regains an extra 1d6 hit points.\nThe extra Hit Points increase when you reach certain levels in this class: to 1d8 at 9th level, to 1d10 at 13th level, and to 1d12 at 17th level.
+Feature/&BardClassMagicalSecretsTitle Magical Secrets
+Feature/&BardClassMagicalSecretsDescription By 10th level, you have plundered magical knowledge from a wide spectrum of disciplines. Choose two spells from any class, including this one. A spell you choose must be of a level you can cast or a cantrip.\nThe chosen spells count as bard spells for you and are included in the number in the Spells Known column of the Bard table.\nYou learn two additional spells from any class at 14th level and again at 18th level.
 Feature/&BardClassDangerSenseDexteritySavingThrowAffinityTitle	Danger Sense
 Feature/&BardClassDangerSenseDexteritySavingThrowAffinityDescription	Advantage on Dexterity Saving Throws.
 Feature/&BardClassFastMovementMovementAffinityTitle	Fast movement

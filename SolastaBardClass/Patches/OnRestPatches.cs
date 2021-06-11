@@ -12,8 +12,8 @@ namespace SolastaBardClass.Patches
         [HarmonyPatch(typeof(RestModuleHitDice), "Bind")]
         internal static class RestModuleHitDice_Bind_Patch
         {
-            static Dictionary<RulesetCharacterHero, Dictionary<string, RuleDefinitions.DieType>> extra_healing_dice_per_hero;
-         
+            static public Dictionary<RulesetCharacterHero, Dictionary<string, RuleDefinitions.DieType>> extra_healing_dice_per_hero;
+
             internal static void Postfix(RestModuleHitDice __instance, RuleDefinitions.RestType restType,
                                          RestDefinitions.RestStage restStage,
                                          RestModule.RestModuleRefreshedHandler restModuleRefreshed)
@@ -29,7 +29,7 @@ namespace SolastaBardClass.Patches
 
                     foreach (FeatureDefinitionExtraHealingDieOnShortRest f in h.FeaturesToBrowse)
                     {
-                        Main.Logger.Log("Found: " + f.name + " on " + h.Name);
+                        Main.Logger.Log("Found Extra Healing Die feature: " + f.name + " on " + h.Name);
                         if (f.ApplyToParty)
                         {
                             foreach (var hh in __instance.Heroes)
@@ -47,6 +47,32 @@ namespace SolastaBardClass.Patches
                                 extra_healing_dice_per_hero[h][f.tag] = f.DieType;
                             }
                         }
+                    }
+                }
+            }
+        }
+
+        class RulesetCharacterHeroRollHitDieOnRestPatcher
+        {
+            [HarmonyPatch(typeof(RulesetCharacterHero), "RollHitDie")]
+            internal static class RestModuleHitDice_RollHitDie_Patch
+            {
+                internal static void Postfix(RulesetCharacterHero __instance)
+                {
+                    int damage = __instance.GetAttribute("HitPoints", false).CurrentValue - __instance.CurrentHitPoints;
+                    if (damage <= 0)
+                        return;
+
+                    if (RestModuleHitDice_Bind_Patch.extra_healing_dice_per_hero.ContainsKey(__instance))
+                    {
+                        foreach (var kv in RestModuleHitDice_Bind_Patch.extra_healing_dice_per_hero[__instance])
+                        {
+                            int first_roll, second_roll;
+                            var healing_amount = RuleDefinitions.RollDie(kv.Value, RuleDefinitions.AdvantageType.None, out first_roll, out second_roll, 0.0f);
+                            __instance.ReceiveHealing(healing_amount, false, 0UL, RuleDefinitions.HealingCap.MaximumHitPoints);
+                            Main.Logger.Log(__instance.Name + $" Received Extra Healing Die {kv.Value.ToString()}(={healing_amount}) due to " + kv.Key);
+                        }
+                        RestModuleHitDice_Bind_Patch.extra_healing_dice_per_hero.Remove(__instance);
                     }
                 }
             }
