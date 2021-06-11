@@ -14,6 +14,15 @@ namespace SolastaBardClass
         const string BardClassSubclassesGuid = "be865126-d7c3-45f3-b891-e77bd8b00cb1";
 
         static public Dictionary<RuleDefinitions.DieType, FeatureDefinitionPower> inspiration_powers = new Dictionary<RuleDefinitions.DieType, FeatureDefinitionPower>();
+        static public FeatureDefinition font_of_inspiration;
+        static public FeatureDefinitionPointPool expertise;
+        static public FeatureDefinitionAbilityCheckAffinity jack_of_all_trades;
+        static public Dictionary<RuleDefinitions.DieType, FeatureDefinitionExtraHealingDieOnShortRest> song_of_rest = new Dictionary<RuleDefinitions.DieType, FeatureDefinitionExtraHealingDieOnShortRest>();
+        //TODO
+        //Countercharm
+        //magical secrets
+        //colleges: lore, valor, swords, eloquence (?), ..
+
 
         protected BardClassBuilder(string name, string guid) : base(name, guid)
         {
@@ -51,7 +60,7 @@ namespace SolastaBardClass
                                                                             Helpers.Skills.Insight });
 
             Definition.ToolAutolearnPreference.Clear();
-            Definition.ToolAutolearnPreference.AddRange(new List<string> { Helpers.Tools.ThievesTool, Helpers.Tools.EnchantingTool });
+            Definition.ToolAutolearnPreference.AddRange(new List<string> { Helpers.Tools.ThievesTool, Helpers.Tools.EnchantingTool, Helpers.Tools.Lyre });
 
 
             Definition.EquipmentRows.AddRange(rogue.EquipmentRows);
@@ -113,7 +122,7 @@ namespace SolastaBardClass
             var tools_proficiency = Helpers.ProficiencyBuilder.CreateToolsProficiency("BardToolsProficiency",
                                                                                       "96d8987b-e682-44a6-afdb-763cbe5361ad",
                                                                                       "Feature/&BardToolsProficiencyTitle",
-                                                                                      Helpers.Tools.EnchantingTool, Helpers.Tools.ThievesTool
+                                                                                      Helpers.Tools.EnchantingTool, Helpers.Tools.ThievesTool, Helpers.Tools.Lyre
                                                                                       );
 
             var skills = Helpers.PoolBuilder.createSkillProficiency("BardSkillProficiency",
@@ -122,6 +131,15 @@ namespace SolastaBardClass
                                                                     "Feature/&BardClassSkillPointPoolDescription",
                                                                     3,
                                                                     Helpers.Skills.getAllSkills());
+
+            expertise = Helpers.CopyFeatureBuilder<FeatureDefinitionPointPool>.createFeatureCopy("BardExpertise",
+                                                                                                 "",
+                                                                                                 "Feature/&BardClassExpertisePointPoolTitle",
+                                                                                                 "Feature/&BardClassExpertisePointPoolDescription",
+                                                                                                 null,
+                                                                                                 DatabaseHelper.FeatureDefinitionPointPools.PointPoolRogueExpertise);
+            expertise.RestrictedChoices.Clear();
+            expertise.RestrictedChoices.Add(Helpers.Tools.Lyre);
 
 
             var ritual_spellcasting = Helpers.RitualSpellcastingBuilder.createRitualSpellcasting("BardRitualSpellcasting", "25c48b9b-e2e9-4ea7-8a80-e6c413275980", "Feature/&BardClassRitualCastingDescription");
@@ -213,7 +231,21 @@ namespace SolastaBardClass
                                                                                                              15, 15, 16, 18, 19, 19, 20, 22, 22, 22}
                                                                                               );
 
+            jack_of_all_trades = Helpers.AbilityCheckAffinityBuilder.createAbilityCheckAffinity("BardClassJackOfAllTradesFeature",
+                                                                                                 "",
+                                                                                                "Feature/&BardClassJackOfAllTradesFeatureTitle",
+                                                                                                "Feature/&BardClassJackOfAllTradesFeatureDescription",
+                                                                                                 null,
+                                                                                                 RuleDefinitions.CharacterAbilityCheckAffinity.HalfProficiencyWhenNotProficient,
+                                                                                                 0,
+                                                                                                 RuleDefinitions.DieType.D1,
+                                                                                                 Helpers.Stats.getAllStats().ToArray()
+                                                                                                 );
+
+
+
             createInspiration();
+            createSongOfRest();
             Definition.FeatureUnlocks.Clear();
             Definition.FeatureUnlocks.Add(new FeatureUnlockByLevel(saving_throws, 1)); 
             Definition.FeatureUnlocks.Add(new FeatureUnlockByLevel(armor_proficiency, 1));
@@ -223,8 +255,14 @@ namespace SolastaBardClass
             Definition.FeatureUnlocks.Add(new FeatureUnlockByLevel(bard_spellcasting, 1));
             Definition.FeatureUnlocks.Add(new FeatureUnlockByLevel(ritual_spellcasting, 1));
             Definition.FeatureUnlocks.Add(new FeatureUnlockByLevel(inspiration_powers[RuleDefinitions.DieType.D6], 1));
+            Definition.FeatureUnlocks.Add(new FeatureUnlockByLevel(song_of_rest[RuleDefinitions.DieType.D6], 2));
+            Definition.FeatureUnlocks.Add(new FeatureUnlockByLevel(jack_of_all_trades, 3));
+            Definition.FeatureUnlocks.Add(new FeatureUnlockByLevel(expertise, 3));
             Definition.FeatureUnlocks.Add(new FeatureUnlockByLevel(inspiration_powers[RuleDefinitions.DieType.D8], 5));
+            Definition.FeatureUnlocks.Add(new FeatureUnlockByLevel(font_of_inspiration, 5));
+            Definition.FeatureUnlocks.Add(new FeatureUnlockByLevel(song_of_rest[RuleDefinitions.DieType.D8], 9));
             Definition.FeatureUnlocks.Add(new FeatureUnlockByLevel(inspiration_powers[RuleDefinitions.DieType.D10], 10));
+            Definition.FeatureUnlocks.Add(new FeatureUnlockByLevel(expertise, 10));
 
             //Level 3 Additional rage use - Add additional uses through subclasses since most times the subclass alters the rage power anyways.
             //Subclass feature at level 3
@@ -262,6 +300,28 @@ namespace SolastaBardClass
             //Level 20 	Primal Champion
             //Level 20 Unlimited Rages
 
+        }
+
+
+        static void createSongOfRest()
+        {
+            string song_of_rest_title_string = "Feature/&BardClassSongOfRestTitle";
+            string song_of_rest_description_string = "Feature/&BardClassSongOfRestDescription";
+
+            var dice = new RuleDefinitions.DieType[] { RuleDefinitions.DieType.D6, RuleDefinitions.DieType.D8};
+
+            for (int i = 0; i < dice.Length; i++)
+            {
+                var feature = Helpers.FeatureBuilder<FeatureDefinitionExtraHealingDieOnShortRest>.createFeature("BardClassSongOfRestFeature" + dice[i].ToString(),
+                                                                                                                 "",
+                                                                                                                 song_of_rest_title_string + (i + 1).ToString(),
+                                                                                                                 song_of_rest_description_string,
+                                                                                                                 null);
+                feature.ApplyToParty = true;
+                feature.tag = "SongOfRest";
+                feature.DieType = dice[i];
+                song_of_rest[dice[i]] = feature;
+            }
         }
 
         static void createInspiration()
@@ -344,7 +404,7 @@ namespace SolastaBardClass
                                                                      RuleDefinitions.ActivationTime.BonusAction,
                                                                      0,
                                                                      RuleDefinitions.UsesDetermination.AbilityBonusPlusFixed,
-                                                                     RuleDefinitions.RechargeRate.LongRest,
+                                                                     previous_power == null ? RuleDefinitions.RechargeRate.LongRest : RuleDefinitions.RechargeRate.ShortRest,
                                                                      Helpers.Stats.Charisma,
                                                                      Helpers.Stats.Charisma
                                                                      );
@@ -357,6 +417,13 @@ namespace SolastaBardClass
                 previous_power = inspiration_power;
                 inspiration_powers.Add(dice[i], inspiration_power);
             }
+
+            string font_of_inspiration_title_string = "Feature/&BardClassFontOfInspirationFeatureTitle";
+            string font_of_inspiration_description_string = "Feature/&BardClassFontOfInspirationFeatureDescription";
+            font_of_inspiration = Helpers.OnlyDescriptionFeatureBuilder.createOnlyDescriptionFeature("BardClassFontOfInspirationFeature",
+                                                                                                     "",
+                                                                                                     font_of_inspiration_title_string,
+                                                                                                     font_of_inspiration_description_string);
         }
 
         public static void BuildAndAddClassToDB()

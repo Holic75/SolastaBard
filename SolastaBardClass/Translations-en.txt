@@ -16,7 +16,16 @@ Feature/&BardClassInspirationPowerTitle1	Bardic Inspiration (d6)
 Feature/&BardClassInspirationPowerTitle2	Bardic Inspiration (d8)
 Feature/&BardClassInspirationPowerTitle3	Bardic Inspiration (d10)
 Feature/&BardClassInspirationPowerDescription You can inspire others through stirring words or music. To do so, you use a bonus action on your turn to choose one creature other than yourself within 60 feet of you who can hear you. That creature gains one Bardic Inspiration die, a d6.\nOnce within the next 10 minutes, the creature can roll the die and add the number rolled to one ability check, attack roll, or saving throw it makes. The creature can wait until after it rolls the d20 before deciding to use the Bardic Inspiration die, but must decide before the DM says whether the roll succeeds or fails. Once the Bardic Inspiration die is rolled, it is lost. A creature can have only one Bardic Inspiration die at a time.\nYou can use this feature a number of times equal to your Charisma modifier (a minimum of once). You regain any expended uses when you finish a long rest.\nYour Bardic Inspiration die changes when you reach certain levels in this class. The die becomes a d8 at 5th level, a d10 at 10th level, and a d12 at 15th level.
+Feature/&BardClassFontOfInspirationFeatureTitle Font of Inspiration
+Feature/&BardClassFontOfInspirationFeatureDescription Beginning when you reach 5th level, you regain all of your expended uses of Bardic Inspiration when you finish a short or long rest.
 Feature/&BardClassRitualCastingDescription You can cast a known spell as a ritual if the spell has the ritual tag.
+Feature/&BardClassExpertisePointPoolTitle Expertise
+Feature/&BardClassExpertisePointPoolDescription At 3rd level, choose two of your skill proficiencies. Your proficiency bonus is doubled for any ability check you make that uses either of the chosen proficiencies.\nAt 10th level, you can choose another two skill proficiencies to gain this benefit.
+Feature/&BardClassJackOfAllTradesFeatureTitle Jack of All Trades
+Feature/&BardClassJackOfAllTradesFeatureDescription Starting at 2nd level, you can add half your proficiency bonus, rounded down, to any ability check you make that doesn't already include your proficiency bonus.
+Feature/&BardClassSongOfRestTitle1 Song of Rest (d6)
+Feature/&BardClassSongOfRestTitle2 Song of Rest (d8)
+Feature/&BardClassSongOfRestDescription Beginning at 2nd level, you can use soothing music or oration to help revitalize your wounded allies during a short rest. If you or any friendly creatures who can hear your performance spend one or more Hit Dice to regain hit points at the end of the short rest, each of those creatures regains an extra 1d6 hit points.\nThe extra Hit Points increase when you reach certain levels in this class: to 1d8 at 9th level, to 1d10 at 13th level, and to 1d12 at 17th level.
 Feature/&BardClassDangerSenseDexteritySavingThrowAffinityTitle	Danger Sense
 Feature/&BardClassDangerSenseDexteritySavingThrowAffinityDescription	Advantage on Dexterity Saving Throws.
 Feature/&BardClassFastMovementMovementAffinityTitle	Fast movement

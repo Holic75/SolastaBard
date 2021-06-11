@@ -115,6 +115,7 @@ namespace SolastaBardClass.Helpers
         public static string ThievesTool = "ThievesToolsType";
         public static string HerbalismKit = "HerbalismKitType";
         public static string PoisonerKit = "PoisonersKitType";
+        public static string Lyre = "MusicalInstrumentLyreType";
 
         public static string[] getAllTools()
         {
@@ -315,7 +316,7 @@ namespace SolastaBardClass.Helpers
             }
             if (description_string != "")
             {
-                Definition.GuiPresentation.Description = title_string;
+                Definition.GuiPresentation.Description = description_string;
             }
             if (sprite != null)
             {
@@ -366,7 +367,7 @@ namespace SolastaBardClass.Helpers
             }
             if (description_string != "")
             {
-                Definition.GuiPresentation.Description = title_string;
+                Definition.GuiPresentation.Description = description_string;
             }
             if (sprite != null)
             {
@@ -564,6 +565,86 @@ namespace SolastaBardClass.Helpers
             return new PowerBuilder(name, guid, title_string, description_string, sprite, base_power, effect_description, 
                                     activation_time, fixed_uses, uses_determination, recharge_rate,
                                     uses_ability,ability, cost_per_use, show_casting).AddToDB();
+        }
+    }
+
+
+    public class OnlyDescriptionFeatureBuilder : BaseDefinitionBuilderWithGuidStorage<FeatureDefinition>
+    {
+        protected OnlyDescriptionFeatureBuilder(string name, string guid, string title_string, string description_string)
+                : base(name, guid)
+        {
+            if (title_string != "")
+            {
+                Definition.GuiPresentation.Title = title_string;
+            }
+            if (description_string != "")
+            {
+                Definition.GuiPresentation.Description = description_string;
+            }
+
+            Definition.GuiPresentation.SetSpriteReference(DatabaseHelper.FeatureDefinitionPointPools.PointPoolAbilityScoreImprovement.GuiPresentation.SpriteReference);
+        }
+
+
+        public static FeatureDefinition createOnlyDescriptionFeature(string name, string guid, string new_title_string, string new_description_string)
+        {
+            return new OnlyDescriptionFeatureBuilder(name, guid, new_title_string, new_description_string).AddToDB();
+        }
+    }
+
+
+
+    public class CopyFeatureBuilder<TDefinition> : BaseDefinitionBuilderWithGuidStorage<TDefinition> where TDefinition : BaseDefinition
+    {
+        protected CopyFeatureBuilder(string name, string guid, string title_string, string description_string, AssetReferenceSprite sprite, TDefinition base_feature)
+                : base(base_feature, name, guid)
+        {
+            if (title_string != "")
+            {
+                Definition.GuiPresentation.Title = title_string;
+            }
+            if (description_string != "")
+            {
+                Definition.GuiPresentation.Description = description_string;
+            }
+            if (sprite != null)
+            {
+                Definition.GuiPresentation.SetSpriteReference(sprite);
+            }
+        }
+
+
+        public static TDefinition createFeatureCopy(string name, string guid, string title_string, string description_string, AssetReferenceSprite sprite, TDefinition base_feature)
+        {
+            return new CopyFeatureBuilder<TDefinition>(name, guid, title_string, description_string, sprite, base_feature).AddToDB();
+        }
+    }
+
+
+    public class FeatureBuilder<TDefinition> : BaseDefinitionBuilderWithGuidStorage<TDefinition> where TDefinition : BaseDefinition
+    {
+        protected FeatureBuilder(string name, string guid, string title_string, string description_string, AssetReferenceSprite sprite)
+                : base(name, guid)
+        {
+
+            Definition.GuiPresentation.Title = title_string;
+            Definition.GuiPresentation.Description = description_string;
+
+            if (sprite != null)
+            {
+                Definition.GuiPresentation.SetSpriteReference(sprite);
+            }
+            else
+            {
+                Definition.GuiPresentation.SetSpriteReference(DatabaseHelper.FeatureDefinitionPointPools.PointPoolAbilityScoreImprovement.GuiPresentation.SpriteReference);
+            }
+        }
+
+
+        public static TDefinition createFeature(string name, string guid, string title_string, string description_string, AssetReferenceSprite sprite)
+        {
+            return new FeatureBuilder<TDefinition>(name, guid, title_string, description_string, sprite).AddToDB();
         }
     }
 }

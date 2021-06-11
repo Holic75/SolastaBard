@@ -26,3 +26,8 @@ BardClassInspirationSkillsBonusD10	aa8d2f3e-8e35-4bf5-a7f8-db72c91522fd
 BardClassInspirationAttackBonusD10	cb3f6a79-450e-4372-a2e8-51ddce454378
 BardClassInspirationConditionD10	3590efd6-f6ef-44f7-b0b2-cf25468779d2
 BardInspirationPowerD10	a93c8654-bf39-4586-b7b4-facdad7589ac
+BardExpertise	7f2377a5-adb8-4a2f-b09c-9284b23a3793
+BardClassFontOfInspirationFeature	9657cd23-7103-44df-9cc0-6f456b42fcee
+BardClassJackOfAllTradesFeature	cb52c75d-c481-46ff-977d-365693976c48
+BardClassJackOfAllTradesFeatureD6	3e920d22-b94e-4fe8-a868-a5dffe4bde7e
+BardClassJackOfAllTradesFeatureD8	37b3ff30-95da-427b-9862-5c5f8bb49974
