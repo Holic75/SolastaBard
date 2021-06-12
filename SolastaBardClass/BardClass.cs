@@ -18,13 +18,12 @@ namespace SolastaBardClass
         static public FeatureDefinition font_of_inspiration;
         static public FeatureDefinitionPointPool expertise;
         static public FeatureDefinitionAbilityCheckAffinity jack_of_all_trades;
-        static public Dictionary<RuleDefinitions.DieType, FeatureDefinitionExtraHealingDieOnShortRest> song_of_rest = new Dictionary<RuleDefinitions.DieType, FeatureDefinitionExtraHealingDieOnShortRest>();
+        static public Dictionary<RuleDefinitions.DieType, NewFeatureDefinitions.FeatureDefinitionExtraHealingDieOnShortRest> song_of_rest = new Dictionary<RuleDefinitions.DieType, NewFeatureDefinitions.FeatureDefinitionExtraHealingDieOnShortRest>();
         static public SpellListDefinition bard_spelllist;
-        static public FeatureDefinition magical_secrets;
+        static public NewFeatureDefinitions.FeatureDefinitionExtraSpellSelection magical_secrets;
+        static public FeatureDefinitionPower countercharm;
         //TODO
-        //Countercharm
-        //magical secrets
-        //colleges: lore, valor, swords, eloquence (?), ..
+        //colleges: lore, virtue, wyrdsingers ?, ..
 
 
         protected BardClassBuilder(string name, string guid) : base(name, guid)
@@ -146,7 +145,10 @@ namespace SolastaBardClass
             expertise.RestrictedChoices.Add(Helpers.Tools.Lyre);
 
 
-            var ritual_spellcasting = Helpers.RitualSpellcastingBuilder.createRitualSpellcasting("BardRitualSpellcasting", "25c48b9b-e2e9-4ea7-8a80-e6c413275980", "Feature/&BardClassRitualCastingDescription");
+            var ritual_spellcasting = Helpers.RitualSpellcastingBuilder.createRitualSpellcasting("BardRitualSpellcasting", 
+                                                                                                 "25c48b9b-e2e9-4ea7-8a80-e6c413275980",
+                                                                                                 "Feature/&BardClassRitualCastingDescription",
+                                                                                                 (RuleDefinitions.RitualCasting)ExtraRitualCasting.Spontaneous);
 
             bard_spelllist = Helpers.SpelllistBuilder.create9LevelSpelllist("BardClassSpelllist", "0f3d14a7-f9a1-41ec-a164-f3e0f3800104", "",
                                                                                 new List<SpellDefinition>
@@ -191,7 +193,7 @@ namespace SolastaBardClass
                                                                                     DatabaseHelper.SpellDefinitions.Invisibility,
                                                                                     DatabaseHelper.SpellDefinitions.Knock,
                                                                                     DatabaseHelper.SpellDefinitions.LesserRestoration,
-                                                                                    DatabaseHelper.SpellDefinitions.MirrorImage,
+                                                                                    //DatabaseHelper.SpellDefinitions.MirrorImage,
                                                                                     DatabaseHelper.SpellDefinitions.SeeInvisibility,
                                                                                     DatabaseHelper.SpellDefinitions.Shatter,
                                                                                     DatabaseHelper.SpellDefinitions.Silence
@@ -253,6 +255,7 @@ namespace SolastaBardClass
             createInspiration();
             createSongOfRest();
             createMagicalSecrets();
+            createCountercharm();
             Definition.FeatureUnlocks.Clear();
             Definition.FeatureUnlocks.Add(new FeatureUnlockByLevel(saving_throws, 1)); 
             Definition.FeatureUnlocks.Add(new FeatureUnlockByLevel(armor_proficiency, 1));
@@ -262,53 +265,98 @@ namespace SolastaBardClass
             Definition.FeatureUnlocks.Add(new FeatureUnlockByLevel(bard_spellcasting, 1));
             Definition.FeatureUnlocks.Add(new FeatureUnlockByLevel(ritual_spellcasting, 1));
             Definition.FeatureUnlocks.Add(new FeatureUnlockByLevel(inspiration_powers[RuleDefinitions.DieType.D6], 1));
-            Definition.FeatureUnlocks.Add(new FeatureUnlockByLevel(song_of_rest[RuleDefinitions.DieType.D6], 2));
+            Definition.FeatureUnlocks.Add(new FeatureUnlockByLevel(song_of_rest[RuleDefinitions.DieType.D6], 2));           
             Definition.FeatureUnlocks.Add(new FeatureUnlockByLevel(jack_of_all_trades, 3));
             Definition.FeatureUnlocks.Add(new FeatureUnlockByLevel(expertise, 3));
-            Definition.FeatureUnlocks.Add(new FeatureUnlockByLevel(magical_secrets, 3));
-
+            Definition.FeatureUnlocks.Add(new FeatureUnlockByLevel(DatabaseHelper.FeatureDefinitionFeatureSets.FeatureSetAbilityScoreChoice, 4));
             Definition.FeatureUnlocks.Add(new FeatureUnlockByLevel(inspiration_powers[RuleDefinitions.DieType.D8], 5));
             Definition.FeatureUnlocks.Add(new FeatureUnlockByLevel(font_of_inspiration, 5));
+            Definition.FeatureUnlocks.Add(new FeatureUnlockByLevel(countercharm, 6));
+            Definition.FeatureUnlocks.Add(new FeatureUnlockByLevel(DatabaseHelper.FeatureDefinitionFeatureSets.FeatureSetAbilityScoreChoice, 8));
             Definition.FeatureUnlocks.Add(new FeatureUnlockByLevel(song_of_rest[RuleDefinitions.DieType.D8], 9));
+            Definition.FeatureUnlocks.Add(new FeatureUnlockByLevel(magical_secrets, 10));
             Definition.FeatureUnlocks.Add(new FeatureUnlockByLevel(inspiration_powers[RuleDefinitions.DieType.D10], 10));
             Definition.FeatureUnlocks.Add(new FeatureUnlockByLevel(expertise, 10));
+            Definition.FeatureUnlocks.Add(new FeatureUnlockByLevel(DatabaseHelper.FeatureDefinitionFeatureSets.FeatureSetAbilityScoreChoice, 12));
+            Definition.FeatureUnlocks.Add(new FeatureUnlockByLevel(DatabaseHelper.FeatureDefinitionFeatureSets.FeatureSetAbilityScoreChoice, 16));
+            Definition.FeatureUnlocks.Add(new FeatureUnlockByLevel(DatabaseHelper.FeatureDefinitionFeatureSets.FeatureSetAbilityScoreChoice, 19));
 
-            //Level 3 Additional rage use - Add additional uses through subclasses since most times the subclass alters the rage power anyways.
-            //Subclass feature at level 3
             var subclassChoicesGuiPresentation = new GuiPresentation();
             subclassChoicesGuiPresentation.Title = "Subclass/&BardSubclassPathTitle";
             subclassChoicesGuiPresentation.Description = "Subclass/&BardSubclassPathDescription";
             BardFeatureDefinitionSubclassChoice = this.BuildSubclassChoice(3, "Path", false, "SubclassChoiceBardSpecialistArchetypes", subclassChoicesGuiPresentation, BardClassSubclassesGuid);
+        }
 
-            Definition.FeatureUnlocks.Add(new FeatureUnlockByLevel(DatabaseHelper.FeatureDefinitionFeatureSets.FeatureSetAbilityScoreChoice, 4));
-            Definition.FeatureUnlocks.Add(new FeatureUnlockByLevel(DatabaseHelper.FeatureDefinitionAttributeModifiers.AttributeModifierFighterExtraAttack, 5));
-            Definition.FeatureUnlocks.Add(new FeatureUnlockByLevel(BardClassFastMovementMovementAffinityBuilder.FastMovementMovementAffinity, 5));
-            Definition.FeatureUnlocks.Add(new FeatureUnlockByLevel(BardClassFastMovementMovementPowerForLevelUpDescriptionBuilder.FastMovementMovementPowerForLevelUpDescription, 5));
-            //Level 6 Additional rage use - Add additional uses through subclasses since most times the subclass alters the rage power anyways.
-            //SubclassFeature at level 6
-            Definition.FeatureUnlocks.Add(new FeatureUnlockByLevel(DatabaseHelper.FeatureDefinitionCombatAffinitys.CombatAffinityEagerForBattle, 7));
-            Definition.FeatureUnlocks.Add(new FeatureUnlockByLevel(BardClassInitiativeAdvantagePowerForLevelUpDescriptionBuilder.InitiativeAdvantagePowerForLevelUpDescription, 7));
-            //Definition.FeatureUnlocks.Add(new FeatureUnlockByLevel(DatabaseHelper.FeatureDefinitionCampAffinitys.CampAffinityFeatFocusedSleeper, 7)); //Could use this to helps not be asleep in camp maybe?  Could add the full Oblivion domain thing? Not sure
-            Definition.FeatureUnlocks.Add(new FeatureUnlockByLevel(DatabaseHelper.FeatureDefinitionFeatureSets.FeatureSetAbilityScoreChoice, 8));
-            Definition.FeatureUnlocks.Add(new FeatureUnlockByLevel(DatabaseHelper.FeatureDefinitionAttributeModifiers.AttributeModifierMartialChampionImprovedCritical, 9)); //Ideally we could add extra damage on crit but I don't think that's possible
-            //Subclass feature at level 10
 
-            //Above level 10 features
-            //Level 11 Relentless Rage
-            //Level 12 Rage use increase
-            Definition.FeatureUnlocks.Add(new FeatureUnlockByLevel(DatabaseHelper.FeatureDefinitionFeatureSets.FeatureSetAbilityScoreChoice, 12));
-            //Level 13 Brutal Critical (2 dice)
-            //Level 14 Path feature
-            //Level 15 Persistent Rage
-            Definition.FeatureUnlocks.Add(new FeatureUnlockByLevel(DatabaseHelper.FeatureDefinitionFeatureSets.FeatureSetAbilityScoreChoice, 16));
-            //Level 16 Rage damage increase
-            //Level 16 Brutal Critical (3 dice)
-            //Level 17 Rage use increase
-            //Level 18 Indomitable Might
-            Definition.FeatureUnlocks.Add(new FeatureUnlockByLevel(DatabaseHelper.FeatureDefinitionFeatureSets.FeatureSetAbilityScoreChoice, 19));
-            //Level 20 	Primal Champion
-            //Level 20 Unlimited Rages
+        static void createCountercharm()
+        {
+            string countercharm_title_string = "Feature/&BardClassCountercharmPowerTitle";
+            string countercharm_description_string = "Feature/&BardClassCountercharmPowerDescription";
+            string countercharm_effect_description_string = "Feature/&BardClassCountercharmEffectDescription";
 
+            var affinity_frightened = Helpers.ConditionAffinityBuilder.createConditionAffinity("BardClassCountercharmFrightenedAffinity",
+                                                                                            "",
+                                                                                            "",
+                                                                                            "",
+                                                                                            null,
+                                                                                            Helpers.Conditions.Frightened,
+                                                                                            RuleDefinitions.ConditionAffinityType.None,
+                                                                                            RuleDefinitions.AdvantageType.Advantage,
+                                                                                            RuleDefinitions.AdvantageType.None
+                                                                                            );
+            var affinity_charmed = Helpers.ConditionAffinityBuilder.createConditionAffinity("BardClassCountercharmCharmedAffinity",
+                                                                                            "",
+                                                                                            "",
+                                                                                            "",
+                                                                                            null,
+                                                                                            Helpers.Conditions.Charmed,
+                                                                                            RuleDefinitions.ConditionAffinityType.None,
+                                                                                            RuleDefinitions.AdvantageType.Advantage,
+                                                                                            RuleDefinitions.AdvantageType.None
+                                                                                            );
+
+            var effect_condition = Helpers.ConditionBuilder.createCondition("BardClassCountercharmEffectCondition",
+                                                                            "",
+                                                                            countercharm_title_string,
+                                                                            countercharm_effect_description_string,
+                                                                            null,
+                                                                            DatabaseHelper.ConditionDefinitions.ConditionResisting,
+                                                                            affinity_charmed,
+                                                                            affinity_frightened
+                                                                            );
+
+            var effect = new EffectDescription();
+            effect.Copy(DatabaseHelper.SpellDefinitions.Resistance.EffectDescription);
+            effect.SetRangeType(RuleDefinitions.RangeType.Self);
+            effect.SetRangeParameter(0);
+            effect.SetTargetProximityDistance(30);
+            effect.DurationParameter = 1;
+            effect.DurationType = RuleDefinitions.DurationType.Round;
+            effect.SetEndOfEffect(RuleDefinitions.TurnOccurenceType.EndOfTurn);
+            effect.EffectForms.Clear();
+            effect.SetTargetType(RuleDefinitions.TargetType.Sphere);
+
+            var effect_form = new EffectForm();
+            effect_form.ConditionForm = new ConditionForm();
+            effect_form.FormType = EffectForm.EffectFormType.Condition;
+            effect_form.ConditionForm.Operation = ConditionForm.ConditionOperation.Add;
+            effect_form.ConditionForm.ConditionDefinition = effect_condition;
+            effect.EffectForms.Add(effect_form);
+            effect.SetRecurrentEffect(RuleDefinitions.RecurrentEffect.OnActivation | RuleDefinitions.RecurrentEffect.OnEnter | RuleDefinitions.RecurrentEffect.OnTurnStart);
+            countercharm = Helpers.PowerBuilder.createPower("BardCountercharmPower",
+                                                            "",
+                                                            countercharm_title_string,
+                                                            countercharm_description_string,
+                                                            DatabaseHelper.SpellDefinitions.Resistance.GuiPresentation.SpriteReference,
+                                                            DatabaseHelper.FeatureDefinitionPowers.PowerPaladinAuraOfProtection,
+                                                            effect,
+                                                            RuleDefinitions.ActivationTime.Action,
+                                                            0,
+                                                            RuleDefinitions.UsesDetermination.Fixed,
+                                                            RuleDefinitions.RechargeRate.AtWill,
+                                                            Helpers.Stats.Charisma,
+                                                            Helpers.Stats.Charisma
+                                                            );
         }
 
 
@@ -321,51 +369,19 @@ namespace SolastaBardClass
                                                                              DatabaseHelper.SpellListDefinitions.SpellListPaladin,
                                                                              DatabaseHelper.SpellListDefinitions.SpellListRanger
                                                                              );
+            spelllist.SpellsByLevel[0].Spells = bard_spelllist.SpellsByLevel[0].Spells; //do not affect cantrips for the time being
 
-            List<FeatureDefinition> features = new List<FeatureDefinition>();
-            foreach (var sl in spelllist.SpellsByLevel)
-            {
-                if (sl.Level <= 2 && sl.Level >= 1)
-                {
-                    foreach (var s in sl.Spells)
-                    {
-                        var feature = Helpers.AutoPrepareSpellBuilder.createAutoPrepareSpell("BardClassMagicalSecret" + s.name,
-                                                                                              "",
-                                                                                              s.GuiPresentation.Title,
-                                                                                              s.GuiPresentation.Description,
-                                                                                              bard_class,
-                                                                                              new FeatureDefinitionAutoPreparedSpells.AutoPreparedSpellsGroup()
-                                                                                              {
-                                                                                                  ClassLevel = 1,
-                                                                                                  SpellsList = new List<SpellDefinition> {s}
-                                                                                              }
-                                                                                              );
-                        features.Add(feature);
-                    }
-                }
-                else if (sl.Level == 0)
-                {
-                    foreach (var s in sl.Spells)
-                    {
-                        var feature = Helpers.BonusCantripsBuilder.createAutoPrepareSpell("BardClassMagicalSecret" + s.name,
-                                                                      "",
-                                                                      s.GuiPresentation.Title,
-                                                                      s.GuiPresentation.Description,
-                                                                      s
-                                                                      );
-                        features.Add(feature);
-                    }
-                }
-            }
-
-            magical_secrets = Helpers.FeatureSetBuilder.createFeatureSet("BardClassMagicalSecrets",
-                                                                         "",
-                                                                         "Feature/&BardClassMagicalSecretsTitle",
-                                                                         "Feature/&BardClassMagicalSecretsDescription",
-                                                                         false, FeatureDefinitionFeatureSet.FeatureSetMode.Exclusion, true,
-                                                                         features.ToArray()
-                                                                         );
+            magical_secrets = Helpers.ExtraSpellSelectionBuilder.createExtraSpellSelection("BardClassMagicalSecrets",
+                                                                                            "",
+                                                                                            "Feature/&BardClassMagicalSecretsTitle",
+                                                                                            "Feature/&BardClassMagicalSecretsDescription",
+                                                                                            bard_class,
+                                                                                            10,
+                                                                                            2,
+                                                                                            spelllist
+                                                                                            );
         }
+
 
         static void createSongOfRest()
         {
@@ -376,7 +392,7 @@ namespace SolastaBardClass
 
             for (int i = 0; i < dice.Length; i++)
             {
-                var feature = Helpers.FeatureBuilder<FeatureDefinitionExtraHealingDieOnShortRest>.createFeature("BardClassSongOfRestFeature" + dice[i].ToString(),
+                var feature = Helpers.FeatureBuilder<NewFeatureDefinitions.FeatureDefinitionExtraHealingDieOnShortRest>.createFeature("BardClassSongOfRestFeature" + dice[i].ToString(),
                                                                                                                  "",
                                                                                                                  song_of_rest_title_string + (i + 1).ToString(),
                                                                                                                  song_of_rest_description_string,
@@ -388,11 +404,11 @@ namespace SolastaBardClass
             }
         }
 
+
         static void createInspiration()
         {
             string inspiration_title_string = "Feature/&BardClassInspirationPowerTitle";
             string inspiration_description_string = "Feature/&BardClassInspirationPowerDescription";
-
 
             FeatureDefinitionPower previous_power = null;
             var dice = new RuleDefinitions.DieType[] { RuleDefinitions.DieType.D6, RuleDefinitions.DieType.D8, RuleDefinitions.DieType.D10 };
@@ -489,6 +505,7 @@ namespace SolastaBardClass
                                                                                                      font_of_inspiration_title_string,
                                                                                                      font_of_inspiration_description_string);
         }
+
 
         public static void BuildAndAddClassToDB()
         {

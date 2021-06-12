@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SolastaBardClass
+namespace SolastaBardClass.NewFeatureDefinitions
 {
     class FeatureDefinitionExtraHealingDieOnShortRest : FeatureDefinition
     {

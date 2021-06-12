@@ -122,3 +122,10 @@ BardClassMagicalSecretProtectionFromPoison	19a1a59f-8903-4ce0-a565-2b7b96261574
 BardClassMagicalSecretBarkskin	ce672fd4-5fc3-4610-826e-22cf02efcc04
 BardClassMagicalSecretPassWithoutTrace	3c0baf71-c53f-4920-bd2a-835293584918
 BardClassMagicalSecrets	b61aa024-2c86-4d04-b276-6266cd203ab6
+MagicAffinitySpontaneousRitualCasting	efd3d247-d74f-47ac-b575-159fcad3608f
+BardClassMagical1Secrets	0d578547-89fd-4240-a397-c64d8706c96c
+BardClassMagical2Secrets	7a4262d6-c1dc-456c-bd65-822864aaddeb
+BardClassCountercharmFrightenedAffinity	d5d670fc-44a6-4b2d-a35d-2e882d4eee5a
+BardClassCountercharmCharmedAffinity	23e07f59-74f0-4374-b96b-c4135dea3b6d
+BardClassCountercharmEffectCondition	42b7ae27-7135-4fa2-9393-a9ee3b42e40e
+BardCountercharmPower	a8eebabc-747d-4fb6-b03a-d5a498e6a2fa

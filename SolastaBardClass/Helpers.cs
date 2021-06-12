@@ -42,6 +42,36 @@ namespace SolastaBardClass.Helpers
         }
     }
 
+
+    public static class Conditions
+    {
+        public static string Charmed = "ConditionCharmed";
+        public static string Frightened = "ConditionFrightened";
+
+
+        public static string[] getAllConditions()
+        {
+            return typeof(Conditions).GetFields(BindingFlags.Public | BindingFlags.Static).Select(f => f.GetValue(null)).Cast<string>().ToArray();
+        }
+
+        public static HashSet<string> getAllConditionsSet()
+        {
+            return getAllConditions().ToHashSet();
+        }
+
+        public static void assertAllConditions(IEnumerable<string> conditions)
+        {
+            var all_conditions = getAllConditionsSet();
+            foreach (var c in conditions)
+            {
+                if (!all_conditions.Contains(c))
+                {
+                    throw new System.Exception(c + "is not a Condition");
+                }
+            }
+        }
+    }
+
     public static class Skills
     {
         public static string Acrobatics = "Acrobatics";
@@ -145,7 +175,7 @@ namespace SolastaBardClass.Helpers
 
     public class ProficiencyBuilder : BaseDefinitionBuilderWithGuidStorage<FeatureDefinitionProficiency>
     {
-        protected ProficiencyBuilder(string name, string guid, string title_string, string description_string, FeatureDefinitionProficiency base_feature, params string[] proficiencies) 
+        protected ProficiencyBuilder(string name, string guid, string title_string, string description_string, FeatureDefinitionProficiency base_feature, params string[] proficiencies)
                 : base(base_feature, name, guid)
         {
             if (title_string != "")
@@ -191,7 +221,7 @@ namespace SolastaBardClass.Helpers
 
     public class PoolBuilder : BaseDefinitionBuilderWithGuidStorage<FeatureDefinitionPointPool>
     {
-        protected PoolBuilder(string name, string guid, string title_string, string description_string, 
+        protected PoolBuilder(string name, string guid, string title_string, string description_string,
                                         FeatureDefinitionPointPool base_feature, HeroDefinitions.PointsPoolType pool_type,
                                         int num_choices, params string[] choices)
                 : base(base_feature, name, guid)
@@ -215,7 +245,7 @@ namespace SolastaBardClass.Helpers
         public static FeatureDefinitionPointPool createSkillProficiency(string name, string guid, string new_title_string, string new_description_string, int num_skills, params string[] skills)
         {
             Skills.assertAllSkills(skills);
-            return new PoolBuilder(name, guid, new_title_string, new_description_string, DatabaseHelper.FeatureDefinitionPointPools.PointPoolRogueSkillPoints, 
+            return new PoolBuilder(name, guid, new_title_string, new_description_string, DatabaseHelper.FeatureDefinitionPointPools.PointPoolRogueSkillPoints,
                                       HeroDefinitions.PointsPoolType.Skill, num_skills, skills).AddToDB();
         }
     }
@@ -223,17 +253,27 @@ namespace SolastaBardClass.Helpers
 
     public class RitualSpellcastingBuilder : BaseDefinitionBuilderWithGuidStorage<FeatureDefinitionFeatureSet>
     {
-        protected RitualSpellcastingBuilder(string name, string guid, string description_string) : base(DatabaseHelper.FeatureDefinitionFeatureSets.FeatureSetWizardRitualCasting, name, guid)
+        protected RitualSpellcastingBuilder(string name, string guid, string description_string,
+                                            RuleDefinitions.RitualCasting ritual_casting_type) : base(DatabaseHelper.FeatureDefinitionFeatureSets.FeatureSetWizardRitualCasting, name, guid)
         {
             if (description_string != "")
             {
                 Definition.GuiPresentation.Description = description_string;
             }
+
+            var action_affinity_feature = Definition.FeatureSet[1];
+
+            Definition.FeatureSet.Clear();
+            if (ritual_casting_type != RuleDefinitions.RitualCasting.None)
+            {
+                Definition.FeatureSet.Add(Common.ritual_spellcastings_map[ritual_casting_type]);
+            }
+            Definition.FeatureSet.Add(action_affinity_feature);
         }
 
-        public static FeatureDefinitionFeatureSet createRitualSpellcasting(string name, string guid, string description_string)
+        public static FeatureDefinitionFeatureSet createRitualSpellcasting(string name, string guid, string description_string, RuleDefinitions.RitualCasting ritual_casting_type)
         {
-            return new RitualSpellcastingBuilder(name, guid, description_string).AddToDB();
+            return new RitualSpellcastingBuilder(name, guid, description_string, ritual_casting_type).AddToDB();
         }
     }
 
@@ -252,7 +292,7 @@ namespace SolastaBardClass.Helpers
                 Definition.SpellsByLevel[i].Spells.Clear();
                 if (spells_by_level.Length > i)
                 {
-                    Definition.SpellsByLevel[i].Spells.AddRange(spells_by_level[i]);
+                    Definition.SpellsByLevel[i].Spells.AddRange(spells_by_level[i].Where(s => s.ContentPack == GamingPlatformDefinitions.ContentPack.BaseGame && s.Implemented));
                 }
             }
         }
@@ -307,7 +347,7 @@ namespace SolastaBardClass.Helpers
 
     class SpellcastingBuilder : BaseDefinitionBuilderWithGuidStorage<FeatureDefinitionCastSpell>
     {
-        
+
         protected SpellcastingBuilder(string name, string guid, string title_string, string description_string, SpellListDefinition spelllist,
                                       string spell_stat, RuleDefinitions.SpellKnowledge spell_knowledge, RuleDefinitions.SpellReadyness spell_readyness,
                                       List<int> scribed_spells, List<int> cantrips_per_level, List<int> known_spells,
@@ -352,8 +392,8 @@ namespace SolastaBardClass.Helpers
     {
 
 
-        protected SavingThrowAffinityBuilder(string name, string guid, 
-                                             string title_string, string description_string, 
+        protected SavingThrowAffinityBuilder(string name, string guid,
+                                             string title_string, string description_string,
                                              AssetReferenceSprite sprite,
                                              RuleDefinitions.CharacterSavingThrowAffinity affinity,
                                              int dice_number,
@@ -382,7 +422,7 @@ namespace SolastaBardClass.Helpers
                 group.affinity = affinity;
                 group.abilityScoreName = s;
                 Definition.AffinityGroups.Add(group);
-            }          
+            }
         }
 
         public static FeatureDefinitionSavingThrowAffinity createSavingthrowAffinity(string name, string guid,
@@ -395,6 +435,53 @@ namespace SolastaBardClass.Helpers
         {
             Stats.assertAllStats(stats);
             return new SavingThrowAffinityBuilder(name, guid, title_string, description_string, sprite, affinity, dice_number, die_type, stats).AddToDB();
+        }
+    }
+
+
+    public class ConditionAffinityBuilder : BaseDefinitionBuilderWithGuidStorage<FeatureDefinitionConditionAffinity>
+    {
+
+
+        protected ConditionAffinityBuilder(string name, string guid,
+                                          string title_string, string description_string,
+                                          AssetReferenceSprite sprite,
+                                          string condition_type,
+                                          RuleDefinitions.ConditionAffinityType affinity,
+                                          RuleDefinitions.AdvantageType saving_throw_advantage_type,
+                                          RuleDefinitions.AdvantageType reroll_advantage_type) : 
+            base(DatabaseHelper.FeatureDefinitionConditionAffinitys.ConditionAffinityElfFeyAncestryCharm, name, guid)
+        {
+            if (title_string != "")
+            {
+                Definition.GuiPresentation.Title = title_string;
+            }
+            if (description_string != "")
+            {
+                Definition.GuiPresentation.Description = description_string;
+            }
+            if (sprite != null)
+            {
+                Definition.GuiPresentation.SetSpriteReference(sprite);
+            }
+
+            Definition.SetConditionType(condition_type);
+            Definition.SetConditionAffinityType(affinity);
+            Definition.SetRerollAdvantageType(reroll_advantage_type);
+            Definition.SetSavingThrowAdvantageType(saving_throw_advantage_type);
+        }
+
+        public static FeatureDefinitionConditionAffinity createConditionAffinity(string name, string guid,
+                                                                                  string title_string, string description_string,
+                                                                                  AssetReferenceSprite sprite,
+                                                                                  string condition_type,
+                                                                                  RuleDefinitions.ConditionAffinityType affinity,
+                                                                                  RuleDefinitions.AdvantageType saving_throw_advantage_type,
+                                                                                  RuleDefinitions.AdvantageType reroll_advantage_type)
+        {
+
+            Conditions.assertAllConditions(new string[] { condition_type });
+            return new ConditionAffinityBuilder(name, guid, title_string, description_string, sprite, condition_type, affinity, saving_throw_advantage_type, reroll_advantage_type).AddToDB();
         }
     }
 
@@ -447,7 +534,7 @@ namespace SolastaBardClass.Helpers
                                                                                          params string[] stats)
         {
             Stats.assertAllStats(stats);
-            return new AbilityCheckAffinityBuilder(name, guid, title_string, description_string, sprite, affinity, dice_number, die_type, 
+            return new AbilityCheckAffinityBuilder(name, guid, title_string, description_string, sprite, affinity, dice_number, die_type,
                                                     stats.ToList(), Enumerable.Repeat("", stats.Length).ToList()).AddToDB();
         }
 
@@ -494,7 +581,7 @@ namespace SolastaBardClass.Helpers
             {
                 Definition.SetMyAttackModifierSign(RuleDefinitions.AttackModifierSign.Substract);
             }
-           
+
         }
 
 
@@ -544,7 +631,7 @@ namespace SolastaBardClass.Helpers
                                                             ConditionDefinition base_condititon,
                                                             params FeatureDefinition[] features)
         {
-            return new ConditionBuilder(name, guid, title_string, description_string, sprite,base_condititon, new RuleDefinitions.ConditionInterruption[0], features).AddToDB();
+            return new ConditionBuilder(name, guid, title_string, description_string, sprite, base_condititon, new RuleDefinitions.ConditionInterruption[0], features).AddToDB();
         }
 
 
@@ -567,7 +654,7 @@ namespace SolastaBardClass.Helpers
                                FeatureDefinitionPower base_power,
                                EffectDescription effect_description,
                                RuleDefinitions.ActivationTime activation_time,
-                               int fixed_uses, 
+                               int fixed_uses,
                                RuleDefinitions.UsesDetermination uses_determination,
                                RuleDefinitions.RechargeRate recharge_rate,
                                string uses_ability,
@@ -612,9 +699,9 @@ namespace SolastaBardClass.Helpers
                                                          int cost_per_use = 1,
                                                          bool show_casting = true)
         {
-            return new PowerBuilder(name, guid, title_string, description_string, sprite, base_power, effect_description, 
+            return new PowerBuilder(name, guid, title_string, description_string, sprite, base_power, effect_description,
                                     activation_time, fixed_uses, uses_determination, recharge_rate,
-                                    uses_ability,ability, cost_per_use, show_casting).AddToDB();
+                                    uses_ability, ability, cost_per_use, show_casting).AddToDB();
         }
     }
 
@@ -699,10 +786,10 @@ namespace SolastaBardClass.Helpers
     }
 
 
-    public class AutoPrepareSpellBuilder: BaseDefinitionBuilderWithGuidStorage<FeatureDefinitionAutoPreparedSpells>
+    public class AutoPrepareSpellBuilder : BaseDefinitionBuilderWithGuidStorage<FeatureDefinitionAutoPreparedSpells>
     {
         protected AutoPrepareSpellBuilder(string name, string guid, string title_string, string description_string,
-                                          CharacterClassDefinition caster_class, 
+                                          CharacterClassDefinition caster_class,
                                           params FeatureDefinitionAutoPreparedSpells.AutoPreparedSpellsGroup[] spells_at_level)
                 : base(DatabaseHelper.FeatureDefinitionAutoPreparedSpellss.AutoPreparedSpellsDomainBattle, name, guid)
         {
@@ -775,6 +862,48 @@ namespace SolastaBardClass.Helpers
                                                                              params FeatureDefinition[] features)
         {
             return new FeatureSetBuilder(name, guid, title_string, description_string, enumerate_in_description, set_mode, unique_choices, features).AddToDB();
+        }
+    }
+
+
+
+    public class ExtraSpellSelectionBuilder : BaseDefinitionBuilderWithGuidStorage<NewFeatureDefinitions.FeatureDefinitionExtraSpellSelection>
+    {
+        protected ExtraSpellSelectionBuilder(string name, string guid, string title_string, string description_string,
+                                          CharacterClassDefinition caster_class, int level, int num_spells,
+                                          SpellListDefinition spell_list)
+                : base(name, guid)
+        {
+
+            Definition.GuiPresentation.Title = title_string;
+            Definition.GuiPresentation.Description = description_string;
+
+            Definition.caster_class = caster_class;
+            Definition.level = level;
+            Definition.max_spells = num_spells;
+            Definition.spell_list = spell_list;
+        }
+
+
+        public static NewFeatureDefinitions.FeatureDefinitionExtraSpellSelection createExtraSpellSelection(string name, string guid, string title_string, string description_string,
+                                                                                                          CharacterClassDefinition caster_class, int level, int num_spells,
+                                                                                                          SpellListDefinition spell_list)
+        {
+            return new ExtraSpellSelectionBuilder(name, guid, title_string, description_string, caster_class, level, num_spells, spell_list).AddToDB();
+        }
+    }
+
+    public class Accessors
+    {
+        public static void SetField(object obj, string name, object value)
+        {
+            HarmonyLib.AccessTools.Field(obj.GetType(), name).SetValue(obj, value);
+        }
+
+
+        public static object GetField(object obj, string name)
+        {
+            return HarmonyLib.AccessTools.Field(obj.GetType(), name).GetValue(obj);
         }
     }
 }

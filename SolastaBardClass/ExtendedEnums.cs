@@ -13,4 +13,13 @@ namespace SolastaBardClass
         Unarmored = 1,
         NonCaster = 128
     }
+
+
+    public enum ExtraRitualCasting
+    {
+        None,
+        Prepared,
+        Spellbook,
+        Spontaneous
+    }
 }

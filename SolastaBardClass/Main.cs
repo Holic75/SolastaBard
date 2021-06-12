@@ -71,6 +71,7 @@ namespace SolastaBardClass
 
         internal static void ModEntryPoint()
         {
+            Common.initialize();
             BardClassBuilder.BuildAndAddClassToDB();
         }
     }
