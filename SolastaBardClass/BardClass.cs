@@ -13,6 +13,7 @@ namespace SolastaBardClass
         const string BardClassNameGuid = "274106b8-0376-4bcd-bd1b-440633a394ae";
         const string BardClassSubclassesGuid = "be865126-d7c3-45f3-b891-e77bd8b00cb1";
 
+        static public RuleDefinitions.DieType[] inspiration_dice = new RuleDefinitions.DieType[] { RuleDefinitions.DieType.D6, RuleDefinitions.DieType.D8, RuleDefinitions.DieType.D10 };
         static public CharacterClassDefinition bard_class;
         static public Dictionary<RuleDefinitions.DieType, FeatureDefinitionPower> inspiration_powers = new Dictionary<RuleDefinitions.DieType, FeatureDefinitionPower>();
         static public FeatureDefinition font_of_inspiration;
@@ -22,6 +23,8 @@ namespace SolastaBardClass
         static public SpellListDefinition bard_spelllist;
         static public NewFeatureDefinitions.FeatureDefinitionExtraSpellSelection magical_secrets;
         static public FeatureDefinitionPower countercharm;
+
+        static public Dictionary<RuleDefinitions.DieType, FeatureDefinitionFeatureSet> cutting_words = new Dictionary<RuleDefinitions.DieType, FeatureDefinitionFeatureSet>();
         //TODO
         //colleges: lore, virtue, wyrdsingers ?, ..
 
@@ -256,6 +259,7 @@ namespace SolastaBardClass
             createSongOfRest();
             createMagicalSecrets();
             createCountercharm();
+            createCuttingWords();
             Definition.FeatureUnlocks.Clear();
             Definition.FeatureUnlocks.Add(new FeatureUnlockByLevel(saving_throws, 1)); 
             Definition.FeatureUnlocks.Add(new FeatureUnlockByLevel(armor_proficiency, 1));
@@ -265,6 +269,7 @@ namespace SolastaBardClass
             Definition.FeatureUnlocks.Add(new FeatureUnlockByLevel(bard_spellcasting, 1));
             Definition.FeatureUnlocks.Add(new FeatureUnlockByLevel(ritual_spellcasting, 1));
             Definition.FeatureUnlocks.Add(new FeatureUnlockByLevel(inspiration_powers[RuleDefinitions.DieType.D6], 1));
+            Definition.FeatureUnlocks.Add(new FeatureUnlockByLevel(cutting_words[RuleDefinitions.DieType.D6], 1));
             Definition.FeatureUnlocks.Add(new FeatureUnlockByLevel(song_of_rest[RuleDefinitions.DieType.D6], 2));           
             Definition.FeatureUnlocks.Add(new FeatureUnlockByLevel(jack_of_all_trades, 3));
             Definition.FeatureUnlocks.Add(new FeatureUnlockByLevel(expertise, 3));
@@ -285,6 +290,93 @@ namespace SolastaBardClass
             subclassChoicesGuiPresentation.Title = "Subclass/&BardSubclassPathTitle";
             subclassChoicesGuiPresentation.Description = "Subclass/&BardSubclassPathDescription";
             BardFeatureDefinitionSubclassChoice = this.BuildSubclassChoice(3, "Path", false, "SubclassChoiceBardSpecialistArchetypes", subclassChoicesGuiPresentation, BardClassSubclassesGuid);
+        }
+
+
+        static void createCuttingWords()
+        {
+            string cutting_words_title_string = "Feature/&BardClassCuttingWordsTitle";
+            string cutting_words_description_string = "Feature/&BardClassCuttingWordsDescription";
+            string cutting_words_attack_roll_title_string = "Feature/&BardClassCuttingWordsPowerAttackRollTitle";
+            string cutting_words_damage_roll_title_string = "Feature/&BardClassCuttingWordsPowerDamageRollTitle";
+
+            NewFeatureDefinitions.FeatureDefinitionReactionPowerOnAllyAttackAttempt previous_attack_roll_penalty_power = null;
+            var dice = inspiration_dice;
+
+            for (int i = 0; i < dice.Length; i++)
+            {
+                var penalty_attack = Helpers.AttackBonusBuilder.createAttackBonus("BardClassCuttingWordsAttackPenalty" + dice[i].ToString(),
+                                                                                    "",
+                                                                                    "",
+                                                                                    "",
+                                                                                    null,
+                                                                                    1,
+                                                                                    dice[i],
+                                                                                    substract: true
+                                                                                    );
+
+                var attack_penalty_condition = Helpers.ConditionBuilder.createConditionWithInterruptions("BardClassCuttingWordsAttackPenaltyCondition" + dice[i].ToString(),
+                                                                                                          "",
+                                                                                                          cutting_words_attack_roll_title_string,
+                                                                                                          cutting_words_description_string,
+                                                                                                          null,
+                                                                                                          DatabaseHelper.ConditionDefinitions.ConditionDazzled,
+                                                                                                          new RuleDefinitions.ConditionInterruption[] {RuleDefinitions.ConditionInterruption.Attacks },
+                                                                                                          penalty_attack
+                                                                                                          );
+
+                var effect = new EffectDescription();
+                effect.Copy(DatabaseHelper.SpellDefinitions.Dazzle.EffectDescription);
+                effect.SetRangeType(RuleDefinitions.RangeType.Distance);
+                effect.SetRangeParameter(60);
+                effect.DurationParameter = 1;
+                effect.SetTargetSide(RuleDefinitions.Side.Enemy);
+                effect.DurationType = RuleDefinitions.DurationType.Round;
+                effect.EffectForms.Clear();
+
+                var effect_form = new EffectForm();
+                effect_form.ConditionForm = new ConditionForm();
+                effect_form.FormType = EffectForm.EffectFormType.Condition;
+                effect_form.ConditionForm.Operation = ConditionForm.ConditionOperation.Add;
+                effect_form.ConditionForm.ConditionDefinition = attack_penalty_condition;
+                effect.EffectForms.Add(effect_form);
+
+                var attack_penalty_power = Helpers.GenericPowerBuilder<NewFeatureDefinitions.FeatureDefinitionReactionPowerOnAllyAttackAttempt>
+                                                    .createPower("BardClassCuttingWordsAttackRollsPenaltyPower" + dice[i].ToString(),
+                                                                    "",
+                                                                    cutting_words_attack_roll_title_string,
+                                                                    null,
+                                                                    DatabaseHelper.SpellDefinitions.Dazzle.GuiPresentation.SpriteReference,
+                                                                    effect,
+                                                                    RuleDefinitions.ActivationTime.Reaction,
+                                                                    0,
+                                                                    RuleDefinitions.UsesDetermination.AbilityBonusPlusFixed,
+                                                                    previous_attack_roll_penalty_power == null ? RuleDefinitions.RechargeRate.LongRest : RuleDefinitions.RechargeRate.ShortRest,
+                                                                    Helpers.Stats.Charisma,
+                                                                    Helpers.Stats.Charisma
+                                                                    );
+                attack_penalty_power.worksOnMelee = true;
+                attack_penalty_power.worksOnRanged = true;
+                attack_penalty_power.SetShortTitleOverride(cutting_words_attack_roll_title_string);
+                if (previous_attack_roll_penalty_power != null)
+                {
+                    attack_penalty_power.SetOverriddenPower(previous_attack_roll_penalty_power);
+                }
+                previous_attack_roll_penalty_power = attack_penalty_power;
+
+                var feature_set = Helpers.FeatureSetBuilder.createFeatureSet("BardClassCuttingWordsAttackRolls" + dice[i].ToString(),
+                                                                             "",
+                                                                             cutting_words_title_string + (i + 1).ToString(),
+                                                                             cutting_words_description_string,
+                                                                             false,
+                                                                             FeatureDefinitionFeatureSet.FeatureSetMode.Union,
+                                                                             false,
+                                                                             attack_penalty_power
+                                                                             );
+
+
+                cutting_words.Add(dice[i], feature_set);
+            }
         }
 
 
@@ -411,7 +503,7 @@ namespace SolastaBardClass
             string inspiration_description_string = "Feature/&BardClassInspirationPowerDescription";
 
             FeatureDefinitionPower previous_power = null;
-            var dice = new RuleDefinitions.DieType[] { RuleDefinitions.DieType.D6, RuleDefinitions.DieType.D8, RuleDefinitions.DieType.D10 };
+            var dice = inspiration_dice;
             for (int i = 0; i < dice.Length; i++)
             {
                 var inspiration_saves = Helpers.SavingThrowAffinityBuilder.createSavingthrowAffinity("BardClassInspirationSavingthrowBonus" + dice[i].ToString(),
@@ -475,19 +567,19 @@ namespace SolastaBardClass
                 effect.EffectForms.Add(effect_form);
 
                 var inspiration_power = Helpers.PowerBuilder.createPower("BardInspirationPower" + dice[i].ToString(),
-                                                                     "",
-                                                                     inspiration_title_string + (i + 1).ToString(),
-                                                                     inspiration_description_string,
-                                                                     DatabaseHelper.SpellDefinitions.Guidance.GuiPresentation.SpriteReference,
-                                                                     DatabaseHelper.FeatureDefinitionPowers.PowerPaladinLayOnHands,
-                                                                     effect,
-                                                                     RuleDefinitions.ActivationTime.BonusAction,
-                                                                     0,
-                                                                     RuleDefinitions.UsesDetermination.AbilityBonusPlusFixed,
-                                                                     previous_power == null ? RuleDefinitions.RechargeRate.LongRest : RuleDefinitions.RechargeRate.ShortRest,
-                                                                     Helpers.Stats.Charisma,
-                                                                     Helpers.Stats.Charisma
-                                                                     );
+                                                                         "",
+                                                                         inspiration_title_string + (i + 1).ToString(),
+                                                                         inspiration_description_string,
+                                                                         DatabaseHelper.SpellDefinitions.Guidance.GuiPresentation.SpriteReference,
+                                                                         DatabaseHelper.FeatureDefinitionPowers.PowerPaladinLayOnHands,
+                                                                         effect,
+                                                                         RuleDefinitions.ActivationTime.BonusAction,
+                                                                         0,
+                                                                         RuleDefinitions.UsesDetermination.AbilityBonusPlusFixed,
+                                                                         previous_power == null ? RuleDefinitions.RechargeRate.LongRest : RuleDefinitions.RechargeRate.ShortRest,
+                                                                         Helpers.Stats.Charisma,
+                                                                         Helpers.Stats.Charisma
+                                                                         );
                 inspiration_power.SetShortTitleOverride(inspiration_title_string);
 
                 if (previous_power != null)

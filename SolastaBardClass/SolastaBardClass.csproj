@@ -20,6 +20,13 @@
 		<LangVersion>7.3</LangVersion>
 	</PropertyGroup>
 
+    <Target Name="Publicise" AfterTargets="Clean">
+        <ItemGroup>
+            <PubliciseInputAssemblies Include="$(SolastaInstallDir)\Solasta_Data\Managed\Assembly-CSharp.dll" />
+        </ItemGroup>
+    <Publicise InputAssemblies="@(PubliciseInputAssemblies)" OutputPath="$(SolutionDir)lib/" PubliciseCompilerGenerated="true" />
+    </Target>
+  
 	<Target Name="CheckEnvironmentVars">
 		<Error Text="Please set the SolastaInstallDir environment variable." Condition="'$(SolastaInstallDir)' == ''" ContinueOnError="false" />
 	</Target>
@@ -37,14 +44,21 @@
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release Install|AnyCPU'">
 		<Optimize>true</Optimize>
 		<DefineConstants>TRACE</DefineConstants>
+		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug Install|AnyCPU'">
 		<Optimize>false</Optimize>
+		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
 		<DefineConstants>TRACE</DefineConstants>
+		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+	</PropertyGroup>
+
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+	  <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
 	</PropertyGroup>
 
 	<ItemGroup>
@@ -388,7 +402,7 @@
 			<Private>false</Private>
 		</Reference>
 		<Reference Include="Assembly-CSharp">
-			<HintPath>$([System.IO.Path]::Combine($(SolastaInstallDir), 'Solasta_Data\Managed\Assembly-CSharp.dll'))</HintPath>
+			<HintPath>$(SolutionDir)lib\Assembly-CSharp_public.dll</HintPath>
 			<Private>false</Private>
 		</Reference>
 		<Reference Include="NewtonSoft.Json">
@@ -409,6 +423,10 @@
 		<None Include="..\README.md" Link="README.md">
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</None>
+		<PackageReference Include="Aze.Publicise.MSBuild.Task" Version="1.0.0">
+		  <PrivateAssets>all</PrivateAssets>
+		  <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
+		</PackageReference>
 		<Compile Update="Properties\Resources.Designer.cs">
 		  <DesignTime>True</DesignTime>
 		  <AutoGen>True</AutoGen>

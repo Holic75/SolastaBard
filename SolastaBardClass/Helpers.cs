@@ -866,6 +866,54 @@ namespace SolastaBardClass.Helpers
     }
 
 
+    public class GenericPowerBuilder<T> : BaseDefinitionBuilderWithGuidStorage<T> where T: FeatureDefinitionPower
+    {
+        protected GenericPowerBuilder(string name, string guid, string title_string, string description_string, AssetReferenceSprite sprite,
+                                       EffectDescription effect_description,
+                                       RuleDefinitions.ActivationTime activation_time,
+                                       int fixed_uses,
+                                       RuleDefinitions.UsesDetermination uses_determination,
+                                       RuleDefinitions.RechargeRate recharge_rate,
+                                       string uses_ability,
+                                       string ability,
+                                       int cost_per_use = 1,
+                                       bool show_casting = true) : base(name, guid)
+        {
+            Definition.SetGuiPresentation(new GuiPresentation());
+            Definition.GuiPresentation.Title = title_string;
+            Definition.GuiPresentation.Description = description_string;
+            Definition.GuiPresentation.SetSpriteReference(sprite);
+
+            Definition.SetRechargeRate(recharge_rate);
+            Definition.SetCostPerUse(cost_per_use);
+            Definition.SetFixedUsesPerRecharge(fixed_uses);
+            Definition.SetActivationTime(activation_time);
+            Definition.SetUsesDetermination(uses_determination);
+            Definition.SetShowCasting(show_casting);
+            Definition.SetAbilityScore(ability);
+            Definition.SetUsesAbilityScoreName(uses_ability);
+            Definition.SetEffectDescription(effect_description);
+        }
+
+        public static T createPower(string name, string guid,
+                                    string title_string, string description_string, AssetReferenceSprite sprite,
+                                    EffectDescription effect_description,
+                                    RuleDefinitions.ActivationTime activation_time,
+                                    int fixed_uses,
+                                    RuleDefinitions.UsesDetermination uses_determination,
+                                    RuleDefinitions.RechargeRate recharge_rate,
+                                    string uses_ability = "Strength",
+                                    string ability = "Strength",
+                                    int cost_per_use = 1,
+                                    bool show_casting = true)
+        {
+            return new GenericPowerBuilder<T>(name, guid, title_string, description_string, sprite, effect_description,
+                                                activation_time, fixed_uses, uses_determination, recharge_rate,
+                                                uses_ability, ability, cost_per_use, show_casting).AddToDB();
+        }
+    }
+
+
 
     public class ExtraSpellSelectionBuilder : BaseDefinitionBuilderWithGuidStorage<NewFeatureDefinitions.FeatureDefinitionExtraSpellSelection>
     {

@@ -31,6 +31,15 @@ Feature/&BardClassMagicalSecretsDescription By 10th level, you have plundered ma
 Feature/&BardClassCountercharmPowerTitle Countercharm
 Feature/&BardClassCountercharmPowerDescription At 6th level, you gain the ability to use musical notes or words of power to disrupt mind-influencing effects. As an action, you can start a performance that lasts until the end of your next turn. During that time, you and any friendly creatures within 30 feet of you have advantage on saving throws against being frightened or charmed.
 Feature/&BardClassCountercharmPowerEffectDescription You have advantage on saving throws against being frightened or charmed.
+Feature/&BardClassCuttingWordsTitle Cutting Words
+Reaction/&UseBardClassCuttingWordsAttackRollsPenaltyPowerD6ReactTitle Use Cutting Words
+Reaction/&UseBardClassCuttingWordsAttackRollsPenaltyPowerD6ReactTitleUse Cutting Words
+Reaction/&UseBardClassCuttingWordsAttackRollsPenaltyPowerD6ReactTitle Use Cutting Words
+Feature/&BardClassCuttingWordsDescription At 3rd level, you learn how to use your wit to distract, confuse, and otherwise sap the confidence and competence of others. When a creature that you can see within 60 feet of you makes an attack roll, an ability check, or a damage roll, you can use your reaction to expend one of your uses of Bardic Inspiration, rolling a Bardic Inspiration die and subtracting the number rolled from the creature's roll. You can choose to use this feature after the creature makes its roll, but before the GM determines whether the attack roll or ability check succeeds or fails, or before the creature deals its damage. The creature is immune if it can't hear you or if it's immune to being charmed.
+Feature/&BardClassCuttingWordsPowerAttackRollTitle Cutting Words: Attack Rolls Penalty
+Feature/&BardClassCuttingWordsPowerAttackRollTitle1 Cutting Words: Attack Rolls Penalty (d6)
+Feature/&BardClassCuttingWordsPowerAttackRollTitle2 Cutting Words: Attack Rolls Penalty (d8)
+Feature/&BardClassCuttingWordsPowerAttackRollTitle3 Cutting Words: Attack Rolls Penalty (d10)
 Feature/&BardClassDangerSenseDexteritySavingThrowAffinityTitle	Danger Sense
 Feature/&BardClassDangerSenseDexteritySavingThrowAffinityDescription	Advantage on Dexterity Saving Throws.
 Feature/&BardClassFastMovementMovementAffinityTitle	Fast movement

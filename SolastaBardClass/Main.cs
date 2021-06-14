@@ -72,6 +72,7 @@ namespace SolastaBardClass
         internal static void ModEntryPoint()
         {
             Common.initialize();
+            CharacterActionModifyAttackRollViaPower.initialize();
             BardClassBuilder.BuildAndAddClassToDB();
         }
     }
