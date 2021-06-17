@@ -1,5 +1,6 @@
 ﻿using SolastaModApi;
 using SolastaModApi.Extensions;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -756,6 +757,14 @@ namespace SolastaBardClass.Helpers
         {
             return new CopyFeatureBuilder<TDefinition>(name, guid, title_string, description_string, sprite, base_feature).AddToDB();
         }
+
+        public static TDefinition createFeatureCopy(string name, string guid, string title_string, string description_string, AssetReferenceSprite sprite, 
+                                                        TDefinition base_feature, Action<TDefinition> action)
+        {
+            var res = new CopyFeatureBuilder<TDefinition>(name, guid, title_string, description_string, sprite, base_feature).AddToDB();
+            action(res);
+            return res;
+        }
     }
 
 
@@ -782,6 +791,13 @@ namespace SolastaBardClass.Helpers
         public static TDefinition createFeature(string name, string guid, string title_string, string description_string, AssetReferenceSprite sprite)
         {
             return new FeatureBuilder<TDefinition>(name, guid, title_string, description_string, sprite).AddToDB();
+        }
+
+        public static TDefinition createFeature(string name, string guid, string title_string, string description_string, AssetReferenceSprite sprite, Action<TDefinition> action)
+        {
+            var res =  new FeatureBuilder<TDefinition>(name, guid, title_string, description_string, sprite).AddToDB();
+            action(res);
+            return res;
         }
     }
 
@@ -939,7 +955,9 @@ namespace SolastaBardClass.Helpers
         {
             return new ExtraSpellSelectionBuilder(name, guid, title_string, description_string, caster_class, level, num_spells, spell_list).AddToDB();
         }
+
     }
+
 
     public class Accessors
     {
@@ -952,6 +970,15 @@ namespace SolastaBardClass.Helpers
         public static object GetField(object obj, string name)
         {
             return HarmonyLib.AccessTools.Field(obj.GetType(), name).GetValue(obj);
+        }
+
+
+        static public System.Collections.IEnumerator convertToEnumerator(List<object> list)
+        {
+            for (int i = 0; i < list.Count; i++)
+            {
+                yield return list[i];
+            }
         }
     }
 }

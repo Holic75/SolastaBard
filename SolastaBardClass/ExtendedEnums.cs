@@ -22,4 +22,10 @@ namespace SolastaBardClass
         Spellbook,
         Spontaneous
     }
+
+
+    public enum ExtraConditionInterruption
+    {
+        RollsForDamage = 128
+    }
 }

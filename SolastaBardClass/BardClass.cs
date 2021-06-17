@@ -300,7 +300,8 @@ namespace SolastaBardClass
             string cutting_words_attack_roll_title_string = "Feature/&BardClassCuttingWordsPowerAttackRollTitle";
             string cutting_words_damage_roll_title_string = "Feature/&BardClassCuttingWordsPowerDamageRollTitle";
 
-            NewFeatureDefinitions.FeatureDefinitionReactionPowerOnAllyAttackAttempt previous_attack_roll_penalty_power = null;
+            NewFeatureDefinitions.FeatureDefinitionReactionPowerOnAttackAttempt previous_attack_roll_penalty_power = null;
+            NewFeatureDefinitions.FeatureDefinitionReactionPowerOnDamage previous_damage_roll_penalty_power = null;
             var dice = inspiration_dice;
 
             for (int i = 0; i < dice.Length; i++)
@@ -341,11 +342,11 @@ namespace SolastaBardClass
                 effect_form.ConditionForm.ConditionDefinition = attack_penalty_condition;
                 effect.EffectForms.Add(effect_form);
 
-                var attack_penalty_power = Helpers.GenericPowerBuilder<NewFeatureDefinitions.FeatureDefinitionReactionPowerOnAllyAttackAttempt>
+                var attack_penalty_power = Helpers.GenericPowerBuilder<NewFeatureDefinitions.FeatureDefinitionReactionPowerOnAttackAttempt>
                                                     .createPower("BardClassCuttingWordsAttackRollsPenaltyPower" + dice[i].ToString(),
                                                                     "",
                                                                     cutting_words_attack_roll_title_string,
-                                                                    null,
+                                                                    cutting_words_description_string,
                                                                     DatabaseHelper.SpellDefinitions.Dazzle.GuiPresentation.SpriteReference,
                                                                     effect,
                                                                     RuleDefinitions.ActivationTime.Reaction,
@@ -364,14 +365,82 @@ namespace SolastaBardClass
                 }
                 previous_attack_roll_penalty_power = attack_penalty_power;
 
-                var feature_set = Helpers.FeatureSetBuilder.createFeatureSet("BardClassCuttingWordsAttackRolls" + dice[i].ToString(),
+
+
+                var penalty_damage = Helpers.FeatureBuilder<NewFeatureDefinitions.ModifyDiceRollValue>.createFeature("BardClassCuttingWordsDamagePenalty" + dice[i].ToString(),
+                                                                                                                     "",
+                                                                                                                     "",
+                                                                                                                     "",
+                                                                                                                     null,
+                                                                                                                     m =>
+                                                                                                                     {
+                                                                                                                         m.diceType = dice[i];
+                                                                                                                         m.numDice = -1;
+                                                                                                                         m.contexts = new List<RuleDefinitions.RollContext>() { RuleDefinitions.RollContext.DamageValueRoll};
+                                                                                                                     }
+                                                                                                                     );
+
+                var damage_penalty_condition = Helpers.ConditionBuilder.createConditionWithInterruptions("BardClassCuttingWordsDamagePenaltyCondition" + dice[i].ToString(),
+                                                                                                          "",
+                                                                                                          cutting_words_damage_roll_title_string,
+                                                                                                          cutting_words_description_string,
+                                                                                                          null,
+                                                                                                          DatabaseHelper.ConditionDefinitions.ConditionDazzled,
+                                                                                                          new RuleDefinitions.ConditionInterruption[] { (RuleDefinitions.ConditionInterruption)ExtraConditionInterruption.RollsForDamage },
+                                                                                                          penalty_damage
+                                                                                                          );
+
+                effect = new EffectDescription();
+                effect.Copy(DatabaseHelper.SpellDefinitions.Dazzle.EffectDescription);
+                effect.SetRangeType(RuleDefinitions.RangeType.Distance);
+                effect.SetRangeParameter(60);
+                effect.DurationParameter = 1;
+                effect.SetTargetSide(RuleDefinitions.Side.Enemy);
+                effect.DurationType = RuleDefinitions.DurationType.Round;
+                effect.EffectForms.Clear();
+
+                effect_form = new EffectForm();
+                effect_form.ConditionForm = new ConditionForm();
+                effect_form.FormType = EffectForm.EffectFormType.Condition;
+                effect_form.ConditionForm.Operation = ConditionForm.ConditionOperation.Add;
+                effect_form.ConditionForm.ConditionDefinition = damage_penalty_condition;
+                effect.EffectForms.Add(effect_form);
+
+                var damage_penalty_power = Helpers.GenericPowerBuilder<NewFeatureDefinitions.FeatureDefinitionReactionPowerOnDamage>
+                                                    .createPower("BardClassCuttingWordsDamageRollsPenaltyPower" + dice[i].ToString(),
+                                                                    "",
+                                                                    cutting_words_damage_roll_title_string,
+                                                                    cutting_words_description_string,
+                                                                    DatabaseHelper.SpellDefinitions.Dazzle.GuiPresentation.SpriteReference,
+                                                                    effect,
+                                                                    RuleDefinitions.ActivationTime.Reaction,
+                                                                    0,
+                                                                    RuleDefinitions.UsesDetermination.AbilityBonusPlusFixed,
+                                                                    previous_damage_roll_penalty_power == null ? RuleDefinitions.RechargeRate.LongRest : RuleDefinitions.RechargeRate.ShortRest,
+                                                                    Helpers.Stats.Charisma,
+                                                                    Helpers.Stats.Charisma
+                                                                    );
+                damage_penalty_power.worksOnMelee = true;
+                damage_penalty_power.worksOnRanged = true;
+                damage_penalty_power.worksOnMagic = true;
+                damage_penalty_power.SetShortTitleOverride(cutting_words_damage_roll_title_string);
+                if (previous_damage_roll_penalty_power != null)
+                {
+                    damage_penalty_power.SetOverriddenPower(previous_damage_roll_penalty_power);
+                }
+                previous_damage_roll_penalty_power = damage_penalty_power;
+
+                var feature_set = Helpers.FeatureSetBuilder.createFeatureSet("BardClassCuttingWordsFeature" + dice[i].ToString(),
                                                                              "",
-                                                                             cutting_words_title_string + (i + 1).ToString(),
+                                                                             StringProcessing.Heleprs.appendToString(cutting_words_title_string,
+                                                                                                                     cutting_words_title_string + dice[i].ToString(),
+                                                                                                                     $" ({dice[i].ToString().ToString().ToLower()})"),
                                                                              cutting_words_description_string,
                                                                              false,
                                                                              FeatureDefinitionFeatureSet.FeatureSetMode.Union,
                                                                              false,
-                                                                             attack_penalty_power
+                                                                             attack_penalty_power,
+                                                                             damage_penalty_power
                                                                              );
 
 
@@ -486,7 +555,9 @@ namespace SolastaBardClass
             {
                 var feature = Helpers.FeatureBuilder<NewFeatureDefinitions.FeatureDefinitionExtraHealingDieOnShortRest>.createFeature("BardClassSongOfRestFeature" + dice[i].ToString(),
                                                                                                                  "",
-                                                                                                                 song_of_rest_title_string + (i + 1).ToString(),
+                                                                                                                 StringProcessing.Heleprs.appendToString(song_of_rest_title_string,
+                                                                                                                                                         song_of_rest_title_string + dice[i].ToString(),
+                                                                                                                                                         $" ({dice[i].ToString().ToString().ToLower()})"),
                                                                                                                  song_of_rest_description_string,
                                                                                                                  null);
                 feature.ApplyToParty = true;
@@ -568,7 +639,9 @@ namespace SolastaBardClass
 
                 var inspiration_power = Helpers.PowerBuilder.createPower("BardInspirationPower" + dice[i].ToString(),
                                                                          "",
-                                                                         inspiration_title_string + (i + 1).ToString(),
+                                                                         StringProcessing.Heleprs.appendToString(inspiration_title_string,
+                                                                                                                 inspiration_title_string + dice[i].ToString(),
+                                                                                                                 $" ({dice[i].ToString().ToString().ToLower()})"),
                                                                          inspiration_description_string,
                                                                          DatabaseHelper.SpellDefinitions.Guidance.GuiPresentation.SpriteReference,
                                                                          DatabaseHelper.FeatureDefinitionPowers.PowerPaladinLayOnHands,

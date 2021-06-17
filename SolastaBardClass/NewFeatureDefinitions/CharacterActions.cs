@@ -11,7 +11,7 @@ namespace SolastaBardClass.NewFeatureDefinitions
 {
     public enum ExtendedActionId
     {
-        ModifyAttackRollViaPower = 128,
+        ModifyAttackRollViaPower = 128
     }
 }
 
