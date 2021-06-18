@@ -1,3 +1,5 @@
+Reaction/&CommonUsePowerReactTitle React
+Rules/&CommonConditioUnderEffectOfPrefix Under effect of 
 Class/&BardClassTitle Bard
 Class/&BardClassDescription Untold wonders and secrets exist for those skillful enough to discover them. Through cleverness, talent, and magic, these cunning few unravel the wiles of the world, becoming adept in the arts of persuasion, manipulation, and inspiration. Typically masters of one or many forms of artistry, bards possess an uncanny ability to know more than they should and use what they learn to keep themselves and their allies ever one step ahead of danger. Bards are quick-witted and captivating, and their skills might lead them down many paths, be they gamblers or jacks-of-all-trades, scholars or performers, leaders or scoundrels, or even all of the above. For bards, every day brings its own opportunities, adventures, and challenges, and only by bucking the odds, knowing the most, and being the best might they claim the treasures of each..
 Subclass/&BardSubclassPathTitle	Path
@@ -31,6 +33,8 @@ Feature/&BardClassCuttingWordsTitle Cutting Words
 Feature/&BardClassCuttingWordsPowerAttackRollTitle Cutting Words: Attack Rolls Penalty
 Feature/&BardClassCuttingWordsPowerDamageRollTitle Cutting Words: Damage Rolls Penalty
 Feature/&BardClassCuttingWordsDescription At 3rd level, you learn how to use your wit to distract, confuse, and otherwise sap the confidence and competence of others. When a creature that you can see within 60 feet of you makes an attack roll, an ability check, or a damage roll, you can use your reaction to expend one of your uses of Bardic Inspiration, rolling a Bardic Inspiration die and subtracting the number rolled from the creature's roll. You can choose to use this feature after the creature makes its roll, but before the GM determines whether the attack roll or ability check succeeds or fails, or before the creature deals its damage. The creature is immune if it can't hear you or if it's immune to being charmed.
+Reaction/&UseBardClassCuttingWordsAttackRollsPenaltyPowerReactDescription Expend one use of your inspiration to substract your inspiration die from target's attack roll. This uses your reaction until your next turn.
+Reaction/&UseBardClassCuttingWordsDamageRollsPenaltyPowerReactDescription Expend one use of your inspiration to substract your inspiration die from target's damage roll. This uses your reaction until your next turn.
 Feature/&BardClassDangerSenseDexteritySavingThrowAffinityTitle	Danger Sense
 Feature/&BardClassDangerSenseDexteritySavingThrowAffinityDescription	Advantage on Dexterity Saving Throws.
 Feature/&BardClassFastMovementMovementAffinityTitle	Fast movement

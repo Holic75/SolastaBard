@@ -5,10 +5,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SolastaBardClass.StringProcessing
+namespace SolastaBardClass.Helpers
 {
 
-    public class Heleprs
+    public class StringProcessing
     {
         public static string addStringCopy(string old_string_id, string new_string_id)
         {
@@ -54,7 +54,7 @@ namespace SolastaBardClass.StringProcessing
         }
 
 
-        public static string concatenateStrings(string old_string_id1, string old_string_id2, string new_string_id, string text_in_between)
+        public static string concatenateStrings(string old_string_id1, string old_string_id2, string new_string_id, string text_in_between = "")
         {
             var languageSourceData = LocalizationManager.Sources[0];
             if (!languageSourceData.mDictionary.ContainsKey(old_string_id1))
@@ -83,6 +83,17 @@ namespace SolastaBardClass.StringProcessing
                 new_term.Languages[i] = new_term.Languages[i] + text_in_between + term2.Languages[i];
             }
             return new_string_id;
+        }
+
+
+        public static void addPowerReactStrings(FeatureDefinitionPower power, string use_power_title, string use_power_description, 
+                                               string react_title, string react_description)
+        {
+            var power_name = power.name;
+            addStringCopy(use_power_title, "Reaction/&Use" + power_name + "Title");
+            addStringCopy(use_power_description, "Reaction/&Use" + power_name + "Description");
+            addStringCopy(react_title, "Reaction/&Use" + power_name + "ReactTitle");
+            addStringCopy(react_description, "Reaction/&Use" + power_name + "ReactDescription");
         }
     }
 }

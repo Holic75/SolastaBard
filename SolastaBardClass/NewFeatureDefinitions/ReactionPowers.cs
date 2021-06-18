@@ -18,7 +18,7 @@ namespace SolastaBardClass.NewFeatureDefinitions
     }
 
 
-    class FeatureDefinitionReactionPowerOnDamage: FeatureDefinitionPower, IReactionPowerOnDamage
+    class FeatureDefinitionReactionPowerOnDamage: NewFeatureDefinitions.LinkedPower, IReactionPowerOnDamage
     {
         public bool worksOnMelee;
         public bool worksOnRanged;
@@ -70,7 +70,7 @@ namespace SolastaBardClass.NewFeatureDefinitions
     }
 
 
-    class FeatureDefinitionReactionPowerOnAttackAttempt : FeatureDefinitionPower, IReactionPowerOnAttackAttempt
+    class FeatureDefinitionReactionPowerOnAttackAttempt : NewFeatureDefinitions.LinkedPower, IReactionPowerOnAttackAttempt
     {
         public bool worksOnMelee;
         public bool worksOnRanged;

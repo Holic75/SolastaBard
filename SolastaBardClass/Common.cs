@@ -11,6 +11,7 @@ namespace SolastaBardClass
     class Common
     {
         public static Dictionary<RuleDefinitions.RitualCasting, FeatureDefinitionMagicAffinity> ritual_spellcastings_map = new Dictionary<RitualCasting, FeatureDefinitionMagicAffinity>();
+        public static string common_condition_prefix = "Rules/&CommonConditioUnderEffectOfPrefix";
 
         static public void initialize()
         {

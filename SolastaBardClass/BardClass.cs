@@ -300,6 +300,16 @@ namespace SolastaBardClass
             string cutting_words_attack_roll_title_string = "Feature/&BardClassCuttingWordsPowerAttackRollTitle";
             string cutting_words_damage_roll_title_string = "Feature/&BardClassCuttingWordsPowerDamageRollTitle";
 
+            string use_cutting_words_attack_roll_react_description = "Reaction/&UseBardClassCuttingWordsAttackRollsPenaltyPowerReactDescription";
+            string use_cutting_words_attack_roll_react_title = "Reaction/&CommonUsePowerReactTitle";
+            string use_cutting_words_attack_roll_description = use_cutting_words_attack_roll_react_description;
+            string use_cutting_words_attack_roll_title = cutting_words_attack_roll_title_string;
+
+            string use_cutting_words_damage_roll_react_description = "Reaction/&UseBardClassCuttingWordsDamageRollsPenaltyPowerReactDescription";
+            string use_cutting_words_damage_roll_react_title = "Reaction/&CommonUsePowerReactTitle";
+            string use_cutting_words_damage_roll_description = use_cutting_words_damage_roll_react_description;
+            string use_cutting_words_damage_roll_title = cutting_words_damage_roll_title_string;
+
             NewFeatureDefinitions.FeatureDefinitionReactionPowerOnAttackAttempt previous_attack_roll_penalty_power = null;
             NewFeatureDefinitions.FeatureDefinitionReactionPowerOnDamage previous_damage_roll_penalty_power = null;
             var dice = inspiration_dice;
@@ -318,7 +328,10 @@ namespace SolastaBardClass
 
                 var attack_penalty_condition = Helpers.ConditionBuilder.createConditionWithInterruptions("BardClassCuttingWordsAttackPenaltyCondition" + dice[i].ToString(),
                                                                                                           "",
-                                                                                                          cutting_words_attack_roll_title_string,
+                                                                                                          Helpers.StringProcessing.concatenateStrings(Common.common_condition_prefix, 
+                                                                                                                                                      cutting_words_attack_roll_title_string,
+                                                                                                                                                      "Rules/&BardClassCuttingWordsAttackPenaltyCondition" + dice[i].ToString()
+                                                                                                                                                      ),
                                                                                                           cutting_words_description_string,
                                                                                                           null,
                                                                                                           DatabaseHelper.ConditionDefinitions.ConditionDazzled,
@@ -356,6 +369,7 @@ namespace SolastaBardClass
                                                                     Helpers.Stats.Charisma,
                                                                     Helpers.Stats.Charisma
                                                                     );
+                attack_penalty_power.linkedPower = inspiration_powers[dice[i]];
                 attack_penalty_power.worksOnMelee = true;
                 attack_penalty_power.worksOnRanged = true;
                 attack_penalty_power.SetShortTitleOverride(cutting_words_attack_roll_title_string);
@@ -364,7 +378,8 @@ namespace SolastaBardClass
                     attack_penalty_power.SetOverriddenPower(previous_attack_roll_penalty_power);
                 }
                 previous_attack_roll_penalty_power = attack_penalty_power;
-
+                Helpers.StringProcessing.addPowerReactStrings(attack_penalty_power, use_cutting_words_attack_roll_title, use_cutting_words_attack_roll_description,
+                                                                                    use_cutting_words_attack_roll_react_title, use_cutting_words_attack_roll_react_description);
 
 
                 var penalty_damage = Helpers.FeatureBuilder<NewFeatureDefinitions.ModifyDiceRollValue>.createFeature("BardClassCuttingWordsDamagePenalty" + dice[i].ToString(),
@@ -382,7 +397,10 @@ namespace SolastaBardClass
 
                 var damage_penalty_condition = Helpers.ConditionBuilder.createConditionWithInterruptions("BardClassCuttingWordsDamagePenaltyCondition" + dice[i].ToString(),
                                                                                                           "",
-                                                                                                          cutting_words_damage_roll_title_string,
+                                                                                                          Helpers.StringProcessing.concatenateStrings(Common.common_condition_prefix,
+                                                                                                                                                      cutting_words_damage_roll_title_string,
+                                                                                                                                                      "Rules/&BardClassCuttingWordsDamagePenaltyCondition" + dice[i].ToString()
+                                                                                                                                                      ),
                                                                                                           cutting_words_description_string,
                                                                                                           null,
                                                                                                           DatabaseHelper.ConditionDefinitions.ConditionDazzled,
@@ -420,6 +438,10 @@ namespace SolastaBardClass
                                                                     Helpers.Stats.Charisma,
                                                                     Helpers.Stats.Charisma
                                                                     );
+                Helpers.StringProcessing.addPowerReactStrings(damage_penalty_power, use_cutting_words_damage_roll_title, use_cutting_words_damage_roll_description,
+                                                                    use_cutting_words_damage_roll_react_title, use_cutting_words_damage_roll_react_description);
+                damage_penalty_power.linkedPower = inspiration_powers[dice[i]];
+
                 damage_penalty_power.worksOnMelee = true;
                 damage_penalty_power.worksOnRanged = true;
                 damage_penalty_power.worksOnMagic = true;
@@ -432,7 +454,7 @@ namespace SolastaBardClass
 
                 var feature_set = Helpers.FeatureSetBuilder.createFeatureSet("BardClassCuttingWordsFeature" + dice[i].ToString(),
                                                                              "",
-                                                                             StringProcessing.Heleprs.appendToString(cutting_words_title_string,
+                                                                             Helpers.StringProcessing.appendToString(cutting_words_title_string,
                                                                                                                      cutting_words_title_string + dice[i].ToString(),
                                                                                                                      $" ({dice[i].ToString().ToString().ToLower()})"),
                                                                              cutting_words_description_string,
@@ -478,7 +500,10 @@ namespace SolastaBardClass
 
             var effect_condition = Helpers.ConditionBuilder.createCondition("BardClassCountercharmEffectCondition",
                                                                             "",
-                                                                            countercharm_title_string,
+                                                                            Helpers.StringProcessing.concatenateStrings(Common.common_condition_prefix,
+                                                                                                                        countercharm_title_string,
+                                                                                                                        "Rules/&BardClassCountercharmEffectCondition"
+                                                                                                                        ),
                                                                             countercharm_effect_description_string,
                                                                             null,
                                                                             DatabaseHelper.ConditionDefinitions.ConditionResisting,
@@ -555,7 +580,7 @@ namespace SolastaBardClass
             {
                 var feature = Helpers.FeatureBuilder<NewFeatureDefinitions.FeatureDefinitionExtraHealingDieOnShortRest>.createFeature("BardClassSongOfRestFeature" + dice[i].ToString(),
                                                                                                                  "",
-                                                                                                                 StringProcessing.Heleprs.appendToString(song_of_rest_title_string,
+                                                                                                                 Helpers.StringProcessing.appendToString(song_of_rest_title_string,
                                                                                                                                                          song_of_rest_title_string + dice[i].ToString(),
                                                                                                                                                          $" ({dice[i].ToString().ToString().ToLower()})"),
                                                                                                                  song_of_rest_description_string,
@@ -609,7 +634,10 @@ namespace SolastaBardClass
                                                                                                          );
                 var inspiration_condition = Helpers.ConditionBuilder.createConditionWithInterruptions("BardClassInspirationCondition" + dice[i].ToString(),
                                                                                                       "",
-                                                                                                      inspiration_title_string,
+                                                                                                      Helpers.StringProcessing.concatenateStrings(Common.common_condition_prefix, 
+                                                                                                                                                  inspiration_title_string,
+                                                                                                                                                  "Rules/&BardClassInspirationCondition" + dice[i].ToString()
+                                                                                                                                                  ),
                                                                                                       inspiration_description_string,
                                                                                                       null,
                                                                                                       DatabaseHelper.ConditionDefinitions.ConditionGuided,
@@ -639,7 +667,7 @@ namespace SolastaBardClass
 
                 var inspiration_power = Helpers.PowerBuilder.createPower("BardInspirationPower" + dice[i].ToString(),
                                                                          "",
-                                                                         StringProcessing.Heleprs.appendToString(inspiration_title_string,
+                                                                         Helpers.StringProcessing.appendToString(inspiration_title_string,
                                                                                                                  inspiration_title_string + dice[i].ToString(),
                                                                                                                  $" ({dice[i].ToString().ToString().ToLower()})"),
                                                                          inspiration_description_string,
