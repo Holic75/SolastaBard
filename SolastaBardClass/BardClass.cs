@@ -13,7 +13,7 @@ namespace SolastaBardClass
         const string BardClassNameGuid = "274106b8-0376-4bcd-bd1b-440633a394ae";
         const string BardClassSubclassesGuid = "be865126-d7c3-45f3-b891-e77bd8b00cb1";
 
-        static public RuleDefinitions.DieType[] inspiration_dice = new RuleDefinitions.DieType[] { RuleDefinitions.DieType.D6, RuleDefinitions.DieType.D8, RuleDefinitions.DieType.D10 };
+        static public RuleDefinitions.DieType[] inspiration_dice = new RuleDefinitions.DieType[] { RuleDefinitions.DieType.D6, RuleDefinitions.DieType.D8, RuleDefinitions.DieType.D10, RuleDefinitions.DieType.D12 };
         static public CharacterClassDefinition bard_class;
         static public Dictionary<RuleDefinitions.DieType, FeatureDefinitionPower> inspiration_powers = new Dictionary<RuleDefinitions.DieType, FeatureDefinitionPower>();
         static public FeatureDefinition font_of_inspiration;
@@ -23,6 +23,8 @@ namespace SolastaBardClass
         static public SpellListDefinition bard_spelllist;
         static public SpellListDefinition magical_secrets_spelllist;
         static public NewFeatureDefinitions.FeatureDefinitionExtraSpellSelection magical_secrets;
+        static public NewFeatureDefinitions.FeatureDefinitionExtraSpellSelection magical_secrets14;
+        static public NewFeatureDefinitions.FeatureDefinitionExtraSpellSelection magical_secrets18;
         static public FeatureDefinitionPower countercharm;
 
         static public Dictionary<RuleDefinitions.DieType, FeatureDefinitionFeatureSet> cutting_words = new Dictionary<RuleDefinitions.DieType, FeatureDefinitionFeatureSet>();
@@ -292,7 +294,10 @@ namespace SolastaBardClass
             Definition.FeatureUnlocks.Add(new FeatureUnlockByLevel(inspiration_powers[RuleDefinitions.DieType.D10], 10));
             Definition.FeatureUnlocks.Add(new FeatureUnlockByLevel(expertise, 10));
             Definition.FeatureUnlocks.Add(new FeatureUnlockByLevel(DatabaseHelper.FeatureDefinitionFeatureSets.FeatureSetAbilityScoreChoice, 12));
+            Definition.FeatureUnlocks.Add(new FeatureUnlockByLevel(magical_secrets14, 14));
+            Definition.FeatureUnlocks.Add(new FeatureUnlockByLevel(inspiration_powers[RuleDefinitions.DieType.D12], 15));
             Definition.FeatureUnlocks.Add(new FeatureUnlockByLevel(DatabaseHelper.FeatureDefinitionFeatureSets.FeatureSetAbilityScoreChoice, 16));
+            Definition.FeatureUnlocks.Add(new FeatureUnlockByLevel(magical_secrets18, 18));
             Definition.FeatureUnlocks.Add(new FeatureUnlockByLevel(DatabaseHelper.FeatureDefinitionFeatureSets.FeatureSetAbilityScoreChoice, 19));
 
             var subclassChoicesGuiPresentation = new GuiPresentation();
@@ -815,6 +820,28 @@ namespace SolastaBardClass
                                                                                             2,
                                                                                             spelllist
                                                                                             );
+
+            magical_secrets14 = Helpers.ExtraSpellSelectionBuilder.createExtraSpellSelection("BardClassMagicalSecrets14",
+                                                                                             "",
+                                                                                             "Feature/&BardClassMagicalSecretsTitle",
+                                                                                             "Feature/&BardClassMagicalSecretsDescription",
+                                                                                             bard_class,
+                                                                                             14,
+                                                                                             2,
+                                                                                             spelllist
+                                                                                             );
+
+            magical_secrets18 = Helpers.ExtraSpellSelectionBuilder.createExtraSpellSelection("BardClassMagicalSecrets18",
+                                                                                             "",
+                                                                                             "Feature/&BardClassMagicalSecretsTitle",
+                                                                                             "Feature/&BardClassMagicalSecretsDescription",
+                                                                                             bard_class,
+                                                                                             18,
+                                                                                             2,
+                                                                                             spelllist
+                                                                                             );
+
+
             magical_secrets_spelllist = spelllist;
         }
 
@@ -953,6 +980,11 @@ namespace SolastaBardClass
         public static void BuildAndAddClassToDB()
         {
             var BardClass = new BardClassBuilder(BardClassName, BardClassNameGuid).AddToDB();
+            BardClass.FeatureUnlocks.Sort(delegate (FeatureUnlockByLevel a, FeatureUnlockByLevel b)
+                                          {
+                                              return a.Level - b.Level;
+                                          }
+                                         );
 
             BardFeatureDefinitionSubclassChoice.Subclasses.Add(createLoreCollege().Name);
             BardFeatureDefinitionSubclassChoice.Subclasses.Add(createVirtueCollege().Name);
