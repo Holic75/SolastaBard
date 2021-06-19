@@ -327,6 +327,7 @@ namespace SolastaBardClass
                     .AddFeatureAtLevel(music_of_spheres[RuleDefinitions.DieType.D8], 5)
                     .AddFeatureAtLevel(virtue_college_extra_attack, 6)
                     .AddFeatureAtLevel(music_of_spheres[RuleDefinitions.DieType.D10], 10)
+                    .AddFeatureAtLevel(music_of_spheres[RuleDefinitions.DieType.D12], 15)
                     .AddToDB();
 
             return definition;
@@ -513,6 +514,7 @@ namespace SolastaBardClass
                     .AddFeatureAtLevel(cutting_words[RuleDefinitions.DieType.D8], 5)
                     .AddFeatureAtLevel(additional_magical_secrets, 6)
                     .AddFeatureAtLevel(cutting_words[RuleDefinitions.DieType.D10], 10)
+                    .AddFeatureAtLevel(cutting_words[RuleDefinitions.DieType.D12], 15)
                     .AddToDB();
 
             return definition;
