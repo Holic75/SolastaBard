@@ -1,6 +1,7 @@
-# SolastaBardClass
+# Bard class for Solasta
 
-My Mod Description
+This is a mod for the game Solasta: Crown of the Magister.
+It adds bard class with two college subclasses: College of Lore and College of Virtue.
 
 # How to Compile
 

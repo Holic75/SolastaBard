@@ -1,13 +1,13 @@
 {
-	"Id": "SolastaBardClass",
-	"DisplayName": "SolastaBardClass",
-	"Author": "Holic92",
-	"Version": "0.9.0",
-	"ManagerVersion": "0.23.4",
-	"Requirements": [ "SolastaModApi"],
-	"LoadAfter": [ "SolastaModApi" ],
-	"AssemblyName": "SolastaBardClass.dll",
-	"EntryMethod": "SolastaBardClass.Main.Load",
-	"Repository": "https://raw.githubusercontent.com/jsnell89/SolastaBardClass/main/SolastaBardClass/Repository.json",
-	"HomePage": "https://www.nexusmods.com/solastacrownofthemagister/mods/93"
+  "Id": "SolastaBardClass",
+  "DisplayName": "SolastaBardClass",
+  "Author": "Holic92",
+  "Version": "0.9.0",
+  "ManagerVersion": "0.23.4",
+  "Requirements": [ "SolastaModApi" ],
+  "LoadAfter": [ "SolastaModApi" ],
+  "AssemblyName": "SolastaBardClass.dll",
+  "EntryMethod": "SolastaBardClass.Main.Load",
+  "Repository": "https://github.com/Holic75/SolastaBard",
+  "HomePage": ""
 }
