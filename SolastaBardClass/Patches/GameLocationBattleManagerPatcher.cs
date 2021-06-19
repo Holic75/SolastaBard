@@ -40,7 +40,7 @@ namespace SolastaBardClass.Patches
                             var powers = unit.RulesetCharacter.UsablePowers.Where(u => u.PowerDefinition is NewFeatureDefinitions.IReactionPowerOnAttackAttempt 
                                                                                   && unit.RulesetCharacter.GetRemainingUsesOfPower(u) > 0
                                                                                   && (u.PowerDefinition as NewFeatureDefinitions.IReactionPowerOnAttackAttempt)
-                                                                                    .canBeUsed(unit.RulesetCharacter, attacker.RulesetCharacter, defender.RulesetCharacter, attackerAttackMode)
+                                                                                    .canBeUsed(unit, attacker, defender, attackerAttackMode)
                                                                                  ).ToArray();
                             var overriden_powers = powers.Aggregate(new List<FeatureDefinitionPower>(), (old, next) =>
                                                                                  {
@@ -114,7 +114,7 @@ namespace SolastaBardClass.Patches
                             var powers = unit.RulesetCharacter.UsablePowers.Where(u => u.PowerDefinition is NewFeatureDefinitions.IReactionPowerOnDamage
                                                                                   && unit.RulesetCharacter.GetRemainingUsesOfPower(u) > 0
                                                                                   && (u.PowerDefinition as NewFeatureDefinitions.IReactionPowerOnDamage)
-                                                                                    .canBeUsed(unit.RulesetCharacter, attacker.RulesetCharacter, defender.RulesetCharacter, null, true)
+                                                                                    .canBeUsed(unit, attacker, defender, null, true)
                                                                                  ).ToArray();
 
                             var overriden_powers = powers.Aggregate(new List<FeatureDefinitionPower>(), (old, next) =>
@@ -187,7 +187,7 @@ namespace SolastaBardClass.Patches
                             var powers = unit.RulesetCharacter.UsablePowers.Where(u => u.PowerDefinition is NewFeatureDefinitions.IReactionPowerOnDamage
                                                                                   && unit.RulesetCharacter.GetRemainingUsesOfPower(u) > 0
                                                                                   && (u.PowerDefinition as NewFeatureDefinitions.IReactionPowerOnDamage)
-                                                                                    .canBeUsed(unit.RulesetCharacter, attacker.RulesetCharacter, defender.RulesetCharacter, attackMode, false)
+                                                                                    .canBeUsed(unit, attacker, defender, attackMode, false)
                                                                                  ).ToArray();
 
                             var overriden_powers = powers.Aggregate(new List<FeatureDefinitionPower>(), (old, next) =>

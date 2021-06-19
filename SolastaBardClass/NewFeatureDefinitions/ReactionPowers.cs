@@ -8,13 +8,13 @@ namespace SolastaBardClass.NewFeatureDefinitions
 {
     public interface IReactionPowerOnAttackAttempt
     {
-        bool canBeUsed(RulesetCharacter caster, RulesetCharacter attacker, RulesetCharacter defender, RulesetAttackMode attack_mode);
+        bool canBeUsed(GameLocationCharacter caster, GameLocationCharacter attacker, GameLocationCharacter defender, RulesetAttackMode attack_mode);
     }
 
 
     public interface IReactionPowerOnDamage
     {
-        bool canBeUsed(RulesetCharacter caster, RulesetCharacter attacker, RulesetCharacter defender, RulesetAttackMode attack_mode, bool is_magic);
+        bool canBeUsed(GameLocationCharacter caster, GameLocationCharacter attacker, GameLocationCharacter defender, RulesetAttackMode attack_mode, bool is_magic);
     }
 
 
@@ -24,7 +24,7 @@ namespace SolastaBardClass.NewFeatureDefinitions
         public bool worksOnRanged;
         public bool worksOnMagic;
 
-        bool IReactionPowerOnDamage.canBeUsed(RulesetCharacter caster, RulesetCharacter attacker, RulesetCharacter defender, RulesetAttackMode attack_mode, bool is_magic)
+        bool IReactionPowerOnDamage.canBeUsed(GameLocationCharacter caster, GameLocationCharacter attacker, GameLocationCharacter defender, RulesetAttackMode attack_mode, bool is_magic)
         {
             var effect = this.EffectDescription;
             if (effect == null)
@@ -32,7 +32,13 @@ namespace SolastaBardClass.NewFeatureDefinitions
                 return false;
             }
 
-            int max_distance = this.EffectDescription.TargetProximityDistance;
+            int max_distance = this.EffectDescription.RangeParameter;
+            
+            if ((caster.LocationPosition - attacker.LocationPosition).magnitude > max_distance)
+            {
+                return false;
+            }
+
             bool works_on_caster = effect.TargetFilteringTag != (RuleDefinitions.TargetFilteringTag)ExtraTargetFilteringTag.NonCaster;
 
             if (!is_magic)
@@ -57,13 +63,11 @@ namespace SolastaBardClass.NewFeatureDefinitions
             {
                 return false;
             }
-
-            if (!works_on_caster && defender == caster)
+            
+            if (!works_on_caster && attacker == caster)
             {
                 return false;
             }
-
-
 
             return true;
         }
@@ -75,7 +79,7 @@ namespace SolastaBardClass.NewFeatureDefinitions
         public bool worksOnMelee;
         public bool worksOnRanged;
 
-        bool IReactionPowerOnAttackAttempt.canBeUsed(RulesetCharacter caster, RulesetCharacter attacker, RulesetCharacter defender, RulesetAttackMode attack_mode)
+        bool IReactionPowerOnAttackAttempt.canBeUsed(GameLocationCharacter caster, GameLocationCharacter attacker, GameLocationCharacter defender, RulesetAttackMode attack_mode)
         {
             var effect = this.EffectDescription;
             if (effect == null)
@@ -83,7 +87,13 @@ namespace SolastaBardClass.NewFeatureDefinitions
                 return false;
             }
 
-            int max_distance = this.EffectDescription.TargetProximityDistance;
+            int max_distance = this.EffectDescription.RangeParameter;
+
+            if ((caster.LocationPosition - attacker.LocationPosition).magnitude > max_distance)
+            {
+                return false;
+            }
+
             bool works_on_caster = effect.TargetFilteringTag != (RuleDefinitions.TargetFilteringTag)ExtraTargetFilteringTag.NonCaster;
 
             if (attack_mode.Ranged && !worksOnRanged)
@@ -101,7 +111,7 @@ namespace SolastaBardClass.NewFeatureDefinitions
                 return false;
             }
 
-            if (!works_on_caster && defender == caster)
+            if (!works_on_caster && attacker == caster)
             {
                 return false;
             }

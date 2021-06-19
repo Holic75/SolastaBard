@@ -54,6 +54,31 @@ namespace SolastaBardClass.Helpers
         }
 
 
+        public static string replaceTagInString(string old_string_id, string new_string_id, string tag, string tag_replacement)
+        {
+            var languageSourceData = LocalizationManager.Sources[0];
+            if (!languageSourceData.mDictionary.ContainsKey(old_string_id))
+            {
+                throw new SystemException($"String: {old_string_id} is not present in LanguageSourceData");
+            }
+            if (languageSourceData.mDictionary.ContainsKey(new_string_id))
+            {
+                throw new SystemException($"String: {new_string_id} is already present in LanguageSourceData");
+            }
+
+            var term = languageSourceData.mDictionary[old_string_id];
+            var new_term = languageSourceData.AddTerm(new_string_id);
+            new_term.Languages = term.Languages.ToArray();
+
+            for (int i = 0; i < new_term.Languages.Count(); i++)
+            {
+                new_term.Languages[i] = new_term.Languages[i].Replace(tag, tag_replacement);
+            }
+
+            return new_string_id;
+        }
+
+
         public static string concatenateStrings(string old_string_id1, string old_string_id2, string new_string_id, string text_in_between = "")
         {
             var languageSourceData = LocalizationManager.Sources[0];

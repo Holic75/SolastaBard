@@ -43,6 +43,36 @@ namespace SolastaBardClass.Helpers
         }
     }
 
+    public static class ArmorProficiencies
+    {
+        public static string LigthArmor = "LightArmorCategory";
+        public static string MediumArmor = "MediumArmorCategory";
+        public static string HeavyArmor = "HeavyArmorCategory";
+        public static string Shield = "ShieldCategory";
+
+        public static string[] getAllArmorProficiencies()
+        {
+            return typeof(ArmorProficiencies).GetFields(BindingFlags.Public | BindingFlags.Static).Select(f => f.GetValue(null)).Cast<string>().ToArray();
+        }
+
+        public static HashSet<string> getAllArmorProficienciesSet()
+        {
+            return getAllArmorProficiencies().ToHashSet();
+        }
+
+        public static void assertAllArmorProficiencies(IEnumerable<string> profs)
+        {
+            var all_profs = getAllArmorProficienciesSet();
+            foreach (var p in profs)
+            {
+                if (!all_profs.Contains(p))
+                {
+                    throw new System.Exception(p + "is not an Armor Proficiency");
+                }
+            }
+        }
+    }
+
 
     public static class Conditions
     {
@@ -192,10 +222,11 @@ namespace SolastaBardClass.Helpers
         }
 
 
-        public static FeatureDefinitionProficiency CreateProficiency(string name, string guid, string title_string, string description_string,
-                                                                        FeatureDefinitionProficiency base_feature, params string[] proficiencies)
+        public static FeatureDefinitionProficiency CreateArmorProficiency(string name, string guid, string title_string, string description_string,
+                                                                          params string[] proficiencies)
         {
-            return new ProficiencyBuilder(name, guid, title_string, description_string, base_feature, proficiencies).AddToDB();
+            ArmorProficiencies.assertAllArmorProficiencies(proficiencies);
+            return new ProficiencyBuilder(name, guid, title_string, description_string, DatabaseHelper.FeatureDefinitionProficiencys.ProficiencyFighterArmor, proficiencies).AddToDB();
         }
 
 

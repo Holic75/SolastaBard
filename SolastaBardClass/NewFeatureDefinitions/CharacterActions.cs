@@ -40,7 +40,6 @@ public class CharacterActionModifyAttackRollViaPower : CharacterActionUsePower
 
     public override IEnumerator ExecuteImpl()
     {
-        SolastaBardClass.Main.Logger.Log("Executing");
         CharacterActionModifyAttackRollViaPower actionModifyAttackRoll = this;
         GameLocationCharacter attacker = actionModifyAttackRoll.ActionParams.TargetCharacters[0];
         GameLocationCharacter defender = actionModifyAttackRoll.ActionParams.TargetCharacters[1];

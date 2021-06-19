@@ -29,8 +29,14 @@ namespace SolastaBardClass
 
         static public FeatureDefinitionPointPool lore_college_bonus_proficiencies;
         static public NewFeatureDefinitions.FeatureDefinitionExtraSpellSelection additional_magical_secrets;
+
+        static public FeatureDefinitionFeatureSet virtue_college_bonus_proficiencies;
+        static public Dictionary<RuleDefinitions.DieType, NewFeatureDefinitions.FeatureDefinitionReactionPowerOnAttackAttempt> music_of_spheres
+            = new Dictionary<RuleDefinitions.DieType, NewFeatureDefinitions.FeatureDefinitionReactionPowerOnAttackAttempt>();
+        static public FeatureDefinitionAttributeModifier virtue_college_extra_attack;
+
         //TODO
-        //colleges: virtue, wyrdsingers ?, ..
+        //colleges: wyrdsingers ?, ..
 
 
         protected BardClassBuilder(string name, string guid) : base(name, guid)
@@ -106,7 +112,8 @@ namespace SolastaBardClass
 
             this.AddEquipmentRow(new List<CharacterClassDefinition.HeroEquipmentOption>
             {
-                EquipmentOptionsBuilder.Option(DatabaseHelper.ItemDefinitions.Dagger, EquipmentDefinitions.OptionWeapon, 1),
+                EquipmentOptionsBuilder.Option(DatabaseHelper.ItemDefinitions.LightCrossbow, EquipmentDefinitions.OptionWeapon, 1),
+                 EquipmentOptionsBuilder.Option(DatabaseHelper.ItemDefinitions.Bolt, EquipmentDefinitions.OptionWeapon, 20),
                 EquipmentOptionsBuilder.Option(DatabaseHelper.ItemDefinitions.Leather, EquipmentDefinitions.OptionArmor, 1),
                 EquipmentOptionsBuilder.Option(DatabaseHelper.ItemDefinitions.ComponentPouch, EquipmentDefinitions.OptionFocus, 1)
             });
@@ -295,6 +302,193 @@ namespace SolastaBardClass
         }
 
 
+        static CharacterSubclassDefinition createVirtueCollege()
+        {
+            createVirtueCollegeProficiencies();
+            createVirtueCollegeExtraAttack();
+            createMusicOfTheSpheres();
+
+
+            var gui_presentation = new GuiPresentationBuilder(
+                    "Subclass/&BardSubclassCollegeOfVirtueDescription",
+                    "Subclass/&BardSubclassCollegeOfVirtueTitle")
+                    .SetSpriteReference(DatabaseHelper.CharacterSubclassDefinitions.OathOfTirmar.GuiPresentation.SpriteReference)
+                    .Build();
+
+            CharacterSubclassDefinition definition = new CharacterSubclassDefinitionBuilder("BardSubclassCollegeOfVirtue", "b931f6f0-2d62-450c-a8d1-5379473d8538")
+                    .SetGuiPresentation(gui_presentation)
+                    .AddFeatureAtLevel(virtue_college_bonus_proficiencies, 3)
+                    .AddFeatureAtLevel(music_of_spheres[RuleDefinitions.DieType.D6], 3)
+                    .AddFeatureAtLevel(music_of_spheres[RuleDefinitions.DieType.D8], 5)
+                    .AddFeatureAtLevel(virtue_college_extra_attack, 6)
+                    .AddFeatureAtLevel(music_of_spheres[RuleDefinitions.DieType.D10], 10)
+                    .AddToDB();
+
+            return definition;
+        }
+
+
+        static void createVirtueCollegeProficiencies()
+        {
+            var armor_proficiency = Helpers.ProficiencyBuilder.CreateArmorProficiency("BardVirtueSubclassArmorProficiency",
+                                                              "",
+                                                              Common.common_no_title,
+                                                              Common.common_no_title,
+                                                              Helpers.ArmorProficiencies.MediumArmor,
+                                                              Helpers.ArmorProficiencies.Shield
+                                                              );
+
+            var wis_proficiency = Helpers.ProficiencyBuilder.CreateSavingthrowProficiency("BardVirtueSubclassWisSavingthrowsProficiency",
+                                                                                          "",
+                                                                                          Helpers.Stats.Wisdom
+                                                                                          );
+
+            virtue_college_bonus_proficiencies = Helpers.FeatureSetBuilder.createFeatureSet("BardVirtueSubclassBonusProficiency",
+                                                                                            "",
+                                                                                            "Feature/&BardVirtueSublclassBonusProficiencieslTitle",
+                                                                                            "Feature/&BardVirtueSublclassBonusProficiencieslDescription",
+                                                                                            false,
+                                                                                            FeatureDefinitionFeatureSet.FeatureSetMode.Union,
+                                                                                            false,
+                                                                                            armor_proficiency,
+                                                                                            wis_proficiency
+                                                                                            );
+
+        }
+
+
+        static void createVirtueCollegeExtraAttack()
+        {
+            virtue_college_extra_attack = Helpers.CopyFeatureBuilder<FeatureDefinitionAttributeModifier>.createFeatureCopy("BardVirtueSubclassExtraAttack",
+                                                                                                                           "",
+                                                                                                                           "",
+                                                                                                                           "",
+                                                                                                                           null,
+                                                                                                                           DatabaseHelper.FeatureDefinitionAttributeModifiers.AttributeModifierFighterExtraAttack
+                                                                                                                           );
+        }
+
+        static void createMusicOfTheSpheres()
+        {
+            string music_of_the_spheres_title_string = "Feature/&BardVirtueSubclassMusicOfTheSpheresTitle";
+            string music_of_the_spheres_description_string = "Feature/&BardVirtueSubclassMusicOfTheSpheresDescription";
+
+            string use_music_of_the_spheres_react_description = "Reaction/&UseBardVirtueSubclassMusicOfTheSpheresPowerReactDescription";
+            string use_music_of_the_spheres_react_title = "Reaction/&CommonUsePowerReactTitle";
+            string use_music_of_the_spheres_description = use_music_of_the_spheres_react_description;
+            string use_music_of_the_spheres_title = music_of_the_spheres_title_string;
+
+            NewFeatureDefinitions.FeatureDefinitionReactionPowerOnAttackAttempt previous_power = null;
+            var dice = inspiration_dice;
+
+            for (int i = 0; i < dice.Length; i++)
+            {
+                var attack_bonus = Helpers.AttackBonusBuilder.createAttackBonus("BardVirtueSubclassMusicOfTheSpheresAttackBonus" + dice[i].ToString(),
+                                                                                    "",
+                                                                                    "",
+                                                                                    "",
+                                                                                    null,
+                                                                                    1,
+                                                                                    dice[i],
+                                                                                    substract: false
+                                                                                    );
+
+                var dmg_bonus_fiend = Helpers.CopyFeatureBuilder<FeatureDefinitionAdditionalDamage>.createFeatureCopy("BardVirtueSubclassMusicOfTheSpheresFiendDamage" + dice[i].ToString(),
+                                                                                                                      "",
+                                                                                                                      "",
+                                                                                                                      "",
+                                                                                                                      null,
+                                                                                                                      DatabaseHelper.FeatureDefinitionAdditionalDamages.AdditionalDamageDivineFavor,
+                                                                                                                      a =>
+                                                                                                                      {
+                                                                                                                          a.notificationTag = "BardVirtueSubclassMusicOfTheSpheres";
+                                                                                                                          a.triggerCondition = RuleDefinitions.AdditionalDamageTriggerCondition.SpecificCharacterFamily;
+                                                                                                                          a.requiredCharacterFamily = DatabaseHelper.CharacterFamilyDefinitions.Fiend;
+                                                                                                                          a.damageDieType = dice[i];
+                                                                                                                      }
+                                                                                                                      );
+
+                var dmg_bonus_undead = Helpers.CopyFeatureBuilder<FeatureDefinitionAdditionalDamage>.createFeatureCopy("BardVirtueSubclassMusicOfTheSpheresUndeadDamage" + dice[i].ToString(),
+                                                                                                      "",
+                                                                                                      "",
+                                                                                                      "",
+                                                                                                      null,
+                                                                                                      DatabaseHelper.FeatureDefinitionAdditionalDamages.AdditionalDamageDivineFavor,
+                                                                                                      a =>
+                                                                                                      {
+                                                                                                          a.notificationTag = "BardVirtueSubclassMusicOfTheSpheres";
+                                                                                                          a.triggerCondition = RuleDefinitions.AdditionalDamageTriggerCondition.SpecificCharacterFamily;
+                                                                                                          a.requiredCharacterFamily = DatabaseHelper.CharacterFamilyDefinitions.Undead;
+                                                                                                          a.damageDieType = dice[i];
+                                                                                                      }
+                                                                                                      );
+
+
+                var condition = Helpers.ConditionBuilder.createConditionWithInterruptions("BardVirtueSubclassMusicOfTheSpheresCondition" + dice[i].ToString(),
+                                                                                            "",
+                                                                                            Helpers.StringProcessing.concatenateStrings(Common.common_condition_prefix,
+                                                                                                                                        music_of_the_spheres_title_string,
+                                                                                                                                        "Rules/&BardVirtueSubclassMusicOfTheSpheresCondition" + dice[i].ToString()
+                                                                                                                                        ),
+                                                                                            music_of_the_spheres_description_string,
+                                                                                            null,
+                                                                                            DatabaseHelper.ConditionDefinitions.ConditionDivineFavor,
+                                                                                            new RuleDefinitions.ConditionInterruption[] { RuleDefinitions.ConditionInterruption.Attacks },
+                                                                                            attack_bonus, dmg_bonus_fiend, dmg_bonus_undead
+                                                                                            );
+
+                var effect = new EffectDescription();
+                effect.Copy(DatabaseHelper.SpellDefinitions.DivineFavor.EffectDescription);
+                effect.SetRangeType(RuleDefinitions.RangeType.Distance);
+                effect.SetTargetType(RuleDefinitions.TargetType.Individuals);
+                effect.SetRangeParameter(12);
+                effect.SetTargetParameter(1);
+                effect.SetTargetParameter2(2);
+                effect.DurationParameter = 1;
+                effect.SetTargetSide(RuleDefinitions.Side.Ally);
+                effect.DurationType = RuleDefinitions.DurationType.Round;
+                effect.EffectForms.Clear();
+
+                var effect_form = new EffectForm();
+                effect_form.ConditionForm = new ConditionForm();
+                effect_form.FormType = EffectForm.EffectFormType.Condition;
+                effect_form.ConditionForm.Operation = ConditionForm.ConditionOperation.Add;
+                effect_form.ConditionForm.ConditionDefinition = condition;
+                effect.EffectForms.Add(effect_form);
+                effect.SetTargetFilteringTag((RuleDefinitions.TargetFilteringTag)ExtraTargetFilteringTag.NonCaster);
+
+                var power = Helpers.GenericPowerBuilder<NewFeatureDefinitions.FeatureDefinitionReactionPowerOnAttackAttempt>
+                                                      .createPower("BardVirtueSubclassMusicOfTheSpheres" + dice[i].ToString(),
+                                                                    "",
+                                                                    Helpers.StringProcessing.appendToString(music_of_the_spheres_title_string,
+                                                                                                             music_of_the_spheres_title_string + dice[i].ToString(),
+                                                                                                             $" ({dice[i].ToString().ToString().ToLower()})"),
+                                                                    music_of_the_spheres_description_string,
+                                                                    DatabaseHelper.SpellDefinitions.DivineFavor.GuiPresentation.SpriteReference,
+                                                                    effect,
+                                                                    RuleDefinitions.ActivationTime.Reaction,
+                                                                    0,
+                                                                    RuleDefinitions.UsesDetermination.AbilityBonusPlusFixed,
+                                                                    previous_power == null ? RuleDefinitions.RechargeRate.LongRest : RuleDefinitions.RechargeRate.ShortRest,
+                                                                    Helpers.Stats.Charisma,
+                                                                    Helpers.Stats.Charisma
+                                                                    );
+                power.linkedPower = inspiration_powers[dice[i]];
+                power.worksOnMelee = true;
+                power.worksOnRanged = true;
+                power.SetShortTitleOverride(music_of_the_spheres_title_string);
+                if (previous_power != null)
+                {
+                    power.SetOverriddenPower(previous_power);
+                }
+                previous_power = power;
+                Helpers.StringProcessing.addPowerReactStrings(power, use_music_of_the_spheres_title, use_music_of_the_spheres_description,
+                                                                                    use_music_of_the_spheres_react_title, use_music_of_the_spheres_react_description);
+                music_of_spheres.Add(dice[i], power);
+            }
+        }
+
+
         static CharacterSubclassDefinition createLoreCollege()
         {
             createCuttingWords();
@@ -396,7 +590,7 @@ namespace SolastaBardClass
                 var effect = new EffectDescription();
                 effect.Copy(DatabaseHelper.SpellDefinitions.Dazzle.EffectDescription);
                 effect.SetRangeType(RuleDefinitions.RangeType.Distance);
-                effect.SetRangeParameter(60);
+                effect.SetRangeParameter(12);
                 effect.DurationParameter = 1;
                 effect.SetTargetSide(RuleDefinitions.Side.Enemy);
                 effect.DurationType = RuleDefinitions.DurationType.Round;
@@ -465,7 +659,7 @@ namespace SolastaBardClass
                 effect = new EffectDescription();
                 effect.Copy(DatabaseHelper.SpellDefinitions.Dazzle.EffectDescription);
                 effect.SetRangeType(RuleDefinitions.RangeType.Distance);
-                effect.SetRangeParameter(60);
+                effect.SetRangeParameter(12);
                 effect.DurationParameter = 1;
                 effect.SetTargetSide(RuleDefinitions.Side.Enemy);
                 effect.DurationType = RuleDefinitions.DurationType.Round;
@@ -568,13 +762,14 @@ namespace SolastaBardClass
             var effect = new EffectDescription();
             effect.Copy(DatabaseHelper.SpellDefinitions.Resistance.EffectDescription);
             effect.SetRangeType(RuleDefinitions.RangeType.Self);
+            effect.SetTargetType(RuleDefinitions.TargetType.Sphere);
             effect.SetRangeParameter(0);
+            effect.SetTargetParameter(6);
             effect.SetTargetProximityDistance(30);
             effect.DurationParameter = 1;
             effect.DurationType = RuleDefinitions.DurationType.Round;
             effect.SetEndOfEffect(RuleDefinitions.TurnOccurenceType.EndOfTurn);
             effect.EffectForms.Clear();
-            effect.SetTargetType(RuleDefinitions.TargetType.Sphere);
 
             var effect_form = new EffectForm();
             effect_form.ConditionForm = new ConditionForm();
@@ -591,7 +786,7 @@ namespace SolastaBardClass
                                                             DatabaseHelper.FeatureDefinitionPowers.PowerPaladinAuraOfProtection,
                                                             effect,
                                                             RuleDefinitions.ActivationTime.Action,
-                                                            0,
+                                                            1,
                                                             RuleDefinitions.UsesDetermination.Fixed,
                                                             RuleDefinitions.RechargeRate.AtWill,
                                                             Helpers.Stats.Charisma,
@@ -707,7 +902,7 @@ namespace SolastaBardClass
                 var effect = new EffectDescription();
                 effect.Copy(DatabaseHelper.SpellDefinitions.Guidance.EffectDescription);
                 effect.SetRangeType(RuleDefinitions.RangeType.Distance);
-                effect.SetRangeParameter(60);
+                effect.SetRangeParameter(12);
                 effect.DurationParameter = 10;
                 effect.DurationType = RuleDefinitions.DurationType.Minute;
                 effect.EffectForms.Clear();
@@ -760,6 +955,7 @@ namespace SolastaBardClass
             var BardClass = new BardClassBuilder(BardClassName, BardClassNameGuid).AddToDB();
 
             BardFeatureDefinitionSubclassChoice.Subclasses.Add(createLoreCollege().Name);
+            BardFeatureDefinitionSubclassChoice.Subclasses.Add(createVirtueCollege().Name);
         }
 
         private static FeatureDefinitionSubclassChoice BardFeatureDefinitionSubclassChoice;
