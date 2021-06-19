@@ -294,9 +294,11 @@ namespace SolastaBardClass
             Definition.FeatureUnlocks.Add(new FeatureUnlockByLevel(inspiration_powers[RuleDefinitions.DieType.D10], 10));
             Definition.FeatureUnlocks.Add(new FeatureUnlockByLevel(expertise, 10));
             Definition.FeatureUnlocks.Add(new FeatureUnlockByLevel(DatabaseHelper.FeatureDefinitionFeatureSets.FeatureSetAbilityScoreChoice, 12));
+            Definition.FeatureUnlocks.Add(new FeatureUnlockByLevel(song_of_rest[RuleDefinitions.DieType.D10], 13));
             Definition.FeatureUnlocks.Add(new FeatureUnlockByLevel(magical_secrets14, 14));
             Definition.FeatureUnlocks.Add(new FeatureUnlockByLevel(inspiration_powers[RuleDefinitions.DieType.D12], 15));
             Definition.FeatureUnlocks.Add(new FeatureUnlockByLevel(DatabaseHelper.FeatureDefinitionFeatureSets.FeatureSetAbilityScoreChoice, 16));
+            Definition.FeatureUnlocks.Add(new FeatureUnlockByLevel(song_of_rest[RuleDefinitions.DieType.D12], 17));
             Definition.FeatureUnlocks.Add(new FeatureUnlockByLevel(magical_secrets18, 18));
             Definition.FeatureUnlocks.Add(new FeatureUnlockByLevel(DatabaseHelper.FeatureDefinitionFeatureSets.FeatureSetAbilityScoreChoice, 19));
 
@@ -853,7 +855,7 @@ namespace SolastaBardClass
             string song_of_rest_title_string = "Feature/&BardClassSongOfRestTitle";
             string song_of_rest_description_string = "Feature/&BardClassSongOfRestDescription";
 
-            var dice = new RuleDefinitions.DieType[] { RuleDefinitions.DieType.D6, RuleDefinitions.DieType.D8 };
+            var dice = inspiration_dice;
 
             for (int i = 0; i < dice.Length; i++)
             {

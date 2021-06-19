@@ -198,3 +198,5 @@ BardVirtueSubclassMusicOfTheSpheresFiendDamageD12	e2ebcc1d-03aa-4aa6-afd4-4cf84c
 BardVirtueSubclassMusicOfTheSpheresUndeadDamageD12	16268eb3-6a99-4ffa-8a8c-9f9600365b6f
 BardVirtueSubclassMusicOfTheSpheresConditionD12	adedafcf-4f9c-4c5e-9776-99b5e769fbee
 BardVirtueSubclassMusicOfTheSpheresD12	0ee5978d-70b4-41bf-a4e2-08b9b0a81245
+BardClassSongOfRestFeatureD10	077638f8-30b1-4d52-979b-102ac87964b1
+BardClassSongOfRestFeatureD12	28befda2-367d-4064-a393-602508ea8c5a
