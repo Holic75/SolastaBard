@@ -19,16 +19,16 @@
 		<Version>0.0.3</Version>
 		<LangVersion>7.3</LangVersion>
 	</PropertyGroup>
-
-    <Target Name="Publicise" AfterTargets="Clean">
-        <ItemGroup>
-            <PubliciseInputAssemblies Include="$(SolastaInstallDir)\Solasta_Data\Managed\Assembly-CSharp.dll" />
-        </ItemGroup>
-    <Publicise InputAssemblies="@(PubliciseInputAssemblies)" OutputPath="$(SolutionDir)lib/" PubliciseCompilerGenerated="true" />
-    </Target>
   
 	<Target Name="CheckEnvironmentVars">
 		<Error Text="Please set the SolastaInstallDir environment variable." Condition="'$(SolastaInstallDir)' == ''" ContinueOnError="false" />
+	</Target>
+
+	<Target Name="Publicise" AfterTargets="Clean">
+		<ItemGroup>
+			<PubliciseInputAssemblies Include="$(SolastaInstallDir)\Solasta_Data\Managed\Assembly-CSharp.dll" />
+		</ItemGroup>
+		<Publicise InputAssemblies="@(PubliciseInputAssemblies)" OutputPath="$(SolutionDir)lib/" PubliciseCompilerGenerated="true" />
 	</Target>
 
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug Install|AnyCPU' Or '$(Configuration)|$(Platform)' == 'Release Install|AnyCPU'">
