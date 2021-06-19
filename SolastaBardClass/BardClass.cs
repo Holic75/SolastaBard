@@ -783,6 +783,11 @@ namespace SolastaBardClass
             var BardClass = new BardClassBuilder(BardClassName, BardClassNameGuid).AddToDB();
 
             BardFeatureDefinitionSubclassChoice.Subclasses.Add(createLoreCollege().Name);
+            BardClass.FeatureUnlocks.Sort(
+                delegate (FeatureUnlockByLevel a, FeatureUnlockByLevel b)
+                {
+                    return a.Level - b.Level;
+                });
         }
 
         private static FeatureDefinitionSubclassChoice BardFeatureDefinitionSubclassChoice;
