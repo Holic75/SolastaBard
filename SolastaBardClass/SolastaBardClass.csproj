@@ -62,9 +62,6 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<Reference Include="SolastaUnarmoredDefense">
-			<HintPath>$([System.IO.Path]::Combine($(SolastaInstallDir), 'Mods\SolastaUnarmoredDefense\SolastaUnarmoredDefense.dll'))</HintPath>
-		</Reference>
 		<Reference Include="Unity.Addressables">
 			<HintPath>$([System.IO.Path]::Combine($(SolastaInstallDir), 'Solasta_Data\Managed\Unity.Addressables.dll'))</HintPath>
 			<Private>false</Private>
