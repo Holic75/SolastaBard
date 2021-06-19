@@ -319,6 +319,7 @@ namespace SolastaBardClass
                     .AddFeatureAtLevel(cutting_words[RuleDefinitions.DieType.D8], 5)
                     .AddFeatureAtLevel(additional_magical_secrets, 6)
                     .AddFeatureAtLevel(cutting_words[RuleDefinitions.DieType.D10], 10)
+                    .AddFeatureAtLevel(cutting_words[RuleDefinitions.DieType.D12], 15)
                     .AddToDB();
 
             return definition;
