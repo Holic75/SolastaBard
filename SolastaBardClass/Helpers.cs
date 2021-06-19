@@ -43,6 +43,7 @@ namespace SolastaBardClass.Helpers
         }
     }
 
+
     public static class ArmorProficiencies
     {
         public static string LigthArmor = "LightArmorCategory";
@@ -877,7 +878,7 @@ namespace SolastaBardClass.Helpers
         }
 
 
-        public static FeatureDefinitionBonusCantrips createAutoPrepareSpell(string name, string guid, string title_string, string description_string,
+        public static FeatureDefinitionBonusCantrips createLearnBonusCantrip(string name, string guid, string title_string, string description_string,
                                                                             params SpellDefinition[] cantrips)
         {
             return new BonusCantripsBuilder(name, guid, title_string, description_string, cantrips).AddToDB();

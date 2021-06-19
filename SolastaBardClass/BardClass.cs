@@ -38,8 +38,12 @@ namespace SolastaBardClass
         static public FeatureDefinitionAttributeModifier virtue_college_extra_attack;
 
         //TODO
-        //colleges: wyrdsingers ?, ..
+        //colleges: nature ?, ..
 
+        static public FeatureDefinitionFeatureSet nature_college_bonus_proficiencies;
+        static public FeatureDefinitionFeatureSet nature_college_extra_cantrip;
+        static public FeatureDefinitionFeatureSet natural_focus;
+        static public FeatureDefinition environmental_magical_secrets;
 
         protected BardClassBuilder(string name, string guid) : base(name, guid)
         {
@@ -309,12 +313,163 @@ namespace SolastaBardClass
         }
 
 
+        static CharacterSubclassDefinition createNatureCollege()
+        {
+            createNatureCollegeBonusProficienies();
+            createNatureCollegeExtraCantrip();
+            createNaturalFocus();
+            createEnvironmentalMagicalSecrets();
+
+
+            var gui_presentation = new GuiPresentationBuilder(
+                    "Subclass/&BardSubclassCollegeOfNatureDescription",
+                    "Subclass/&BardSubclassCollegeOfNatureTitle")
+                    .SetSpriteReference(DatabaseHelper.CharacterSubclassDefinitions.TraditionGreenmage.GuiPresentation.SpriteReference)
+                    .Build();
+
+            CharacterSubclassDefinition definition = new CharacterSubclassDefinitionBuilder("BardSubclassCollegeOfNature", "c943389a-f8a1-4ad4-9400-2ab97a4a3541")
+                                                                                            .SetGuiPresentation(gui_presentation)
+                                                                                            .AddFeatureAtLevel(nature_college_bonus_proficiencies, 3)
+                                                                                            .AddFeatureAtLevel(nature_college_extra_cantrip, 3)
+                                                                                            .AddFeatureAtLevel(natural_focus, 3)
+                                                                                            .AddFeatureAtLevel(environmental_magical_secrets, 6)
+                                                                                            .AddToDB();
+
+            return definition;
+        }
+
+
+        static void createEnvironmentalMagicalSecrets()
+        {
+            string title = "Feature/&BardNatureSubclassEnvironmentalMagicalSecretsTitle";
+            string description = "Feature/&BardNatureSubclassEnvironmentalMagicalSecretsDescription";
+            environmental_magical_secrets = Helpers.CopyFeatureBuilder<FeatureDefinitionMagicAffinity>.createFeatureCopy("BardNatureSubclassEnvironmentalMagicalSecrets",
+                                                                                                                         "",
+                                                                                                                         title,
+                                                                                                                         description,
+                                                                                                                         null,
+                                                                                                                         DatabaseHelper.FeatureDefinitionMagicAffinitys.MagicAffinityGreenmageGreenMagicList
+                                                                                                                         );
+        }
+
+        static void createNaturalFocus()
+        {
+            //TODO: fix autoprepareSpell to work with spontaneous casters
+            //TODO: add Forest and Grassland ?
+            string title = "Feature/&BardNatureSubclassNaturalFocusTitle";
+            string description = "Feature/&BardNatureSubclassNaturalFocusDescription";
+            Dictionary<string, (FeatureDefinition feature, SpellDefinition lvl2_spell, SpellDefinition lvl3_spell)> foci
+                            = new Dictionary<string, (FeatureDefinition feature, SpellDefinition lvl2_spell, SpellDefinition lvl3_spell)>()
+                            {
+                                {"Arctic", (DatabaseHelper.FeatureDefinitionDamageAffinitys.DamageAffinityColdResistance, DatabaseHelper.SpellDefinitions.HoldPerson, DatabaseHelper.SpellDefinitions.SleetStorm) },
+                                {"Desert", (DatabaseHelper.FeatureDefinitionDamageAffinitys.DamageAffinityFireResistance, DatabaseHelper.SpellDefinitions.ScorchingRay, DatabaseHelper.SpellDefinitions.WindWall) },
+                                {"Mountain", (DatabaseHelper.FeatureDefinitionDamageAffinitys.DamageAffinityLightningResistance, DatabaseHelper.SpellDefinitions.SpiderClimb, DatabaseHelper.SpellDefinitions.Fly) },
+                                {"Swamp", (DatabaseHelper.FeatureDefinitionDamageAffinitys.DamageAffinityPoisonResistance, DatabaseHelper.SpellDefinitions.AcidArrow, DatabaseHelper.SpellDefinitions.StinkingCloud) }
+                            };
+
+            List<FeatureDefinitionFeatureSet> features = new List<FeatureDefinitionFeatureSet>();
+
+            foreach (var kv in foci)
+            {
+                var extra_spells = Helpers.AutoPrepareSpellBuilder.createAutoPrepareSpell(kv.Key + "BardNatureSubclassBonusSpells",
+                                                                                           "",
+                                                                                           Common.common_no_title,
+                                                                                           Common.common_no_title,
+                                                                                           bard_class,
+                                                                                           new FeatureDefinitionAutoPreparedSpells.AutoPreparedSpellsGroup()
+                                                                                           {
+                                                                                               ClassLevel = 6,
+                                                                                               SpellsList = new List<SpellDefinition>() { kv.Value.lvl2_spell, kv.Value.lvl3_spell }
+                                                                                           }
+                                                                                           );
+
+                var feature = Helpers.FeatureSetBuilder.createFeatureSet(kv.Key + "BardNatureSubclassNaturalFocus",
+                                                                         "",
+                                                                         "Feature/&BardNatureSubclass" + kv.Key + "NaturalFocusTitle",
+                                                                         "Feature/&BardNatureSubclass" + kv.Key + "NaturalFocusDescription",
+                                                                         false,
+                                                                         FeatureDefinitionFeatureSet.FeatureSetMode.Union,
+                                                                         false,
+                                                                         extra_spells, kv.Value.feature
+                                                                         );
+                features.Add(feature);
+            }
+            natural_focus = Helpers.FeatureSetBuilder.createFeatureSet("BardNatureSubclassNaturalFocus",
+                                                                        "",
+                                                                        title,
+                                                                        description,
+                                                                        false,
+                                                                        FeatureDefinitionFeatureSet.FeatureSetMode.Exclusion,
+                                                                        false,
+                                                                        features.ToArray()
+                                                                        );
+        }
+
+
+        static void createNatureCollegeExtraCantrip()
+        {
+            string title = "Feature/&BardNatureSubclassBonusCantripTitle";
+            string description = "Feature/&BardNatureSubclassBonusCantripDescription";
+
+            var cantrips = new SpellDefinition[] { DatabaseHelper.SpellDefinitions.Guidance, DatabaseHelper.SpellDefinitions.PoisonSpray, DatabaseHelper.SpellDefinitions.Resistance };
+
+            List<FeatureDefinition> learn_features = new List<FeatureDefinition>();
+
+            foreach (var c in cantrips)
+            {
+                var feature = Helpers.BonusCantripsBuilder.createLearnBonusCantrip(c.name + "BardNatureSubclassBonusCantrip",
+                                                                                   "",
+                                                                                   c.GuiPresentation.Title,
+                                                                                   c.GuiPresentation.Description,
+                                                                                   c);
+                learn_features.Add(feature);
+            }
+
+            nature_college_extra_cantrip = Helpers.FeatureSetBuilder.createFeatureSet("BardNatureSubclassBonusCantrip",
+                                                                                "",
+                                                                                title,
+                                                                                description,
+                                                                                false,
+                                                                                FeatureDefinitionFeatureSet.FeatureSetMode.Exclusion,
+                                                                                false,
+                                                                                learn_features.ToArray()
+                                                                                );
+        }
+
+
+        static void createNatureCollegeBonusProficienies()
+        {
+            var tools_proficiency = Helpers.ProficiencyBuilder.CreateToolsProficiency("BardNatureSubclassToolsProficiency",
+                                                                                      "",
+                                                                                      Common.common_no_title,
+                                                                                      Helpers.Tools.HerbalismKit
+                                                                                      );
+
+            var skills = Helpers.PoolBuilder.createSkillProficiency("BardNatureSubclassSkillsProficiency",
+                                                                    "",
+                                                                    Common.common_no_title,
+                                                                    Common.common_no_title,
+                                                                    2,
+                                                                    Helpers.Skills.Nature, Helpers.Skills.Medicine, Helpers.Skills.AnimalHandling, Helpers.Skills.Survival);
+
+            nature_college_bonus_proficiencies = Helpers.FeatureSetBuilder.createFeatureSet("BardNatureSubclassBonusProficiencies",
+                                                                                            "",
+                                                                                            "Feature/&BardNatureSubclassBonusProficiencieslTitle",
+                                                                                            "Feature/&BardNatureSubclassBonusProficiencieslDescription",
+                                                                                            false,
+                                                                                            FeatureDefinitionFeatureSet.FeatureSetMode.Union,
+                                                                                            false,
+                                                                                            skills,
+                                                                                            tools_proficiency
+                                                                                            );
+        }
+
+
         static CharacterSubclassDefinition createVirtueCollege()
         {
             createVirtueCollegeProficiencies();
             createVirtueCollegeExtraAttack();
             createMusicOfTheSpheres();
-
 
             var gui_presentation = new GuiPresentationBuilder(
                     "Subclass/&BardSubclassCollegeOfVirtueDescription",
@@ -992,6 +1147,7 @@ namespace SolastaBardClass
 
             BardFeatureDefinitionSubclassChoice.Subclasses.Add(createLoreCollege().Name);
             BardFeatureDefinitionSubclassChoice.Subclasses.Add(createVirtueCollege().Name);
+            BardFeatureDefinitionSubclassChoice.Subclasses.Add(createNatureCollege().Name);
         }
 
         private static FeatureDefinitionSubclassChoice BardFeatureDefinitionSubclassChoice;

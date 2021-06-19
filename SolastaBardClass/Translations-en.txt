@@ -51,3 +51,21 @@ Feature/&BardVirtueSubclassMusicOfTheSpheresDescription At 3rd level you learn h
 Reaction/&UseBardVirtueSubclassMusicOfTheSpheresPowerReactDescription Expend one use of your inspiration to add your inspiration die to your ally's attack roll. This uses your reaction until your next turn. Against undead and fiends this attack deals an extra amount of damage equal to inspiration die value.
 Feedback/&AdditionalDamageBardVirtueSubclassMusicOfTheSpheresLine Extra damage due to Music of the Spheres
 Feedback/&AdditionalDamageBardVirtueSubclassMusicOfTheSpheresFormat Extra damage due to Music of the Spheres
+Subclass/&BardSubclassCollegeOfNatureTitle College of Nature
+Subclass/&BardSubclassCollegeOfNatureDescription Bards from the College of Nature endeavor to protect the balance that exists between all living things. Members of this college are more at home in the wilderness than a rowdy tavern or royal court. They feel the connection that binds all life together and sustain its harmony.\nMost of these bards revere the forces of nature themselves, but some devote themselves to Aubori or one of the many nature gods in the multiverse. While all life is precious to College of Nature bards, they also know that nature can provide sustenance and utility to those who only take life when needed.\nWhen a member of this college performs, it can seem as if nature itself joins in with rustling leaves, whistling winds, crashing waves, and singing birds. They harm only those who needlessly take lives, despoil nature, or use dark magic to go against nature’s balance. For their protection of nature, they receive magical energy in return.
+Feature/&BardNatureSubclassBonusProficiencieslTitle Bonus Proficiencies
+Feature/&BardNatureSubclassBonusProficiencieslDescription You gain proficiency in two skills of your choice selected from Animal Handling, Medicine, Nature, and Survival. In addition, you gain proficiency with the herbalism kit.
+Feature/&BardNatureSubclassBonusCantripTitle Bonus Cantrip
+Feature/&BardNatureSubclassBonusCantripDescription At 3rd level, you learn one druid cantrip of your choice. This counts as a bard cantrip for you.
+Feature/&BardNatureSubclassNaturalFocusTitle Natural Focus
+Feature/&BardNatureSubclassNaturalFocusDescription You gain a natural focus, a specific environment that you feel a connection with. It provides you with extra spells and abilities.
+Feature/&BardNatureSubclassArcticNaturalFocusTitle Arctic
+Feature/&BardNatureSubclassArcticNaturalFocusDescription Frozen wastelands are a second home to you. You have resistance to cold damage. At 6th level, you add Hold Person and Sleet Storm to your list of known spells.
+Feature/&BardNatureSubclassDesertNaturalFocusTitle Desert
+Feature/&BardNatureSubclassDesertNaturalFocusDescription The blazing sun and blistering heat of the desert is a comfort. You have resistance to fire damage. At 6th level, you add Scorching Ray and Wind Wall to your list of known spells.
+Feature/&BardNatureSubclassMountainNaturalFocusTitle Mountain
+Feature/&BardNatureSubclassMountainNaturalFocusDescription The storming skies high above the mountains bring you calm and peace. You have resistance to lightning damage. At 6th level, you add Spider Climb and Fly to your list of known spells.
+Feature/&BardNatureSubclassSwampNaturalFocusTitle Swamp
+Feature/&BardNatureSubclassSwampNaturalFocusDescription  You enjoy spending time in thick, foggy swamps. You have resistance to poison damage. At 6th level, you add Acid Arrow and Stinking Cloud to your list of known spells.
+Feature/&BardNatureSubclassEnvironmentalMagicalSecretsTitle Environmental Magical Secrets
+Feature/&BardNatureSubclassEnvironmentalMagicalSecretsDescription Starting at 6th level, whenever you learn a new bard spell, you may instead choose a spell from the druid or ranger spell list. A spell you choose must be of a level you can cast, and must be of 1st level or higher. A chosen spell counts as a bard spell for you.
