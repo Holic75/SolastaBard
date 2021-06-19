@@ -13,7 +13,7 @@ namespace SolastaBardClass
         const string BardClassNameGuid = "274106b8-0376-4bcd-bd1b-440633a394ae";
         const string BardClassSubclassesGuid = "be865126-d7c3-45f3-b891-e77bd8b00cb1";
 
-        static public RuleDefinitions.DieType[] inspiration_dice = new RuleDefinitions.DieType[] { RuleDefinitions.DieType.D6, RuleDefinitions.DieType.D8, RuleDefinitions.DieType.D10 };
+        static public RuleDefinitions.DieType[] inspiration_dice = new RuleDefinitions.DieType[] { RuleDefinitions.DieType.D6, RuleDefinitions.DieType.D8, RuleDefinitions.DieType.D10, RuleDefinitions.DieType.D12 };
         static public CharacterClassDefinition bard_class;
         static public Dictionary<RuleDefinitions.DieType, FeatureDefinitionPower> inspiration_powers = new Dictionary<RuleDefinitions.DieType, FeatureDefinitionPower>();
         static public FeatureDefinition font_of_inspiration;
@@ -288,6 +288,7 @@ namespace SolastaBardClass
             Definition.FeatureUnlocks.Add(new FeatureUnlockByLevel(expertise, 10));
             Definition.FeatureUnlocks.Add(new FeatureUnlockByLevel(DatabaseHelper.FeatureDefinitionFeatureSets.FeatureSetAbilityScoreChoice, 12));
             Definition.FeatureUnlocks.Add(new FeatureUnlockByLevel(magical_secrets14, 14));
+            Definition.FeatureUnlocks.Add(new FeatureUnlockByLevel(inspiration_powers[RuleDefinitions.DieType.D12], 15));
             Definition.FeatureUnlocks.Add(new FeatureUnlockByLevel(DatabaseHelper.FeatureDefinitionFeatureSets.FeatureSetAbilityScoreChoice, 16));
             Definition.FeatureUnlocks.Add(new FeatureUnlockByLevel(magical_secrets18, 18));
             Definition.FeatureUnlocks.Add(new FeatureUnlockByLevel(DatabaseHelper.FeatureDefinitionFeatureSets.FeatureSetAbilityScoreChoice, 19));
