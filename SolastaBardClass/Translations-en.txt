@@ -51,3 +51,5 @@ Feature/&BardVirtueSubclassMusicOfTheSpheresDescription At 3rd level you learn h
 Reaction/&UseBardVirtueSubclassMusicOfTheSpheresPowerReactDescription Expend one use of your inspiration to add your inspiration die to your ally's attack roll. This uses your reaction until your next turn. Against undead and fiends this attack deals an extra amount of damage equal to inspiration die value.
 Feedback/&AdditionalDamageBardVirtueSubclassMusicOfTheSpheresLine Extra damage due to Music of the Spheres
 Feedback/&AdditionalDamageBardVirtueSubclassMusicOfTheSpheresFormat Extra damage due to Music of the Spheres
+Feature/&BardClassPeerlessSkillTitle	Peerless Skill
+Feature/&BardClassPeerlessSkillDescription	Starting at 14th level, when you make an ability check, you can expend one use of Bardic Inspiration. Roll a Bardic Inspiration die and add the number rolled to your ability check. You can choose to do so after you roll the die for the ability check, but before the GM tells you whether you succeed or fail.

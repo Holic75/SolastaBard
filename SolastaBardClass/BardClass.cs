@@ -31,6 +31,7 @@ namespace SolastaBardClass
 
         static public FeatureDefinitionPointPool lore_college_bonus_proficiencies;
         static public NewFeatureDefinitions.FeatureDefinitionExtraSpellSelection additional_magical_secrets;
+        static public Dictionary<RuleDefinitions.DieType, FeatureDefinition> peerless_skills = new Dictionary<RuleDefinitions.DieType, FeatureDefinition>();
 
         static public FeatureDefinitionFeatureSet virtue_college_bonus_proficiencies;
         static public Dictionary<RuleDefinitions.DieType, NewFeatureDefinitions.FeatureDefinitionReactionPowerOnAttackAttempt> music_of_spheres
@@ -502,6 +503,7 @@ namespace SolastaBardClass
             createCuttingWords();
             createLoreCollegeBonusProficiencies();
             createLoreCollegeMagicalSecrets();
+            createPeerlessSkill();
 
             var gui_presentation = new GuiPresentationBuilder(
                     "Subclass/&BardSubclassCollegeOfLoreDescription",
@@ -516,7 +518,9 @@ namespace SolastaBardClass
                     .AddFeatureAtLevel(cutting_words[RuleDefinitions.DieType.D8], 5)
                     .AddFeatureAtLevel(additional_magical_secrets, 6)
                     .AddFeatureAtLevel(cutting_words[RuleDefinitions.DieType.D10], 10)
+                    .AddFeatureAtLevel(peerless_skills[RuleDefinitions.DieType.D10], 14)
                     .AddFeatureAtLevel(cutting_words[RuleDefinitions.DieType.D12], 15)
+                    .AddFeatureAtLevel(peerless_skills[RuleDefinitions.DieType.D12], 15)
                     .AddToDB();
 
             return definition;
@@ -545,6 +549,35 @@ namespace SolastaBardClass
                                                                                                         2,
                                                                                                         magical_secrets_spelllist
                                                                                                         );
+        }
+
+
+        static void createPeerlessSkill()
+        {
+            string peerless_skill_title_string = "Feature/&BardClassPeerlessSkillTitle";
+            string peerless_skill_description_string = "Feature/&BardClassPeerlessSkillDescription";
+
+            var dice = new RuleDefinitions.DieType[] { RuleDefinitions.DieType.D10, RuleDefinitions.DieType.D12 };
+
+            for (int i = 0; i < dice.Length; i++)
+            {
+                var peerless_skill = Helpers.FeatureBuilder<NewFeatureDefinitions.ModifyDiceRollValue>.createFeature("BardClassPeerlessSkill" + dice[i].ToString(),
+                                                                                                 "",
+                                                                                                 Helpers.StringProcessing.appendToString(peerless_skill_title_string,
+                                                                                                                                         peerless_skill_title_string + dice[i].ToString(),
+                                                                                                                                         $" ({dice[i].ToString().ToString().ToLower()})"),
+                                                                                                peerless_skill_description_string,
+                                                                                                 null,
+                                                                                                 m =>
+                                                                                                 {
+                                                                                                     m.diceType = dice[i];
+                                                                                                     m.numDice = -1;
+                                                                                                     m.contexts = new List<RuleDefinitions.RollContext>() { RuleDefinitions.RollContext.AbilityCheck };
+                                                                                                 }
+                                                                                                 );
+
+                peerless_skills.Add(dice[i], peerless_skill);
+            }
         }
 
 
@@ -856,7 +889,7 @@ namespace SolastaBardClass
             string song_of_rest_description_string = "Feature/&BardClassSongOfRestDescription";
 
             var dice = inspiration_dice;
-
+            
             for (int i = 0; i < dice.Length; i++)
             {
                 var feature = Helpers.FeatureBuilder<NewFeatureDefinitions.FeatureDefinitionExtraHealingDieOnShortRest>.createFeature("BardClassSongOfRestFeature" + dice[i].ToString(),
