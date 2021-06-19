@@ -158,3 +158,5 @@ BardClassCuttingWordsDamageRollsD10	04333261-28b4-40d3-869a-e1c023911167
 BardClassCuttingWordsFeatureD6	22f6d11f-e8c5-4962-a07d-3f7c62e6d5d7
 BardClassCuttingWordsFeatureD8	7e75390c-afdc-460e-b264-79c3fdcb5650
 BardClassCuttingWordsFeatureD10	44a304b1-7ba9-40f7-9393-4218c8122810
+BardLoreSubclassSkillProficiency	eae6cf73-6480-416c-b094-1d0463041f33
+BardLoreSubclassAdditionalMagicalSecrets	08ae8b69-616f-4784-8876-e234c1046fb8

@@ -42,6 +42,15 @@ namespace SolastaBardClass.Patches
                                                                                   && (u.PowerDefinition as NewFeatureDefinitions.IReactionPowerOnAttackAttempt)
                                                                                     .canBeUsed(unit.RulesetCharacter, attacker.RulesetCharacter, defender.RulesetCharacter, attackerAttackMode)
                                                                                  ).ToArray();
+                            var overriden_powers = powers.Aggregate(new List<FeatureDefinitionPower>(), (old, next) =>
+                                                                                 {
+                                                                                     if (next.PowerDefinition?.overriddenPower != null)
+                                                                                     {
+                                                                                         old.Add(next.PowerDefinition?.overriddenPower);
+                                                                                     }
+                                                                                     return old;
+                                                                                 });
+                            powers = powers.Where(pp => !overriden_powers.Contains(pp.powerDefinition)).ToArray();
 
                             foreach (var p in powers)
                             {
@@ -108,6 +117,16 @@ namespace SolastaBardClass.Patches
                                                                                     .canBeUsed(unit.RulesetCharacter, attacker.RulesetCharacter, defender.RulesetCharacter, null, true)
                                                                                  ).ToArray();
 
+                            var overriden_powers = powers.Aggregate(new List<FeatureDefinitionPower>(), (old, next) =>
+                            {
+                                if (next.PowerDefinition?.overriddenPower != null)
+                                {
+                                    old.Add(next.PowerDefinition?.overriddenPower);
+                                }
+                                return old;
+                            });
+                            powers = powers.Where(pp => !overriden_powers.Contains(pp.powerDefinition)).ToArray();
+
                             foreach (var p in powers)
                             {
                                 CharacterActionParams reactionParams = new CharacterActionParams(unit, ActionDefinitions.Id.PowerReaction);
@@ -170,6 +189,16 @@ namespace SolastaBardClass.Patches
                                                                                   && (u.PowerDefinition as NewFeatureDefinitions.IReactionPowerOnDamage)
                                                                                     .canBeUsed(unit.RulesetCharacter, attacker.RulesetCharacter, defender.RulesetCharacter, attackMode, false)
                                                                                  ).ToArray();
+
+                            var overriden_powers = powers.Aggregate(new List<FeatureDefinitionPower>(), (old, next) =>
+                            {
+                                if (next.PowerDefinition?.overriddenPower != null)
+                                {
+                                    old.Add(next.PowerDefinition?.overriddenPower);
+                                }
+                                return old;
+                            });
+                            powers = powers.Where(pp => !overriden_powers.Contains(pp.powerDefinition)).ToArray();
 
                             foreach (var p in powers)
                             {
