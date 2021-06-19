@@ -23,6 +23,8 @@ namespace SolastaBardClass
         static public SpellListDefinition bard_spelllist;
         static public SpellListDefinition magical_secrets_spelllist;
         static public NewFeatureDefinitions.FeatureDefinitionExtraSpellSelection magical_secrets;
+        static public NewFeatureDefinitions.FeatureDefinitionExtraSpellSelection magical_secrets14;
+        static public NewFeatureDefinitions.FeatureDefinitionExtraSpellSelection magical_secrets18;
         static public FeatureDefinitionPower countercharm;
 
         static public Dictionary<RuleDefinitions.DieType, FeatureDefinitionFeatureSet> cutting_words = new Dictionary<RuleDefinitions.DieType, FeatureDefinitionFeatureSet>();
@@ -285,7 +287,9 @@ namespace SolastaBardClass
             Definition.FeatureUnlocks.Add(new FeatureUnlockByLevel(inspiration_powers[RuleDefinitions.DieType.D10], 10));
             Definition.FeatureUnlocks.Add(new FeatureUnlockByLevel(expertise, 10));
             Definition.FeatureUnlocks.Add(new FeatureUnlockByLevel(DatabaseHelper.FeatureDefinitionFeatureSets.FeatureSetAbilityScoreChoice, 12));
+            Definition.FeatureUnlocks.Add(new FeatureUnlockByLevel(magical_secrets14, 14));
             Definition.FeatureUnlocks.Add(new FeatureUnlockByLevel(DatabaseHelper.FeatureDefinitionFeatureSets.FeatureSetAbilityScoreChoice, 16));
+            Definition.FeatureUnlocks.Add(new FeatureUnlockByLevel(magical_secrets18, 18));
             Definition.FeatureUnlocks.Add(new FeatureUnlockByLevel(DatabaseHelper.FeatureDefinitionFeatureSets.FeatureSetAbilityScoreChoice, 19));
 
             var subclassChoicesGuiPresentation = new GuiPresentation();
@@ -620,6 +624,24 @@ namespace SolastaBardClass
                                                                                             2,
                                                                                             spelllist
                                                                                             );
+            magical_secrets14 = Helpers.ExtraSpellSelectionBuilder.createExtraSpellSelection("BardClassMagicalSecrets14",
+                                                                                "",
+                                                                                "Feature/&BardClassMagicalSecretsTitle",
+                                                                                "Feature/&BardClassMagicalSecretsDescription",
+                                                                                bard_class,
+                                                                                14,
+                                                                                2,
+                                                                                spelllist
+                                                                                );
+            magical_secrets18 = Helpers.ExtraSpellSelectionBuilder.createExtraSpellSelection("BardClassMagicalSecrets18",
+                                                                                "",
+                                                                                "Feature/&BardClassMagicalSecretsTitle",
+                                                                                "Feature/&BardClassMagicalSecretsDescription",
+                                                                                bard_class,
+                                                                                18,
+                                                                                2,
+                                                                                spelllist
+                                                                                );
             magical_secrets_spelllist = spelllist;
         }
 
