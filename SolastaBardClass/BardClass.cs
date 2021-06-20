@@ -1,9 +1,14 @@
 ﻿using SolastaModApi;
 using SolastaModApi.Extensions;
+using SolastaModHelpers;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine.AddressableAssets;
 using static FeatureDefinitionSavingThrowAffinity;
+
+using Helpers = SolastaModHelpers.Helpers;
+using NewFeatureDefinitions = SolastaModHelpers.NewFeatureDefinitions;
+using ExtendedEnums = SolastaModHelpers.ExtendedEnums;
 
 namespace SolastaBardClass
 {
@@ -168,7 +173,7 @@ namespace SolastaBardClass
             var ritual_spellcasting = Helpers.RitualSpellcastingBuilder.createRitualSpellcasting("BardRitualSpellcasting",
                                                                                                  "25c48b9b-e2e9-4ea7-8a80-e6c413275980",
                                                                                                  "Feature/&BardClassRitualCastingDescription",
-                                                                                                 (RuleDefinitions.RitualCasting)ExtraRitualCasting.Spontaneous);
+                                                                                                 (RuleDefinitions.RitualCasting)ExtendedEnums.ExtraRitualCasting.Spontaneous);
 
             bard_spelllist = Helpers.SpelllistBuilder.create9LevelSpelllist("BardClassSpelllist", "0f3d14a7-f9a1-41ec-a164-f3e0f3800104", "",
                                                                                 new List<SpellDefinition>
@@ -691,7 +696,7 @@ namespace SolastaBardClass
                 effect_form.ConditionForm.Operation = ConditionForm.ConditionOperation.Add;
                 effect_form.ConditionForm.ConditionDefinition = condition;
                 effect.EffectForms.Add(effect_form);
-                effect.SetTargetFilteringTag((RuleDefinitions.TargetFilteringTag)ExtraTargetFilteringTag.NonCaster);
+                effect.SetTargetFilteringTag((RuleDefinitions.TargetFilteringTag)ExtendedEnums.ExtraTargetFilteringTag.NonCaster);
 
                 var power = Helpers.GenericPowerBuilder<NewFeatureDefinitions.FeatureDefinitionReactionPowerOnAttackAttempt>
                                                       .createPower("BardVirtueSubclassMusicOfTheSpheres" + dice[i].ToString(),
@@ -889,7 +894,7 @@ namespace SolastaBardClass
                                                                                                           cutting_words_description_string,
                                                                                                           null,
                                                                                                           DatabaseHelper.ConditionDefinitions.ConditionDazzled,
-                                                                                                          new RuleDefinitions.ConditionInterruption[] { (RuleDefinitions.ConditionInterruption)ExtraConditionInterruption.RollsForDamage },
+                                                                                                          new RuleDefinitions.ConditionInterruption[] { (RuleDefinitions.ConditionInterruption)ExtendedEnums.ExtraConditionInterruption.RollsForDamage },
                                                                                                           penalty_damage
                                                                                                           );
 
@@ -1166,7 +1171,7 @@ namespace SolastaBardClass
                 effect.DurationParameter = 10;
                 effect.DurationType = RuleDefinitions.DurationType.Minute;
                 effect.EffectForms.Clear();
-                effect.SetTargetFilteringTag((RuleDefinitions.TargetFilteringTag)ExtraTargetFilteringTag.NonCaster);
+                effect.SetTargetFilteringTag((RuleDefinitions.TargetFilteringTag)ExtendedEnums.ExtraTargetFilteringTag.NonCaster);
 
                 var effect_form = new EffectForm();
                 effect_form.ConditionForm = new ConditionForm();

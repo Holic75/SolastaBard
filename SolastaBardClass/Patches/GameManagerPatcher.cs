@@ -1,4 +1,5 @@
 using HarmonyLib;
+using SolastaModHelpers;
 using UnityModManagerNet;
 
 namespace SolastaBardClass.Patches

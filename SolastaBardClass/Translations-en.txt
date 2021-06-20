@@ -1,5 +1,3 @@
-Reaction/&CommonUsePowerReactTitle React
-Rules/&CommonConditioUnderEffectOfPrefix Under effect of 
 Subclass/&BardSubclassCollegeTitle	College
 Subclass/&BardSubclassCollegeDescription	Select a Bard college
 Class/&BardClassTitle Bard
