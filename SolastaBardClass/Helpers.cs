@@ -1012,5 +1012,22 @@ namespace SolastaBardClass.Helpers
                 yield return list[i];
             }
         }
+
+        static public List<T> extractFeaturesHierarchically<T>(IEnumerable<FeatureDefinition> features) where T: class
+        {
+            var list = new List<T>();
+            foreach (var f in features)
+            {
+                if (f is T)
+                {
+                    list.Add(f as T);
+                }
+                if (f is FeatureDefinitionFeatureSet)
+                {
+                    list.AddRange(extractFeaturesHierarchically<T>((f as FeatureDefinitionFeatureSet).featureSet));
+                }
+            }
+            return list;
+        }
     }
 }

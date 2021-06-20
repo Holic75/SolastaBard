@@ -217,3 +217,5 @@ SwampBardNatureSubclassBonusSpells	a167b9ad-97c0-4c56-b0a2-efe45b714022
 SwampBardNatureSubclassNaturalFocus	9bb983f4-2335-4011-9e16-68fded031fa9
 BardNatureSubclassNaturalFocus	49025df4-e1cc-470b-9b80-a47458e7d409
 BardNatureSubclassEnvironmentalMagicalSecrets	e0fb86c0-774a-4dfb-81fc-c5ed573b18e9
+BardNatureSubclassEnvironmentalMagicalSecretsSpelllist	a2d90cfe-cbd5-495f-9e7c-a265cf0e0b85
+BardNatureSubclassNaturalFocusBonusSpells	808bf93d-ad24-416f-9c35-5c5f6888643b

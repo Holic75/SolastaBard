@@ -341,6 +341,56 @@ namespace SolastaBardClass
 
         static void createEnvironmentalMagicalSecrets()
         {
+            var nature_focus_spelllist = Helpers.SpelllistBuilder.create9LevelSpelllist("BardNatureSubclassEnvironmentalMagicalSecretsSpelllist", "", "",
+                                                                                        new List<SpellDefinition>
+                                                                                        {
+
+                                                                                        },
+                                                                                        new List<SpellDefinition>
+                                                                                        {
+                                                                                                        DatabaseHelper.SpellDefinitions.FogCloud,
+                                                                                                        DatabaseHelper.SpellDefinitions.HuntersMark,
+                                                                                                        DatabaseHelper.SpellDefinitions.Jump,
+                                                                                                        DatabaseHelper.SpellDefinitions.Goodberry,
+                                                                                        },
+                                                                                        new List<SpellDefinition>
+                                                                                        {
+                                                                                                        DatabaseHelper.SpellDefinitions.Barkskin,
+                                                                                                        DatabaseHelper.SpellDefinitions.Darkvision,
+                                                                                                        DatabaseHelper.SpellDefinitions.FindTraps,
+                                                                                                        DatabaseHelper.SpellDefinitions.PassWithoutTrace,
+                                                                                                        DatabaseHelper.SpellDefinitions.ProtectionFromPoison,
+                                                                                                        DatabaseHelper.SpellDefinitions.FlameBlade,
+                                                                                                        DatabaseHelper.SpellDefinitions.FlamingSphere,
+                                                                                        },
+                                                                                        new List<SpellDefinition>
+                                                                                        {
+                                                                                                        DatabaseHelper.SpellDefinitions.ConjureAnimals,
+                                                                                                        DatabaseHelper.SpellDefinitions.CreateFood,
+                                                                                                        DatabaseHelper.SpellDefinitions.Daylight,
+                                                                                                        DatabaseHelper.SpellDefinitions.ProtectionFromEnergy,
+                                                                                                        DatabaseHelper.SpellDefinitions.SleetStorm,
+                                                                                                        DatabaseHelper.SpellDefinitions.WindWall,
+                                                                                        },
+                                                                                        new List<SpellDefinition>
+                                                                                        {
+                                                                                                        DatabaseHelper.SpellDefinitions.Blight,
+                                                                                                        DatabaseHelper.SpellDefinitions.FireShield,
+                                                                                                        DatabaseHelper.SpellDefinitions.IceStorm,
+                                                                                                        DatabaseHelper.SpellDefinitions.IdentifyCreatures,
+                                                                                                        DatabaseHelper.SpellDefinitions.GiantInsect,
+                                                                                                        DatabaseHelper.SpellDefinitions.Stoneskin,
+                                                                                                        DatabaseHelper.SpellDefinitions.WallOfFire,
+                                                                                        },
+                                                                                        new List<SpellDefinition>
+                                                                                        {
+                                                                                                        DatabaseHelper.SpellDefinitions.ConjureElemental,
+                                                                                                        DatabaseHelper.SpellDefinitions.ConeOfCold,
+                                                                                                        DatabaseHelper.SpellDefinitions.Contagion,
+                                                                                                        DatabaseHelper.SpellDefinitions.InsectPlague,
+                                                                                        }
+                                                                                        );
+
             string title = "Feature/&BardNatureSubclassEnvironmentalMagicalSecretsTitle";
             string description = "Feature/&BardNatureSubclassEnvironmentalMagicalSecretsDescription";
             environmental_magical_secrets = Helpers.CopyFeatureBuilder<FeatureDefinitionMagicAffinity>.createFeatureCopy("BardNatureSubclassEnvironmentalMagicalSecrets",
@@ -348,13 +398,28 @@ namespace SolastaBardClass
                                                                                                                          title,
                                                                                                                          description,
                                                                                                                          null,
-                                                                                                                         DatabaseHelper.FeatureDefinitionMagicAffinitys.MagicAffinityGreenmageGreenMagicList
+                                                                                                                         DatabaseHelper.FeatureDefinitionMagicAffinitys.MagicAffinityGreenmageGreenMagicList,
+                                                                                                                         c =>
+                                                                                                                         {
+                                                                                                                             c.SetExtendedSpellList(nature_focus_spelllist);
+                                                                                                                         }
                                                                                                                          );
         }
 
         static void createNaturalFocus()
         {
-            //TODO: fix autoprepareSpell to work with spontaneous casters
+            var bonus_spells = Helpers.FeatureBuilder<NewFeatureDefinitions.FeatureDefinitionExtraSpellsKnown>.createFeature("BardNatureSubclassNaturalFocusBonusSpells",
+                                                                                                                             "",
+                                                                                                                             Common.common_no_title,
+                                                                                                                             Common.common_no_title,
+                                                                                                                             null,
+                                                                                                                             b =>
+                                                                                                                             {
+                                                                                                                                 b.caster_class = bard_class;
+                                                                                                                                 b.level = 6;
+                                                                                                                                 b.max_spells = 2;
+                                                                                                                             }
+                                                                                                                             );
             //TODO: add Forest and Grassland ?
             string title = "Feature/&BardNatureSubclassNaturalFocusTitle";
             string description = "Feature/&BardNatureSubclassNaturalFocusDescription";
@@ -369,19 +434,27 @@ namespace SolastaBardClass
 
             List<FeatureDefinitionFeatureSet> features = new List<FeatureDefinitionFeatureSet>();
 
+
             foreach (var kv in foci)
             {
-                var extra_spells = Helpers.AutoPrepareSpellBuilder.createAutoPrepareSpell(kv.Key + "BardNatureSubclassBonusSpells",
-                                                                                           "",
-                                                                                           Common.common_no_title,
-                                                                                           Common.common_no_title,
-                                                                                           bard_class,
-                                                                                           new FeatureDefinitionAutoPreparedSpells.AutoPreparedSpellsGroup()
-                                                                                           {
-                                                                                               ClassLevel = 6,
-                                                                                               SpellsList = new List<SpellDefinition>() { kv.Value.lvl2_spell, kv.Value.lvl3_spell }
-                                                                                           }
-                                                                                           );
+                var extra_spells = Helpers.FeatureBuilder<NewFeatureDefinitions.GrantSpells>.createFeature(kv.Key + "BardNatureSubclassBonusSpells",
+                                                                                                           "",
+                                                                                                           Common.common_no_title,
+                                                                                                           Common.common_no_title,
+                                                                                                           null,
+                                                                                                           f =>
+                                                                                                           {
+                                                                                                               f.spellcastingClass = bard_class;
+                                                                                                               f.spellGroups = new List<FeatureDefinitionAutoPreparedSpells.AutoPreparedSpellsGroup>()
+                                                                                                               {
+                                                                                                                   new FeatureDefinitionAutoPreparedSpells.AutoPreparedSpellsGroup()
+                                                                                                                   {
+                                                                                                                       ClassLevel = 6,
+                                                                                                                       SpellsList = new List<SpellDefinition>() { kv.Value.lvl2_spell, kv.Value.lvl3_spell }
+                                                                                                                   }
+                                                                                                               };
+                                                                                                           }
+                                                                                                           );
 
                 var feature = Helpers.FeatureSetBuilder.createFeatureSet(kv.Key + "BardNatureSubclassNaturalFocus",
                                                                          "",
@@ -390,7 +463,7 @@ namespace SolastaBardClass
                                                                          false,
                                                                          FeatureDefinitionFeatureSet.FeatureSetMode.Union,
                                                                          false,
-                                                                         extra_spells, kv.Value.feature
+                                                                         extra_spells, kv.Value.feature, bonus_spells
                                                                          );
                 features.Add(feature);
             }

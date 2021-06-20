@@ -19,6 +19,34 @@ namespace SolastaBardClass.NewFeatureDefinitions
         SpellListDefinition getSpelllist(ICharacterBuildingService characterBuildingService);
     }
 
+
+    public class FeatureDefinitionExtraSpellsKnown : FeatureDefinition, IKnownSpellNumberIncrease
+    {
+        public CharacterClassDefinition caster_class;
+        public int max_spells;
+        public int level;
+
+        public int getKnownSpellsBonus(RulesetCharacterHero hero)
+        {
+            if (hero == null)
+            {
+                return 0;
+            }
+
+            if (!hero.ClassesAndLevels.ContainsKey(caster_class))
+            {
+                return 0;
+            }
+
+            if (hero.ClassesAndLevels[caster_class] >= level)
+            {
+                return max_spells;
+            }
+
+            return 0;
+        }
+    }
+
     public class FeatureDefinitionExtraSpellSelection : FeatureDefinition, IReplaceSpellList, IKnownSpellNumberIncrease
     {
         public SpellListDefinition spell_list;

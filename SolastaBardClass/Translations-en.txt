@@ -7,7 +7,7 @@ Class/&BardClassDescription Untold wonders and secrets exist for those skillful 
 Feature/&BardWeaponProficiencyTitle Bard Weapon Proficiencies
 Feature/&BardArmorProficiencyTitle Bard Armor Proficiencies
 Feature/&BardToolsProficiencyTitle Bard Tool Proficiencies
-Feature/&BardClassSkillPointPoolTitle	Bard skills
+Feature/&BardClassSkillPointPoolTitle	Bard Skills
 Feature/&BardClassSkillPointPoolDescription	Choose any 3 skills
 Feature/&BardClassSpellcastingTitle Bard Spellcasting
 Feature/&BardClassSpellcastingDescription Can cast spells from Bard Spells list
@@ -59,13 +59,13 @@ Feature/&BardNatureSubclassBonusCantripTitle Bonus Cantrip
 Feature/&BardNatureSubclassBonusCantripDescription At 3rd level, you learn one druid cantrip of your choice. This counts as a bard cantrip for you.
 Feature/&BardNatureSubclassNaturalFocusTitle Natural Focus
 Feature/&BardNatureSubclassNaturalFocusDescription You gain a natural focus, a specific environment that you feel a connection with. It provides you with extra spells and abilities.
-Feature/&BardNatureSubclassArcticNaturalFocusTitle Arctic
+Feature/&BardNatureSubclassArcticNaturalFocusTitle Natural Focus - Arctic
 Feature/&BardNatureSubclassArcticNaturalFocusDescription Frozen wastelands are a second home to you. You have resistance to cold damage. At 6th level, you add Hold Person and Sleet Storm to your list of known spells.
-Feature/&BardNatureSubclassDesertNaturalFocusTitle Desert
+Feature/&BardNatureSubclassDesertNaturalFocusTitle Natural Focus - Desert
 Feature/&BardNatureSubclassDesertNaturalFocusDescription The blazing sun and blistering heat of the desert is a comfort. You have resistance to fire damage. At 6th level, you add Scorching Ray and Wind Wall to your list of known spells.
-Feature/&BardNatureSubclassMountainNaturalFocusTitle Mountain
+Feature/&BardNatureSubclassMountainNaturalFocusTitle Natural Focus - Mountain
 Feature/&BardNatureSubclassMountainNaturalFocusDescription The storming skies high above the mountains bring you calm and peace. You have resistance to lightning damage. At 6th level, you add Spider Climb and Fly to your list of known spells.
-Feature/&BardNatureSubclassSwampNaturalFocusTitle Swamp
+Feature/&BardNatureSubclassSwampNaturalFocusTitle Natural Focus - Swamp
 Feature/&BardNatureSubclassSwampNaturalFocusDescription  You enjoy spending time in thick, foggy swamps. You have resistance to poison damage. At 6th level, you add Acid Arrow and Stinking Cloud to your list of known spells.
 Feature/&BardNatureSubclassEnvironmentalMagicalSecretsTitle Environmental Magical Secrets
 Feature/&BardNatureSubclassEnvironmentalMagicalSecretsDescription Starting at 6th level, whenever you learn a new bard spell, you may instead choose a spell from the druid or ranger spell list. A spell you choose must be of a level you can cast, and must be of 1st level or higher. A chosen spell counts as a bard spell for you.
