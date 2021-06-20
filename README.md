@@ -3,7 +3,7 @@
 This is a mod for the game Solasta: Crown of the Magister.
 It adds bard class with following college subclasses: College of Lore, College of Nature and College of Virtue.
 This mod requires SolastaModApi https://github.com/SolastaMods/SolastaModApi
-and SolastaModHelpers https://github.com/Holic75/SolastaModHelpers
+and (starting from version 1.0.0) SolastaModHelpers https://github.com/Holic75/SolastaModHelpers
 # How to Compile
 
 0. Install all required development pre-requisites:
