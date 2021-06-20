@@ -1039,7 +1039,8 @@ namespace SolastaBardClass
                                                                              DatabaseHelper.SpellListDefinitions.SpellListWizard,
                                                                              DatabaseHelper.SpellListDefinitions.SpellListCleric,
                                                                              DatabaseHelper.SpellListDefinitions.SpellListPaladin,
-                                                                             DatabaseHelper.SpellListDefinitions.SpellListRanger
+                                                                             DatabaseHelper.SpellListDefinitions.SpellListRanger,
+                                                                             DatabaseHelper.SpellListDefinitions.SpellListWizardGreenmage
                                                                              );
             spelllist.SpellsByLevel[0].Spells = bard_spelllist.SpellsByLevel[0].Spells; //do not affect cantrips for the time being
 
