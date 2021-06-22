@@ -58,7 +58,7 @@ namespace SolastaBardClass
             Definition.GuiPresentation.Description = "Class/&BardClassDescription";
             Definition.GuiPresentation.SetSpriteReference(rogue.GuiPresentation.SpriteReference);
 
-            Definition.SetClassAnimationId(AnimationDefinitions.ClassAnimationId.Fighter);
+            Definition.SetClassAnimationId(AnimationDefinitions.ClassAnimationId.Cleric);
             Definition.SetClassPictogramReference(rogue.ClassPictogramReference);
             Definition.SetDefaultBattleDecisions(rogue.DefaultBattleDecisions);
             Definition.SetHitDice(RuleDefinitions.DieType.D8);
