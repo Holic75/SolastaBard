@@ -259,8 +259,8 @@ namespace SolastaBardClass
                                                                                               bard_spelllist,
                                                                                               Helpers.Stats.Charisma,
                                                                                               DatabaseHelper.FeatureDefinitionCastSpells.CastSpellWizard.KnownCantrips,
-                                                                                              new List<int> {4,  5,  6,  7,  8,  9,  10, 11, 12, 12,
-                                                                                                                         13, 13, 14, 14, 15, 15, 16, 16, 16, 16},
+                                                                                              new List<int> { 4,  5,  6,  7,  8,  9, 10, 11, 12, 12,
+                                                                                                             13, 13, 14, 14, 15, 15, 16, 16, 16, 16},
                                                                                               DatabaseHelper.FeatureDefinitionCastSpells.CastSpellWizard.SlotsPerLevels
                                                                                               );
 
@@ -1007,7 +1007,7 @@ namespace SolastaBardClass
             effect.SetTargetType(RuleDefinitions.TargetType.Sphere);
             effect.SetRangeParameter(0);
             effect.SetTargetParameter(6);
-            effect.SetTargetProximityDistance(30);
+            effect.SetTargetProximityDistance(6);
             effect.DurationParameter = 1;
             effect.DurationType = RuleDefinitions.DurationType.Round;
             effect.SetEndOfEffect(RuleDefinitions.TurnOccurenceType.EndOfTurn);

@@ -2,7 +2,7 @@
   "Id": "SolastaBardClass",
   "DisplayName": "SolastaBardClass",
   "Author": "Holic92",
-  "Version": "0.9.2",
+  "Version": "1.0.0",
   "ManagerVersion": "0.23.4",
   "Requirements": [ "SolastaModApi", "SolastaModHelpers" ],
   "LoadAfter": [ "SolastaModApi", "SolastaModHelpers" ],
