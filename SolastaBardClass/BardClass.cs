@@ -52,11 +52,14 @@ namespace SolastaBardClass
 
         protected BardClassBuilder(string name, string guid) : base(name, guid)
         {
+            var bard_class_pictogram = SolastaModHelpers.CustomIcons.Tools.storeCustomIcon("BardClassPictogram",
+                                                                                           $@"{UnityModManagerNet.UnityModManager.modsPath}/SolastaBardClass/Sprites/BardClass.png",
+                                                                                           1024, 576);
             var rogue = DatabaseHelper.CharacterClassDefinitions.Rogue;
             bard_class = Definition;
             Definition.GuiPresentation.Title = "Class/&BardClassTitle";
             Definition.GuiPresentation.Description = "Class/&BardClassDescription";
-            Definition.GuiPresentation.SetSpriteReference(rogue.GuiPresentation.SpriteReference);
+            Definition.GuiPresentation.SetSpriteReference(bard_class_pictogram);
 
             Definition.SetClassAnimationId(AnimationDefinitions.ClassAnimationId.Cleric);
             Definition.SetClassPictogramReference(rogue.ClassPictogramReference);
