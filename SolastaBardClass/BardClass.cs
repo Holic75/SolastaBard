@@ -368,7 +368,7 @@ namespace SolastaBardClass
                                                                                                         DatabaseHelper.SpellDefinitions.FindTraps,
                                                                                                         DatabaseHelper.SpellDefinitions.PassWithoutTrace,
                                                                                                         DatabaseHelper.SpellDefinitions.ProtectionFromPoison,
-                                                                                                        DatabaseHelper.SpellDefinitions.FlameBlade,
+                                                                                                        //DatabaseHelper.SpellDefinitions.FlameBlade,
                                                                                                         DatabaseHelper.SpellDefinitions.FlamingSphere,
                                                                                         },
                                                                                         new List<SpellDefinition>
