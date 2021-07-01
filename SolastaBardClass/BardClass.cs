@@ -52,14 +52,14 @@ namespace SolastaBardClass
 
         protected BardClassBuilder(string name, string guid) : base(name, guid)
         {
-            var bard_class_pictogram = SolastaModHelpers.CustomIcons.Tools.storeCustomIcon("BardClassPictogram",
+            var bard_class_image = SolastaModHelpers.CustomIcons.Tools.storeCustomIcon("BardClassImage",
                                                                                            $@"{UnityModManagerNet.UnityModManager.modsPath}/SolastaBardClass/Sprites/BardClass.png",
                                                                                            1024, 576);
             var rogue = DatabaseHelper.CharacterClassDefinitions.Rogue;
             bard_class = Definition;
             Definition.GuiPresentation.Title = "Class/&BardClassTitle";
             Definition.GuiPresentation.Description = "Class/&BardClassDescription";
-            Definition.GuiPresentation.SetSpriteReference(bard_class_pictogram);
+            Definition.GuiPresentation.SetSpriteReference(bard_class_image);
 
             Definition.SetClassAnimationId(AnimationDefinitions.ClassAnimationId.Cleric);
             Definition.SetClassPictogramReference(rogue.ClassPictogramReference);
@@ -680,6 +680,7 @@ namespace SolastaBardClass
                                                                                             new RuleDefinitions.ConditionInterruption[] { RuleDefinitions.ConditionInterruption.Attacks },
                                                                                             attack_bonus, dmg_bonus_fiend, dmg_bonus_undead
                                                                                             );
+                NewFeatureDefinitions.ConditionsData.no_refresh_conditions.Add(condition);
 
                 var effect = new EffectDescription();
                 effect.Copy(DatabaseHelper.SpellDefinitions.DivineFavor.EffectDescription);
@@ -831,7 +832,7 @@ namespace SolastaBardClass
                                                                                                           new RuleDefinitions.ConditionInterruption[] { RuleDefinitions.ConditionInterruption.Attacks },
                                                                                                           penalty_attack
                                                                                                           );
-
+                NewFeatureDefinitions.ConditionsData.no_refresh_conditions.Add(attack_penalty_condition);
                 var effect = new EffectDescription();
                 effect.Copy(DatabaseHelper.SpellDefinitions.Dazzle.EffectDescription);
                 effect.SetRangeType(RuleDefinitions.RangeType.Distance);
@@ -900,6 +901,7 @@ namespace SolastaBardClass
                                                                                                           new RuleDefinitions.ConditionInterruption[] { (RuleDefinitions.ConditionInterruption)ExtendedEnums.ExtraConditionInterruption.RollsForDamage },
                                                                                                           penalty_damage
                                                                                                           );
+                NewFeatureDefinitions.ConditionsData.no_refresh_conditions.Add(damage_penalty_condition);
 
                 effect = new EffectDescription();
                 effect.Copy(DatabaseHelper.SpellDefinitions.Dazzle.EffectDescription);
