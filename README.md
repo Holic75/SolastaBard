@@ -5,6 +5,12 @@ It adds bard class with following college subclasses: College of Lore, College o
 This mod requires SolastaModApi https://github.com/SolastaMods/SolastaModApi
 and (starting from version 1.0.0) SolastaModHelpers https://github.com/Holic75/SolastaModHelpers
 
+# Know Issue
+When the bard attempts to use a reaction during other party memeber turn 
+(like Music of the Spheres from college of Virtue) and the camera attempts
+to focus on this action, the game might freeze completely. 
+Please set contextual camera frequency to 0 (in Settings->Game->Camera) if you experience this issue.
+
 # How to Install
 
 1. Download and install [Unity Mod Manager (UMM)](https://www.nexusmods.com/site/mods/21)
