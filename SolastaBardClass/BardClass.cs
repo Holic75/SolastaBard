@@ -866,6 +866,7 @@ namespace SolastaBardClass
                 attack_penalty_power.linkedPower = inspiration_powers[dice[i]];
                 attack_penalty_power.worksOnMelee = true;
                 attack_penalty_power.worksOnRanged = true;
+                attack_penalty_power.checkImmunityToCondtions = new List<ConditionDefinition> { DatabaseHelper.ConditionDefinitions.ConditionCharmed };
                 attack_penalty_power.SetShortTitleOverride(cutting_words_attack_roll_title_string);
                 if (previous_attack_roll_penalty_power != null)
                 {
@@ -940,6 +941,7 @@ namespace SolastaBardClass
                 damage_penalty_power.worksOnMelee = true;
                 damage_penalty_power.worksOnRanged = true;
                 damage_penalty_power.worksOnMagic = true;
+                damage_penalty_power.checkImmunityToCondtions = new List<ConditionDefinition> { DatabaseHelper.ConditionDefinitions.ConditionCharmed };
                 damage_penalty_power.SetShortTitleOverride(cutting_words_damage_roll_title_string);
                 if (previous_damage_roll_penalty_power != null)
                 {
