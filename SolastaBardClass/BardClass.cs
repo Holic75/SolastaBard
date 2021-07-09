@@ -266,7 +266,8 @@ namespace SolastaBardClass
                                                                                                              13, 13, 14, 14, 15, 15, 16, 16, 16, 16},
                                                                                               DatabaseHelper.FeatureDefinitionCastSpells.CastSpellWizard.SlotsPerLevels
                                                                                               );
-
+            bard_spellcasting.replacedSpells = new List<int> {0, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+                                                              1, 1, 1, 1, 1, 1, 1, 1, 1, 1};
             jack_of_all_trades = Helpers.AbilityCheckAffinityBuilder.createAbilityCheckAffinity("BardClassJackOfAllTradesFeature",
                                                                                                  "",
                                                                                                 "Feature/&BardClassJackOfAllTradesFeatureTitle",
