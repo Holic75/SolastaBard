@@ -67,3 +67,7 @@ Feature/&BardNatureSubclassSwampNaturalFocusTitle	Natural Focus - Swamp
 Feature/&BardNatureSubclassSwampNaturalFocusDescription	 You enjoy spending time in thick, foggy swamps. You have resistance to poison damage. At 6th level, you add Acid Arrow and Stinking Cloud to your list of known spells.
 Feature/&BardNatureSubclassEnvironmentalMagicalSecretsTitle	Environmental Magical Secrets
 Feature/&BardNatureSubclassEnvironmentalMagicalSecretsDescription	Starting at 6th level, whenever you learn a new bard spell, you may instead choose a spell from the druid or ranger spell list. A spell you choose must be of a level you can cast, and must be of 1st level or higher. A chosen spell counts as a bard spell for you.
+Feature/&BardNatureSubclassGrasslandNaturalFocusTitle	Natural Focus - Grassland
+Feature/&BardNatureSubclassGrasslandNaturalFocusDescription	The vast grasslands have taught you to travel quickly and quietly. Your speed increases by 5 feet while you are not wearing heavy armor. At 6th level, you add Pass Without a Trace and Wind Wall to your list of known spells.
+Feature/&BardNatureSubclassForestNaturalFocusTitle	Natural Focus - Forest
+Feature/&BardNatureSubclassForestNaturalFocusDescription	You feel at home high in the tallest trees. Climbing no longer costs you extra movement. At 6th level, you add Barkskin and Conjure Animals to your list of known spells.

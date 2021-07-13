@@ -357,6 +357,7 @@ namespace SolastaBardClass
                                                                                         },
                                                                                         new List<SpellDefinition>
                                                                                         {
+                                                                                                        DatabaseHelper.SpellDefinitions.Entangle,
                                                                                                         DatabaseHelper.SpellDefinitions.FogCloud,
                                                                                                         DatabaseHelper.SpellDefinitions.HuntersMark,
                                                                                                         DatabaseHelper.SpellDefinitions.Jump,
@@ -417,6 +418,44 @@ namespace SolastaBardClass
 
         static void createNaturalFocus()
         {
+            var forest_feature = Helpers.CopyFeatureBuilder<FeatureDefinitionMovementAffinity>.createFeatureCopy("BardNatureSubclassNaturalFocusForestFeature",
+                                                                                                                 "",
+                                                                                                                 Common.common_no_title,
+                                                                                                                 Common.common_no_title,
+                                                                                                                 null,
+                                                                                                                 DatabaseHelper.FeatureDefinitionMovementAffinitys.MovementAffinityDarkweaverSpiderOnWall,
+                                                                                                                 a =>
+                                                                                                                 {
+                                                                                                                     a.SetExpertClimber(false);
+                                                                                                                 }
+                                                                                                                 );
+
+            var grassland_movement_bonus_feature = Helpers.CopyFeatureBuilder<FeatureDefinitionMovementAffinity>.createFeatureCopy("BardNatureSubclassNaturalFocusGrasslandBonus",
+                                                                                                                                   "",
+                                                                                                                                   "",
+                                                                                                                                   "",
+                                                                                                                                   null,
+                                                                                                                                   DatabaseHelper.FeatureDefinitionMovementAffinitys.MovementAffinityLongstrider,
+                                                                                                                                   a =>
+                                                                                                                                   {
+                                                                                                                                       a.baseSpeedAdditiveModifier = 1;
+                                                                                                                                   }
+                                                                                                                                   );
+                                      
+            var grassland_feature = Helpers.FeatureBuilder<NewFeatureDefinitions.MovementBonusWithRestrictions>.createFeature("BardNatureSubclassNaturalFocusGrasslandEffect",
+                                                                                                                      "",
+                                                                                                                      Common.common_no_title,
+                                                                                                                      Common.common_no_title,
+                                                                                                                      null,
+                                                                                                                      a =>
+                                                                                                                      {
+                                                                                                                          a.restrictions = new List<NewFeatureDefinitions.IRestriction>()
+                                                                                                                          {
+                                                                                                                              new NewFeatureDefinitions.ArmorTypeRestriction(DatabaseHelper.ArmorCategoryDefinitions.HeavyArmorCategory, inverted: true)
+                                                                                                                          };
+                                                                                                                          a.modifiers = new List<FeatureDefinition> { grassland_movement_bonus_feature };
+                                                                                                                      }
+                                                                                                                      );
             var bonus_spells = Helpers.FeatureBuilder<NewFeatureDefinitions.FeatureDefinitionExtraSpellsKnown>.createFeature("BardNatureSubclassNaturalFocusBonusSpells",
                                                                                                                              "",
                                                                                                                              Common.common_no_title,
@@ -429,7 +468,7 @@ namespace SolastaBardClass
                                                                                                                                  b.max_spells = 2;
                                                                                                                              }
                                                                                                                              );
-            //TODO: add Forest and Grassland ?
+            //TODO: add Forest ?
             string title = "Feature/&BardNatureSubclassNaturalFocusTitle";
             string description = "Feature/&BardNatureSubclassNaturalFocusDescription";
             Dictionary<string, (FeatureDefinition feature, SpellDefinition lvl2_spell, SpellDefinition lvl3_spell)> foci
@@ -437,6 +476,8 @@ namespace SolastaBardClass
                             {
                                 {"Arctic", (DatabaseHelper.FeatureDefinitionDamageAffinitys.DamageAffinityColdResistance, DatabaseHelper.SpellDefinitions.HoldPerson, DatabaseHelper.SpellDefinitions.SleetStorm) },
                                 {"Desert", (DatabaseHelper.FeatureDefinitionDamageAffinitys.DamageAffinityFireResistance, DatabaseHelper.SpellDefinitions.ScorchingRay, DatabaseHelper.SpellDefinitions.WindWall) },
+                                {"Forest", (forest_feature, DatabaseHelper.SpellDefinitions.Barkskin, DatabaseHelper.SpellDefinitions.ConjureAnimals) },
+                                {"Grassland", (grassland_feature, DatabaseHelper.SpellDefinitions.PassWithoutTrace, DatabaseHelper.SpellDefinitions.WindWall) },
                                 {"Mountain", (DatabaseHelper.FeatureDefinitionDamageAffinitys.DamageAffinityLightningResistance, DatabaseHelper.SpellDefinitions.SpiderClimb, DatabaseHelper.SpellDefinitions.Fly) },
                                 {"Swamp", (DatabaseHelper.FeatureDefinitionDamageAffinitys.DamageAffinityPoisonResistance, DatabaseHelper.SpellDefinitions.AcidArrow, DatabaseHelper.SpellDefinitions.StinkingCloud) }
                             };
