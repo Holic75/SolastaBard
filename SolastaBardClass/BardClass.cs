@@ -261,7 +261,8 @@ namespace SolastaBardClass
                                                                                               "Feature/&BardClassSpellcastingDescription",
                                                                                               bard_spelllist,
                                                                                               Helpers.Stats.Charisma,
-                                                                                              DatabaseHelper.FeatureDefinitionCastSpells.CastSpellWizard.KnownCantrips,
+                                                                                              new List<int> { 2,  2,  2,  3,  3,  3, 3, 3, 3, 4,
+                                                                                                              4, 4, 4, 4, 4, 4, 4, 4, 4, 4},
                                                                                               new List<int> { 4,  5,  6,  7,  8,  9, 10, 11, 12, 12,
                                                                                                              13, 13, 14, 14, 15, 15, 16, 16, 16, 16},
                                                                                               DatabaseHelper.FeatureDefinitionCastSpells.CastSpellWizard.SlotsPerLevels
