@@ -181,7 +181,6 @@ namespace SolastaBardClass
             bard_spelllist = Helpers.SpelllistBuilder.create9LevelSpelllist("BardClassSpelllist", "0f3d14a7-f9a1-41ec-a164-f3e0f3800104", "",
                                                                                 new List<SpellDefinition>
                                                                                 {
-                                                                                    DatabaseHelper.SpellDefinitions.AnnoyingBee,
                                                                                     DatabaseHelper.SpellDefinitions.DancingLights,
                                                                                     DatabaseHelper.SpellDefinitions.Dazzle,
                                                                                     DatabaseHelper.SpellDefinitions.Light,
@@ -535,7 +534,10 @@ namespace SolastaBardClass
             string title = "Feature/&BardNatureSubclassBonusCantripTitle";
             string description = "Feature/&BardNatureSubclassBonusCantripDescription";
 
-            var cantrips = new SpellDefinition[] { DatabaseHelper.SpellDefinitions.Guidance, DatabaseHelper.SpellDefinitions.PoisonSpray, DatabaseHelper.SpellDefinitions.Resistance };
+            var cantrips = new SpellDefinition[] { DatabaseHelper.SpellDefinitions.Guidance,
+                                                   DatabaseHelper.SpellDefinitions.PoisonSpray,
+                                                   DatabaseHelper.SpellDefinitions.Resistance,
+                                                   DatabaseHelper.SpellDefinitions.AnnoyingBee };
 
             List<FeatureDefinition> learn_features = new List<FeatureDefinition>();
 
