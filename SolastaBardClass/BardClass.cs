@@ -546,6 +546,7 @@ namespace SolastaBardClass
                                                                                    c.GuiPresentation.Title,
                                                                                    c.GuiPresentation.Description,
                                                                                    c);
+                NewFeatureDefinitions.FeatureData.addFeatureRestrictions(feature, new NewFeatureDefinitions.InverseRestriction(new NewFeatureDefinitions.CanCastSpellRestriction(c, false)));
                 learn_features.Add(feature);
             }
 
