@@ -181,6 +181,7 @@ namespace SolastaBardClass
             bard_spelllist = Helpers.SpelllistBuilder.create9LevelSpelllist("BardClassSpelllist", "0f3d14a7-f9a1-41ec-a164-f3e0f3800104", "",
                                                                                 new List<SpellDefinition>
                                                                                 {
+                                                                                    DatabaseHelper.SpellDefinitions.AnnoyingBee,
                                                                                     DatabaseHelper.SpellDefinitions.DancingLights,
                                                                                     DatabaseHelper.SpellDefinitions.Dazzle,
                                                                                     DatabaseHelper.SpellDefinitions.Light,
@@ -253,6 +254,11 @@ namespace SolastaBardClass
                                                                                     DatabaseHelper.SpellDefinitions.RaiseDead
                                                                                 }
                                                                                 );
+            var vicious_mockery = NewFeatureDefinitions.SpellData.getSpell("ViciousMockerySpell");
+            if (vicious_mockery != null)
+            {
+                Helpers.Misc.addSpellToSpelllist(bard_spelllist, vicious_mockery);
+            }
 
             var bard_spellcasting = Helpers.SpellcastingBuilder.createSpontaneousSpellcasting("BardClassSpellcasting",
                                                                                               "f720edaf-92c4-43e3-8228-c48c0b41b93b",
@@ -536,8 +542,7 @@ namespace SolastaBardClass
 
             var cantrips = new SpellDefinition[] { DatabaseHelper.SpellDefinitions.Guidance,
                                                    DatabaseHelper.SpellDefinitions.PoisonSpray,
-                                                   DatabaseHelper.SpellDefinitions.Resistance,
-                                                   DatabaseHelper.SpellDefinitions.AnnoyingBee };
+                                                   DatabaseHelper.SpellDefinitions.Resistance };
 
             List<FeatureDefinition> learn_features = new List<FeatureDefinition>();
 
@@ -1101,6 +1106,11 @@ namespace SolastaBardClass
                                                                              DatabaseHelper.SpellListDefinitions.SpellListWizardGreenmage
                                                                              );
             spelllist.SpellsByLevel[0].Spells = bard_spelllist.SpellsByLevel[0].Spells; //do not affect cantrips for the time being
+            var hellish_rebuke = NewFeatureDefinitions.SpellData.getSpell("HellishRebukeSpell");
+            if (hellish_rebuke != null)
+            {
+                Helpers.Misc.addSpellToSpelllist(spelllist, hellish_rebuke);
+            }
 
             magical_secrets = Helpers.ExtraSpellSelectionBuilder.createExtraSpellSelection("BardClassMagicalSecrets",
                                                                                             "",

@@ -5,7 +5,7 @@
   "Version": "1.0.5",
   "ManagerVersion": "0.23.4",
   "Requirements": [ "SolastaModApi", "SolastaModHelpers" ],
-  "LoadAfter": [ "SolastaModApi", "SolastaModHelpers" ],
+  "LoadAfter": [ "SolastaModApi", "SolastaModHelpers", "SolastaExtraContent" ],
   "AssemblyName": "SolastaBardClass.dll",
   "EntryMethod": "SolastaBardClass.Main.Load",
   "Repository": "https://github.com/Holic75/SolastaBard",
