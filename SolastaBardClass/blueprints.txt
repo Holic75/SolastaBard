@@ -227,3 +227,4 @@ ForestBardNatureSubclassNaturalFocus	e432ae44-c453-4cea-8894-4ba8bbba94c0
 GrasslandBardNatureSubclassBonusSpells	1729bd4f-7d63-45aa-8f44-ce98ea33a736
 GrasslandBardNatureSubclassNaturalFocus	a66e56f9-c865-4350-bee5-b02a78776b9d
 AnnoyingBeeBardNatureSubclassBonusCantrip	bbbf43fd-4d7b-429b-a3d5-521c22d2311d
+BardNatureSubclassBonusCantripSpelllist	f5a9a341-dde7-4483-9771-58c868c15ad2

@@ -46,7 +46,7 @@ namespace SolastaBardClass
         //colleges: nature ?, ..
 
         static public FeatureDefinitionFeatureSet nature_college_bonus_proficiencies;
-        static public FeatureDefinitionFeatureSet nature_college_extra_cantrip;
+        static public NewFeatureDefinitions.FeatureDefinitionExtraSpellSelection nature_college_extra_cantrip;
         static public FeatureDefinitionFeatureSet natural_focus;
         static public FeatureDefinition environmental_magical_secrets;
 
@@ -474,7 +474,6 @@ namespace SolastaBardClass
                                                                                                                                  b.max_spells = 2;
                                                                                                                              }
                                                                                                                              );
-            //TODO: add Forest ?
             string title = "Feature/&BardNatureSubclassNaturalFocusTitle";
             string description = "Feature/&BardNatureSubclassNaturalFocusDescription";
             Dictionary<string, (FeatureDefinition feature, SpellDefinition lvl2_spell, SpellDefinition lvl3_spell)> foci
@@ -540,9 +539,11 @@ namespace SolastaBardClass
             string title = "Feature/&BardNatureSubclassBonusCantripTitle";
             string description = "Feature/&BardNatureSubclassBonusCantripDescription";
 
-            var cantrips = new SpellDefinition[] { DatabaseHelper.SpellDefinitions.Guidance,
+            var cantrips = new List<SpellDefinition> { DatabaseHelper.SpellDefinitions.Guidance,
                                                    DatabaseHelper.SpellDefinitions.PoisonSpray,
                                                    DatabaseHelper.SpellDefinitions.Resistance };
+
+            var shillelagh = NewFeatureDefinitions.SpellData.getSpell("ShillelaghSpell");
 
             List<FeatureDefinition> learn_features = new List<FeatureDefinition>();
 
@@ -557,15 +558,25 @@ namespace SolastaBardClass
                 learn_features.Add(feature);
             }
 
-            nature_college_extra_cantrip = Helpers.FeatureSetBuilder.createFeatureSet("BardNatureSubclassBonusCantrip",
-                                                                                "",
-                                                                                title,
-                                                                                description,
-                                                                                false,
-                                                                                FeatureDefinitionFeatureSet.FeatureSetMode.Exclusion,
-                                                                                false,
-                                                                                learn_features.ToArray()
-                                                                                );
+            if (shillelagh != null)
+            {
+                cantrips.Add(shillelagh);
+            }
+
+            var spelllist = Helpers.SpelllistBuilder.create9LevelSpelllist("BardNatureSubclassBonusCantripSpelllist",
+                                                                           "",
+                                                                           Common.common_no_title,
+                                                                           cantrips
+                                                                           );
+            nature_college_extra_cantrip = Helpers.ExtraSpellSelectionBuilder.createExtraCantripSelection("BardNatureSubclassBonusCantrip",
+                                                                                                            "",
+                                                                                                            title,
+                                                                                                            description,
+                                                                                                            bard_class,
+                                                                                                            3,
+                                                                                                            1,
+                                                                                                            spelllist
+                                                                                                            );
         }
 
 
