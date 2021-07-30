@@ -260,6 +260,12 @@ namespace SolastaBardClass
                 Helpers.Misc.addSpellToSpelllist(bard_spelllist, vicious_mockery);
             }
 
+            var heat_metal = NewFeatureDefinitions.SpellData.getSpell("HeatMetalSpell");
+            if (heat_metal != null)
+            {
+                Helpers.Misc.addSpellToSpelllist(bard_spelllist, heat_metal);
+            }
+
             var bard_spellcasting = Helpers.SpellcastingBuilder.createSpontaneousSpellcasting("BardClassSpellcasting",
                                                                                               "f720edaf-92c4-43e3-8228-c48c0b41b93b",
                                                                                               "Feature/&BardClassSpellcastingTitle",
