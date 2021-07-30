@@ -331,6 +331,19 @@ namespace SolastaBardClass
             subclassChoicesGuiPresentation.Title = "Subclass/&BardSubclassCollegeTitle";
             subclassChoicesGuiPresentation.Description = "Subclass/&BardSubclassCollegeDescription";
             BardFeatureDefinitionSubclassChoice = this.BuildSubclassChoice(3, "College", false, "SubclassChoiceBardSpecialistArchetypes", subclassChoicesGuiPresentation, BardClassSubclassesGuid);
+
+            var itemlist = new List<ItemDefinition>
+            {
+                DatabaseHelper.ItemDefinitions.WandOfLightningBolts,
+                //DatabaseHelper.ItemDefinitions.StaffOfMetis,              // devs removed class restrictions for HF 1.1.11 so not needed now
+                DatabaseHelper.ItemDefinitions.StaffOfHealing,
+                DatabaseHelper.ItemDefinitions.ArcaneShieldstaff
+            };
+
+            foreach (ItemDefinition item in itemlist)
+            {
+                item.RequiredAttunementClasses.Add(bard_class);
+            };
         }
 
 
