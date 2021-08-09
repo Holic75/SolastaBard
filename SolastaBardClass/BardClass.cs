@@ -197,7 +197,7 @@ namespace SolastaBardClass
                                                                                     DatabaseHelper.SpellDefinitions.Bane,
                                                                                     DatabaseHelper.SpellDefinitions.CharmPerson,
                                                                                     DatabaseHelper.SpellDefinitions.ColorSpray,
-                                                                                    DatabaseHelper.SpellDefinitions.Command,
+                                                                                    //DatabaseHelper.SpellDefinitions.Command,
                                                                                     DatabaseHelper.SpellDefinitions.ComprehendLanguages,
                                                                                     DatabaseHelper.SpellDefinitions.CureWounds,
                                                                                     DatabaseHelper.SpellDefinitions.DetectMagic,
@@ -254,16 +254,16 @@ namespace SolastaBardClass
                                                                                     DatabaseHelper.SpellDefinitions.RaiseDead
                                                                                 }
                                                                                 );
-            var vicious_mockery = NewFeatureDefinitions.SpellData.getSpell("ViciousMockerySpell");
-            if (vicious_mockery != null)
+            var new_spells = new SpellDefinition[]{ NewFeatureDefinitions.SpellData.getSpell("ViciousMockerySpell"),
+                                                    NewFeatureDefinitions.SpellData.getSpell("ThunderStrikeSpell"),
+                                                    NewFeatureDefinitions.SpellData.getSpell("HeatMetalSpell")
+                                                  };
+            foreach (var s in new_spells)
             {
-                Helpers.Misc.addSpellToSpelllist(bard_spelllist, vicious_mockery);
-            }
-
-            var heat_metal = NewFeatureDefinitions.SpellData.getSpell("HeatMetalSpell");
-            if (heat_metal != null)
-            {
-                Helpers.Misc.addSpellToSpelllist(bard_spelllist, heat_metal);
+                if (s != null)
+                {
+                    Helpers.Misc.addSpellToSpelllist(bard_spelllist, s);
+                }
             }
 
             var bard_spellcasting = Helpers.SpellcastingBuilder.createSpontaneousSpellcasting("BardClassSpellcasting",
@@ -559,10 +559,8 @@ namespace SolastaBardClass
             string description = "Feature/&BardNatureSubclassBonusCantripDescription";
 
             var cantrips = new List<SpellDefinition> { DatabaseHelper.SpellDefinitions.Guidance,
-                                                   DatabaseHelper.SpellDefinitions.PoisonSpray,
-                                                   DatabaseHelper.SpellDefinitions.Resistance };
-
-            var shillelagh = NewFeatureDefinitions.SpellData.getSpell("ShillelaghSpell");
+                                                       DatabaseHelper.SpellDefinitions.PoisonSpray,
+                                                       DatabaseHelper.SpellDefinitions.Resistance };
 
             List<FeatureDefinition> learn_features = new List<FeatureDefinition>();
 
@@ -577,9 +575,16 @@ namespace SolastaBardClass
                 learn_features.Add(feature);
             }
 
-            if (shillelagh != null)
+            var new_spells = new SpellDefinition[]{ NewFeatureDefinitions.SpellData.getSpell("ShillelaghSpell"),
+                                                    NewFeatureDefinitions.SpellData.getSpell("AirBlastSpell"),
+                                                    NewFeatureDefinitions.SpellData.getSpell("IceStrikeSpell"),
+                                                  };
+            foreach (var s in new_spells)
             {
-                cantrips.Add(shillelagh);
+                if (s != null)
+                {
+                    cantrips.Add(s);
+                }
             }
 
             var spelllist = Helpers.SpelllistBuilder.create9LevelSpelllist("BardNatureSubclassBonusCantripSpelllist",
