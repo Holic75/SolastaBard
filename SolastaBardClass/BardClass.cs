@@ -1254,11 +1254,11 @@ namespace SolastaBardClass
                                                                                                       inspiration_description_string,
                                                                                                       null,
                                                                                                       DatabaseHelper.ConditionDefinitions.ConditionGuided,
-                                                                                                      new RuleDefinitions.ConditionInterruption[] {RuleDefinitions.ConditionInterruption.AbilityCheck,
+                                                                                                      new RuleDefinitions.ConditionInterruption[] {//RuleDefinitions.ConditionInterruption.AbilityCheck,
                                                                                                                                                RuleDefinitions.ConditionInterruption.Attacks,
                                                                                                                                                RuleDefinitions.ConditionInterruption.SavingThrow },
                                                                                                       inspiration_saves,
-                                                                                                      inspiration_skills,
+                                                                                                      //inspiration_skills,
                                                                                                       inspiration_attack
                                                                                                       );
 
