@@ -153,15 +153,22 @@ namespace SolastaBardClass
             var tools_proficiency = Helpers.ProficiencyBuilder.CreateToolsProficiency("BardToolsProficiency",
                                                                                       "96d8987b-e682-44a6-afdb-763cbe5361ad",
                                                                                       "Feature/&BardToolsProficiencyTitle",
-                                                                                      Helpers.Tools.EnchantingTool, Helpers.Tools.ThievesTool, Helpers.Tools.Lyre
+                                                                                      Helpers.Tools.Lyre
                                                                                       );
-
+            tools_proficiency.guiPresentation.hidden = true;
             var skills = Helpers.PoolBuilder.createSkillProficiency("BardSkillProficiency",
                                                                     "029f6c7e-f1fc-4030-9012-9c698c714f00",
                                                                     "Feature/&BardClassSkillPointPoolTitle",
                                                                     "Feature/&BardClassSkillPointPoolDescription",
                                                                     3,
                                                                     Helpers.Skills.getAllSkills());
+
+            var tools_proficiency2 = Helpers.PoolBuilder.createToolProficiency("BardToolsProficiency2",
+                                                                               "8333d184-c6d2-4429-a5fd-6810e2003833",
+                                                                               "Feature/&BardToolsProficiencyTitle",
+                                                                               "Feature/&BardToolsProficiencyDescription",
+                                                                               1,
+                                                                               Helpers.Tools.EnchantingTool, Helpers.Tools.ThievesTool);
 
             expertise = Helpers.CopyFeatureBuilder<FeatureDefinitionPointPool>.createFeatureCopy("BardExpertise",
                                                                                                  "",
@@ -303,6 +310,7 @@ namespace SolastaBardClass
             Definition.FeatureUnlocks.Add(new FeatureUnlockByLevel(weapon_proficiency, 1));
             Definition.FeatureUnlocks.Add(new FeatureUnlockByLevel(skills, 1));
             Definition.FeatureUnlocks.Add(new FeatureUnlockByLevel(tools_proficiency, 1));
+            Definition.FeatureUnlocks.Add(new FeatureUnlockByLevel(tools_proficiency2, 1));
             Definition.FeatureUnlocks.Add(new FeatureUnlockByLevel(bard_spellcasting, 1));
             Definition.FeatureUnlocks.Add(new FeatureUnlockByLevel(ritual_spellcasting, 1));
             Definition.FeatureUnlocks.Add(new FeatureUnlockByLevel(inspiration_powers[RuleDefinitions.DieType.D6], 1));
@@ -700,6 +708,7 @@ namespace SolastaBardClass
 
         static void createMusicOfTheSpheres()
         {
+            string music_of_the_spheres_condition_title_string = "Rules/&BardVirtueSubclassMusicOfTheSpheresConditionTitle";
             string music_of_the_spheres_title_string = "Feature/&BardVirtueSubclassMusicOfTheSpheresTitle";
             string music_of_the_spheres_description_string = "Feature/&BardVirtueSubclassMusicOfTheSpheresDescription";
 
@@ -756,10 +765,9 @@ namespace SolastaBardClass
 
                 var condition = Helpers.ConditionBuilder.createConditionWithInterruptions("BardVirtueSubclassMusicOfTheSpheresCondition" + dice[i].ToString(),
                                                                                             "",
-                                                                                            Helpers.StringProcessing.concatenateStrings(Common.common_condition_prefix,
-                                                                                                                                        music_of_the_spheres_title_string,
-                                                                                                                                        "Rules/&BardVirtueSubclassMusicOfTheSpheresCondition" + dice[i].ToString()
-                                                                                                                                        ),
+                                                                                            Helpers.StringProcessing.addStringCopy(music_of_the_spheres_condition_title_string,
+                                                                                                                                   "Rules/&BardVirtueSubclassMusicOfTheSpheresCondition" + dice[i].ToString()
+                                                                                                                                   ),
                                                                                             music_of_the_spheres_description_string,
                                                                                             null,
                                                                                             DatabaseHelper.ConditionDefinitions.ConditionDivineFavor,
@@ -807,6 +815,7 @@ namespace SolastaBardClass
                 power.linkedPower = inspiration_powers[dice[i]];
                 power.worksOnMelee = true;
                 power.worksOnRanged = true;
+                power.onlyOnFailure = true;
                 power.SetShortTitleOverride(music_of_the_spheres_title_string);
                 if (previous_power != null)
                 {
@@ -949,6 +958,7 @@ namespace SolastaBardClass
                                                                     Helpers.Stats.Charisma,
                                                                     Helpers.Stats.Charisma
                                                                     );
+                attack_penalty_power.onlyOnSuccess = true;
                 attack_penalty_power.linkedPower = inspiration_powers[dice[i]];
                 attack_penalty_power.worksOnMelee = true;
                 attack_penalty_power.worksOnRanged = true;
@@ -1208,34 +1218,53 @@ namespace SolastaBardClass
 
         static void createInspiration()
         {
+            string inspired_condition_string = "Rules/&BardClassInspiredCondition";
             string inspiration_title_string = "Feature/&BardClassInspirationPowerTitle";
             string inspiration_description_string = "Feature/&BardClassInspirationPowerDescription";
 
+            string inspiration_use_title_string = "Feature/&BardClassInspirationUsePowerTitle";
+            string inspiration_use_description_string = "Feature/&BardClassInspirationUsePowerDescription";
+
+            string use_inspiration_react_description = "Reaction/&UseBardInspirationUsePowerReactDescription";
+            string use_inspiration_saves_description = "Reaction/&UseBardInspirationSavesUsePowerDescription";
+            string use_inspiration_react_title = "Reaction/&CommonUsePowerSpendTitle";
+            string use_inspiration_description = "Reaction/&UseBardInspirationUsePowerDescription";
+            string use_inspiration_title = inspiration_use_title_string;
+
             FeatureDefinitionPower previous_power = null;
+            FeatureDefinitionPower previous_use_power = null;
+            FeatureDefinitionPower previous_use_power_saves = null;
             var dice = inspiration_dice;
             for (int i = 0; i < dice.Length; i++)
             {
-                var inspiration_saves = Helpers.SavingThrowAffinityBuilder.createSavingthrowAffinity("BardClassInspirationSavingthrowBonus" + dice[i].ToString(),
-                                                                                                     "",
-                                                                                                     "",
-                                                                                                     "",
-                                                                                                     null,
-                                                                                                     RuleDefinitions.CharacterSavingThrowAffinity.None,
-                                                                                                     1,
-                                                                                                     dice[i],
-                                                                                                     Helpers.Stats.getAllStats().ToArray()
-                                                                                                     );
+                var eff = new EffectDescription();
+                eff.Copy(DatabaseHelper.FeatureDefinitionPowers.PowerDomainBattleDivineWrath.effectDescription);
+                eff.effectForms.Clear();
+                eff.targetSide = RuleDefinitions.Side.Ally;
+                var use_power_saves = Helpers.GenericPowerBuilder<NewFeatureDefinitions.FeatureDefinitionAddRandomBonusOnFailedSavePower>
+                                                                    .createPower("BardInspirationSavesUsePower" + dice[i].ToString(),
+                                                                                 "",
+                                                                                 inspiration_use_title_string,
+                                                                                 inspiration_use_description_string,
+                                                                                 DatabaseHelper.FeatureDefinitionPowers.PowerDomainBattleDivineWrath.guiPresentation.SpriteReference,
+                                                                                 eff,
+                                                                                 RuleDefinitions.ActivationTime.NoCost,
+                                                                                 1,
+                                                                                 RuleDefinitions.UsesDetermination.Fixed,
+                                                                                 RuleDefinitions.RechargeRate.ShortRest
+                                                                                 );
+                use_power_saves.diceNumber = 1;
+                use_power_saves.dieType = dice[i];
+                use_power_saves.SetShortTitleOverride(inspiration_use_title_string);
 
-                var inspiration_skills = Helpers.AbilityCheckAffinityBuilder.createAbilityCheckAffinity("BardClassInspirationSkillsBonus" + dice[i].ToString(),
-                                                                                                         "",
-                                                                                                         "",
-                                                                                                         "",
-                                                                                                         null,
-                                                                                                         RuleDefinitions.CharacterAbilityCheckAffinity.None,
-                                                                                                         1,
-                                                                                                         dice[i],
-                                                                                                         Helpers.Stats.getAllStats().ToArray()
-                                                                                                         );
+                Helpers.StringProcessing.addStringCopy(inspiration_use_title_string,
+                                                      $"Reaction/&ConsumePowerUse{use_power_saves.name}Title");
+                Helpers.StringProcessing.addStringCopy(use_inspiration_react_title,
+                                                       $"Reaction/&ConsumePowerUse{use_power_saves.name}ReactTitle");
+                Helpers.StringProcessing.addStringCopy(use_inspiration_react_description,
+                                                       $"Reaction/&ConsumePowerUse{use_power_saves.name}ReactDescription");
+                Helpers.StringProcessing.addStringCopy(use_inspiration_saves_description,
+                                                       $"Reaction/&ConsumePowerUse{use_power_saves.name}Description");
 
                 var inspiration_attack = Helpers.AttackBonusBuilder.createAttackBonus("BardClassInspirationAttackBonus" + dice[i].ToString(),
                                                                                                          "",
@@ -1245,24 +1274,101 @@ namespace SolastaBardClass
                                                                                                          1,
                                                                                                          dice[i]
                                                                                                          );
-                var inspiration_condition = Helpers.ConditionBuilder.createConditionWithInterruptions("BardClassInspirationCondition" + dice[i].ToString(),
+
+                var condition_power = Helpers.ConditionBuilder.createConditionWithInterruptions("BardClassInspirationUseConditionPower" + dice[i].ToString(),
+                                                                                            "",
+                                                                                            Helpers.StringProcessing.concatenateStrings(Common.common_condition_prefix,
+                                                                                                                                        inspired_condition_string,
+                                                                                                                                        "Rules/&BardClassInspirationUseCondition" + dice[i].ToString()
+                                                                                                                                        ),
+                                                                                            inspiration_description_string,
+                                                                                            null,
+                                                                                            DatabaseHelper.ConditionDefinitions.ConditionShieldedByFaith,
+                                                                                            new RuleDefinitions.ConditionInterruption[] {RuleDefinitions.ConditionInterruption.Attacks},
+                                                                                            inspiration_attack
+                                                                                            );
+                NewFeatureDefinitions.ConditionsData.no_refresh_conditions.Add(condition_power);
+                condition_power.SetSilentWhenAdded(true);
+                condition_power.SetSilentWhenRemoved(true);
+
+                var effect = new EffectDescription();
+                effect.Copy(DatabaseHelper.SpellDefinitions.DivineFavor.EffectDescription);
+                effect.SetRangeType(RuleDefinitions.RangeType.Self);
+                effect.SetTargetType(RuleDefinitions.TargetType.Self);
+                effect.SetRangeParameter(1);
+                effect.SetTargetParameter(1);
+                effect.SetTargetParameter2(2);
+                effect.DurationParameter = 1;
+                effect.SetTargetSide(RuleDefinitions.Side.Ally);
+                effect.DurationType = RuleDefinitions.DurationType.Round;
+                effect.EffectForms.Clear();
+
+                var effect_form = new EffectForm();
+                effect_form.ConditionForm = new ConditionForm();
+                effect_form.FormType = EffectForm.EffectFormType.Condition;
+                effect_form.ConditionForm.Operation = ConditionForm.ConditionOperation.Add;
+                effect_form.ConditionForm.ConditionDefinition = condition_power;
+                effect.EffectForms.Add(effect_form);
+
+                var use_power = Helpers.GenericPowerBuilder<NewFeatureDefinitions.FeatureDefinitionReactionPowerOnAttackAttempt>
+                                                      .createPower("BardInspirationUsePower" + dice[i].ToString(),
+                                                                    "",
+                                                                    Helpers.StringProcessing.appendToString(inspiration_use_title_string,
+                                                                                                             inspiration_use_title_string + dice[i].ToString(),
+                                                                                                             $" ({dice[i].ToString().ToString().ToLower()})"),
+                                                                    inspiration_use_description_string,
+                                                                    DatabaseHelper.SpellDefinitions.DivineFavor.GuiPresentation.SpriteReference,
+                                                                    effect,
+                                                                    RuleDefinitions.ActivationTime.NoCost,
+                                                                    1,
+                                                                    RuleDefinitions.UsesDetermination.Fixed,
+                                                                    previous_use_power == null ? RuleDefinitions.RechargeRate.LongRest : RuleDefinitions.RechargeRate.ShortRest,
+                                                                    Helpers.Stats.Charisma,
+                                                                    Helpers.Stats.Charisma
+                                                                    );
+                use_power.worksOnMelee = true;
+                use_power.worksOnRanged = true;
+                use_power.onlyOnFailure = true;
+                use_power.worksOnMagic = true;
+                use_power.SetShortTitleOverride(inspiration_use_title_string);
+                var grant_power_feature = Helpers.FeatureBuilder<NewFeatureDefinitions.GrantPowerOnConditionApplication>.createFeature("BardInspirationGrantUsePower" + dice[i].ToString(),
+                                                                                                                                       "",
+                                                                                                                                       Common.common_no_title,
+                                                                                                                                       Common.common_no_title,
+                                                                                                                                       Common.common_no_icon,
+                                                                                                                                       a =>
+                                                                                                                                       {
+                                                                                                                                           a.power = use_power;
+                                                                                                                                           a.removAfterUse = true;
+                                                                                                                                       }
+                                                                                                                                       );
+                var grant_power_feature2 = Helpers.FeatureBuilder<NewFeatureDefinitions.GrantPowerOnConditionApplication>.createFeature("BardInspirationGrantUsePowerSaves" + dice[i].ToString(),
+                                                                                                                       "",
+                                                                                                                       Common.common_no_title,
+                                                                                                                       Common.common_no_title,
+                                                                                                                       Common.common_no_icon,
+                                                                                                                       a =>
+                                                                                                                       {
+                                                                                                                           a.power = use_power_saves;
+                                                                                                                           a.removAfterUse = true;
+                                                                                                                       }
+                                                                                                                       );
+
+                var inspiration_condition = Helpers.ConditionBuilder.createCondition("BardClassInspirationCondition" + dice[i].ToString(),
                                                                                                       "",
-                                                                                                      Helpers.StringProcessing.concatenateStrings(Common.common_condition_prefix,
-                                                                                                                                                  inspiration_title_string,
-                                                                                                                                                  "Rules/&BardClassInspirationCondition" + dice[i].ToString()
-                                                                                                                                                  ),
+                                                                                                      Helpers.StringProcessing.addStringCopy(inspired_condition_string,
+                                                                                                                                             "Rules/&BardClassInspirationCondition" + dice[i].ToString()
+                                                                                                                                            ),
                                                                                                       inspiration_description_string,
                                                                                                       null,
                                                                                                       DatabaseHelper.ConditionDefinitions.ConditionGuided,
-                                                                                                      new RuleDefinitions.ConditionInterruption[] {//RuleDefinitions.ConditionInterruption.AbilityCheck,
-                                                                                                                                               RuleDefinitions.ConditionInterruption.Attacks,
-                                                                                                                                               RuleDefinitions.ConditionInterruption.SavingThrow },
-                                                                                                      inspiration_saves,
-                                                                                                      //inspiration_skills,
-                                                                                                      inspiration_attack
+                                                                                                      grant_power_feature,
+                                                                                                      grant_power_feature2
                                                                                                       );
+                grant_power_feature.condition = inspiration_condition;
+                grant_power_feature2.condition = inspiration_condition;
 
-                var effect = new EffectDescription();
+                effect = new EffectDescription();
                 effect.Copy(DatabaseHelper.SpellDefinitions.Guidance.EffectDescription);
                 effect.SetRangeType(RuleDefinitions.RangeType.Distance);
                 effect.SetRangeParameter(12);
@@ -1271,7 +1377,7 @@ namespace SolastaBardClass
                 effect.EffectForms.Clear();
                 effect.SetTargetFilteringTag((RuleDefinitions.TargetFilteringTag)ExtendedEnums.ExtraTargetFilteringTag.NonCaster);
 
-                var effect_form = new EffectForm();
+                effect_form = new EffectForm();
                 effect_form.ConditionForm = new ConditionForm();
                 effect_form.FormType = EffectForm.EffectFormType.Condition;
                 effect_form.ConditionForm.Operation = ConditionForm.ConditionOperation.Add;
@@ -1300,8 +1406,22 @@ namespace SolastaBardClass
                 {
                     inspiration_power.SetOverriddenPower(previous_power);
                 }
+                if (previous_use_power != null)
+                {
+                    use_power.SetOverriddenPower(previous_use_power);
+                }
+                if (previous_use_power_saves != null)
+                {
+                    use_power_saves.SetOverriddenPower(previous_use_power_saves);
+                }
                 previous_power = inspiration_power;
+                previous_use_power = use_power;
+                previous_use_power_saves = use_power_saves;
+
                 inspiration_powers.Add(dice[i], inspiration_power);
+
+                Helpers.StringProcessing.addPowerReactStrings(use_power, use_inspiration_title, use_inspiration_description,
+                                                                    use_inspiration_react_title, use_inspiration_react_description);
             }
 
             string font_of_inspiration_title_string = "Feature/&BardClassFontOfInspirationFeatureTitle";
