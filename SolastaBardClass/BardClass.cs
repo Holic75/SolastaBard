@@ -42,9 +42,6 @@ namespace SolastaBardClass
             = new Dictionary<RuleDefinitions.DieType, NewFeatureDefinitions.FeatureDefinitionReactionPowerOnAttackAttempt>();
         static public FeatureDefinitionAttributeModifier virtue_college_extra_attack;
 
-        //TODO
-        //colleges: nature ?, ..
-
         static public FeatureDefinitionFeatureSet nature_college_bonus_proficiencies;
         static public NewFeatureDefinitions.FeatureDefinitionExtraSpellSelection nature_college_extra_cantrip;
         static public FeatureDefinitionFeatureSet natural_focus;
@@ -1256,6 +1253,7 @@ namespace SolastaBardClass
                 use_power_saves.diceNumber = 1;
                 use_power_saves.dieType = dice[i];
                 use_power_saves.SetShortTitleOverride(inspiration_use_title_string);
+                NewFeatureDefinitions.Polymorph.transferablePowers.Add(use_power_saves);
 
                 Helpers.StringProcessing.addStringCopy(inspiration_use_title_string,
                                                       $"Reaction/&ConsumePowerUse{use_power_saves.name}Title");
@@ -1326,6 +1324,7 @@ namespace SolastaBardClass
                                                                     Helpers.Stats.Charisma,
                                                                     Helpers.Stats.Charisma
                                                                     );
+                NewFeatureDefinitions.Polymorph.transferablePowers.Add(use_power);
                 use_power.worksOnMelee = true;
                 use_power.worksOnRanged = true;
                 use_power.onlyOnFailure = true;
