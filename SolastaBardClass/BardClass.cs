@@ -583,6 +583,7 @@ namespace SolastaBardClass
             var new_spells = new SpellDefinition[]{ NewFeatureDefinitions.SpellData.getSpell("ShillelaghSpell"),
                                                     NewFeatureDefinitions.SpellData.getSpell("AirBlastSpell"),
                                                     NewFeatureDefinitions.SpellData.getSpell("IceStrikeSpell"),
+                                                    NewFeatureDefinitions.SpellData.getSpell("AcidClawsSpell"),
                                                   };
             foreach (var s in new_spells)
             {
