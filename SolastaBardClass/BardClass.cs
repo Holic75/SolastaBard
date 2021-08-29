@@ -572,7 +572,7 @@ namespace SolastaBardClass
 
             List<FeatureDefinition> learn_features = new List<FeatureDefinition>();
 
-            foreach (var c in cantrips)
+            /*foreach (var c in cantrips)
             {
                 var feature = Helpers.BonusCantripsBuilder.createLearnBonusCantrip(c.name + "BardNatureSubclassBonusCantrip",
                                                                                    "",
@@ -581,7 +581,7 @@ namespace SolastaBardClass
                                                                                    c);
                 NewFeatureDefinitions.FeatureData.addFeatureRestrictions(feature, new NewFeatureDefinitions.InverseRestriction(new NewFeatureDefinitions.CanCastSpellRestriction(c, false)));
                 learn_features.Add(feature);
-            }
+            }*/
 
             var new_spells = new SpellDefinition[]{ NewFeatureDefinitions.SpellData.getSpell("ShillelaghSpell"),
                                                     NewFeatureDefinitions.SpellData.getSpell("AirBlastSpell"),
