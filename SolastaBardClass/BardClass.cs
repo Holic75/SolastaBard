@@ -563,9 +563,12 @@ namespace SolastaBardClass
             string title = "Feature/&BardNatureSubclassBonusCantripTitle";
             string description = "Feature/&BardNatureSubclassBonusCantripDescription";
 
-            var cantrips = new List<SpellDefinition> { DatabaseHelper.SpellDefinitions.Guidance,
-                                                       DatabaseHelper.SpellDefinitions.PoisonSpray,
-                                                       DatabaseHelper.SpellDefinitions.Resistance };
+            var cantrips = new List<SpellDefinition> {  DatabaseHelper.SpellDefinitions.AnnoyingBee,
+                                                        DatabaseHelper.SpellDefinitions.Guidance,
+                                                        DatabaseHelper.SpellDefinitions.PoisonSpray,
+                                                        DatabaseHelper.SpellDefinitions.Resistance,
+                                                        DatabaseHelper.SpellDefinitions.Shine,
+                                                        DatabaseHelper.SpellDefinitions.Sparkle };
 
             List<FeatureDefinition> learn_features = new List<FeatureDefinition>();
 
