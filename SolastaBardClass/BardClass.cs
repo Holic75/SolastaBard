@@ -1069,7 +1069,7 @@ namespace SolastaBardClass
         {
             string countercharm_title_string = "Feature/&BardClassCountercharmPowerTitle";
             string countercharm_description_string = "Feature/&BardClassCountercharmPowerDescription";
-            string countercharm_effect_description_string = "Feature/&BardClassCountercharmEffectDescription";
+            string countercharm_effect_description_string = "Feature/&BardClassCountercharmPowerEffectDescription";
 
             var affinity_frightened = Helpers.ConditionAffinityBuilder.createConditionAffinity("BardClassCountercharmFrightenedAffinity",
                                                                                             "",
@@ -1152,6 +1152,17 @@ namespace SolastaBardClass
                                                                              DatabaseHelper.SpellListDefinitions.SpellListWizardGreenmage
                                                                              );
             spelllist.SpellsByLevel[0].Spells = bard_spelllist.SpellsByLevel[0].Spells; //do not affect cantrips for the time being
+            var new_spells = new SpellDefinition[]{ NewFeatureDefinitions.SpellData.getSpell("HellishRebukeSpell"),
+                                                    NewFeatureDefinitions.SpellData.getSpell("VulnerabilityHexSpell")
+                                                  };
+            foreach (var s in new_spells)
+            {
+                if (s != null)
+                {
+                    Helpers.Misc.addSpellToSpelllist(bard_spelllist, s);
+                }
+            }
+
             var hellish_rebuke = NewFeatureDefinitions.SpellData.getSpell("HellishRebukeSpell");
             if (hellish_rebuke != null)
             {
@@ -1360,9 +1371,9 @@ namespace SolastaBardClass
                 var inspiration_condition = Helpers.ConditionBuilder.createCondition("BardClassInspirationCondition" + dice[i].ToString(),
                                                                                                       "",
                                                                                                       Helpers.StringProcessing.addStringCopy(inspired_condition_string,
-                                                                                                                                             "Rules/&BardClassInspirationCondition" + dice[i].ToString()
+                                                                                                                                             "Rules/&BardClassInspiredCondition" + dice[i].ToString()
                                                                                                                                             ),
-                                                                                                      inspiration_description_string,
+                                                                                                      "Rules/&BardClassInspiredConditionDescription",
                                                                                                       null,
                                                                                                       DatabaseHelper.ConditionDefinitions.ConditionGuided,
                                                                                                       grant_power_feature,
