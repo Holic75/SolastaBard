@@ -31,7 +31,7 @@ Feature/&BardClassSongOfRestDescription	You can use soothing music or oration to
 Feature/&BardClassMagicalSecretsTitle	Magical Secrets
 Feature/&BardClassMagicalSecretsDescription	You have plundered magical knowledge from a wide spectrum of disciplines. Choose two spells from any class, including this one. A spell you choose must be of a level you can cast.\nThe chosen spells count as bard spells for you and are included in the number in the Spells Known column of the Bard table.\nYou learn two additional spells from any class at 14th level and again at 18th level.
 Feature/&BardClassCountercharmPowerTitle	Countercharm
-Feature/&BardClassCountercharmPowerDescriptionYou gain the ability to use musical notes or words of power to disrupt mind-influencing effects. As an action, you can start a performance that lasts until the end of your next turn. During that time, you and any friendly creatures within 30 feet of you have advantage on saving throws against being frightened or charmed.
+Feature/&BardClassCountercharmPowerDescription	You gain the ability to use musical notes or words of power to disrupt mind-influencing effects. As an action, you can start a performance that lasts until the end of your next turn. During that time, you and any friendly creatures within 30 feet of you have advantage on saving throws against being frightened or charmed.
 Feature/&BardClassCountercharmPowerEffectDescription	You have advantage on saving throws against being frightened or charmed.
 Stage/&SubclassSelectionStageCollegeHeader	Bard Colleges
 Stage/&SubclassSelectionStageCollegeTitle	Bard College

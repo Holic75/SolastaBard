@@ -1289,17 +1289,14 @@ namespace SolastaBardClass
                                                                                                          );
 
                 var condition_power = Helpers.ConditionBuilder.createConditionWithInterruptions("BardClassInspirationUseConditionPower" + dice[i].ToString(),
-                                                                                            "",
-                                                                                            Helpers.StringProcessing.concatenateStrings(Common.common_condition_prefix,
-                                                                                                                                        inspired_condition_string,
-                                                                                                                                        "Rules/&BardClassInspirationUseCondition" + dice[i].ToString()
-                                                                                                                                        ),
-                                                                                            inspiration_description_string,
-                                                                                            null,
-                                                                                            DatabaseHelper.ConditionDefinitions.ConditionShieldedByFaith,
-                                                                                            new RuleDefinitions.ConditionInterruption[] {RuleDefinitions.ConditionInterruption.Attacks},
-                                                                                            inspiration_attack
-                                                                                            );
+                                                                                                "",
+                                                                                                inspired_condition_string,
+                                                                                                inspiration_description_string,
+                                                                                                null,
+                                                                                                DatabaseHelper.ConditionDefinitions.ConditionShieldedByFaith,
+                                                                                                new RuleDefinitions.ConditionInterruption[] {RuleDefinitions.ConditionInterruption.Attacks},
+                                                                                                inspiration_attack
+                                                                                                );
                 NewFeatureDefinitions.ConditionsData.no_refresh_conditions.Add(condition_power);
                 condition_power.SetSilentWhenAdded(true);
                 condition_power.SetSilentWhenRemoved(true);
@@ -1369,16 +1366,14 @@ namespace SolastaBardClass
                                                                                                                        );
 
                 var inspiration_condition = Helpers.ConditionBuilder.createCondition("BardClassInspirationCondition" + dice[i].ToString(),
-                                                                                                      "",
-                                                                                                      Helpers.StringProcessing.addStringCopy(inspired_condition_string,
-                                                                                                                                             "Rules/&BardClassInspiredCondition" + dice[i].ToString()
-                                                                                                                                            ),
-                                                                                                      "Rules/&BardClassInspiredConditionDescription",
-                                                                                                      null,
-                                                                                                      DatabaseHelper.ConditionDefinitions.ConditionGuided,
-                                                                                                      grant_power_feature,
-                                                                                                      grant_power_feature2
-                                                                                                      );
+                                                                                        "",
+                                                                                        inspired_condition_string,
+                                                                                        "Rules/&BardClassInspiredConditionDescription",
+                                                                                        null,
+                                                                                        DatabaseHelper.ConditionDefinitions.ConditionGuided,
+                                                                                        grant_power_feature,
+                                                                                        grant_power_feature2
+                                                                                        );
                 grant_power_feature.condition = inspiration_condition;
                 grant_power_feature2.condition = inspiration_condition;
 
