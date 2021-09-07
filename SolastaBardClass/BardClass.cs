@@ -342,7 +342,8 @@ namespace SolastaBardClass
                 DatabaseHelper.ItemDefinitions.WandOfLightningBolts,
                 //DatabaseHelper.ItemDefinitions.StaffOfMetis,              // devs removed class restrictions for HF 1.1.11 so not needed now
                 DatabaseHelper.ItemDefinitions.StaffOfHealing,
-                DatabaseHelper.ItemDefinitions.ArcaneShieldstaff
+                DatabaseHelper.ItemDefinitions.ArcaneShieldstaff,
+                DatabaseHelper.ItemDefinitions.WizardClothes_Alternate
             };
 
             foreach (ItemDefinition item in itemlist)
