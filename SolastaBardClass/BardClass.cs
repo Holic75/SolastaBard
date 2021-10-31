@@ -226,6 +226,7 @@ namespace SolastaBardClass
                                                                                     DatabaseHelper.SpellDefinitions.Knock,
                                                                                     DatabaseHelper.SpellDefinitions.LesserRestoration,
                                                                                     //DatabaseHelper.SpellDefinitions.MirrorImage,
+                                                                                    DatabaseHelper.SpellDefinitions.HeatMetal,
                                                                                     DatabaseHelper.SpellDefinitions.SeeInvisibility,
                                                                                     DatabaseHelper.SpellDefinitions.Shatter,
                                                                                     DatabaseHelper.SpellDefinitions.Silence
@@ -256,11 +257,25 @@ namespace SolastaBardClass
                                                                                     DatabaseHelper.SpellDefinitions.HoldMonster,
                                                                                     DatabaseHelper.SpellDefinitions.MassCureWounds,
                                                                                     DatabaseHelper.SpellDefinitions.RaiseDead
+                                                                                },
+                                                                                new List<SpellDefinition>
+                                                                                {
+                                                                                    DatabaseHelper.SpellDefinitions.DominatePerson,
+                                                                                    DatabaseHelper.SpellDefinitions.GreaterRestoration,
+                                                                                    DatabaseHelper.SpellDefinitions.HoldMonster,
+                                                                                    DatabaseHelper.SpellDefinitions.MassCureWounds,
+                                                                                    DatabaseHelper.SpellDefinitions.RaiseDead
+                                                                                },
+                                                                                new List<SpellDefinition>
+                                                                                {
+                                                                                    DatabaseHelper.SpellDefinitions.Eyebite,
+                                                                                    DatabaseHelper.SpellDefinitions.HeroesFeast,
+                                                                                    DatabaseHelper.SpellDefinitions.TrueSeeing,
                                                                                 }
                                                                                 );
             var new_spells = new SpellDefinition[]{ NewFeatureDefinitions.SpellData.getSpell("ViciousMockerySpell"),
                                                     NewFeatureDefinitions.SpellData.getSpell("ThunderStrikeSpell"),
-                                                    NewFeatureDefinitions.SpellData.getSpell("HeatMetalSpell")
+                                                    //NewFeatureDefinitions.SpellData.getSpell("HeatMetalSpell")
                                                   };
             foreach (var s in new_spells)
             {
@@ -401,8 +416,9 @@ namespace SolastaBardClass
                                                                                                         DatabaseHelper.SpellDefinitions.FindTraps,
                                                                                                         DatabaseHelper.SpellDefinitions.PassWithoutTrace,
                                                                                                         DatabaseHelper.SpellDefinitions.ProtectionFromPoison,
-                                                                                                        //DatabaseHelper.SpellDefinitions.FlameBlade,
+                                                                                                        DatabaseHelper.SpellDefinitions.FlameBlade,
                                                                                                         DatabaseHelper.SpellDefinitions.FlamingSphere,
+                                                                                                        DatabaseHelper.SpellDefinitions.SpikeGrowth,
                                                                                         },
                                                                                         new List<SpellDefinition>
                                                                                         {
@@ -412,6 +428,7 @@ namespace SolastaBardClass
                                                                                                         DatabaseHelper.SpellDefinitions.ProtectionFromEnergy,
                                                                                                         DatabaseHelper.SpellDefinitions.SleetStorm,
                                                                                                         DatabaseHelper.SpellDefinitions.WindWall,
+                                                                                                        DatabaseHelper.SpellDefinitions.CallLightning,
                                                                                         },
                                                                                         new List<SpellDefinition>
                                                                                         {
@@ -429,15 +446,21 @@ namespace SolastaBardClass
                                                                                                         DatabaseHelper.SpellDefinitions.ConeOfCold,
                                                                                                         DatabaseHelper.SpellDefinitions.Contagion,
                                                                                                         DatabaseHelper.SpellDefinitions.InsectPlague,
+                                                                                        },
+                                                                                        new List<SpellDefinition>
+                                                                                        {
+                                                                                                        DatabaseHelper.SpellDefinitions.ConjureFey,
+                                                                                                        DatabaseHelper.SpellDefinitions.Heal,
+                                                                                                        DatabaseHelper.SpellDefinitions.Sunbeam,
+                                                                                                        DatabaseHelper.SpellDefinitions.WallOfThorns,
                                                                                         }
                                                                                         );
 
             var new_spells = new SpellDefinition[]{ 
                                         NewFeatureDefinitions.SpellData.getSpell("ConjureSpiritAnimalSpell"),
-                                        NewFeatureDefinitions.SpellData.getSpell("FlameBladeSpell"),
-                                        NewFeatureDefinitions.SpellData.getSpell("HeatMetalSpell"),
-                                        NewFeatureDefinitions.SpellData.getSpell("SpikeGrowthSpell"),
-                                        NewFeatureDefinitions.SpellData.getSpell("CallLightningSpell"),
+                                        //NewFeatureDefinitions.SpellData.getSpell("FlameBladeSpell"),
+                                        //NewFeatureDefinitions.SpellData.getSpell("SpikeGrowthSpell"),
+                                        //NewFeatureDefinitions.SpellData.getSpell("CallLightningSpell"),
                                         NewFeatureDefinitions.SpellData.getSpell("EarthTremorSpell"),
                                         NewFeatureDefinitions.SpellData.getSpell("WinterBlastSpell"),
                                         };
@@ -1002,7 +1025,7 @@ namespace SolastaBardClass
                                                                                                                      {
                                                                                                                          m.diceType = dice[i];
                                                                                                                          m.numDice = -1;
-                                                                                                                         m.contexts = new List<RuleDefinitions.RollContext>() { RuleDefinitions.RollContext.DamageValueRoll };
+                                                                                                                         m.contexts = new List<RuleDefinitions.RollContext>() { RuleDefinitions.RollContext.AttackDamageValueRoll, RuleDefinitions.RollContext.MagicDamageValueRoll };
                                                                                                                      }
                                                                                                                      );
 
@@ -1287,7 +1310,6 @@ namespace SolastaBardClass
                 use_power_saves.diceNumber = 1;
                 use_power_saves.dieType = dice[i];
                 use_power_saves.SetShortTitleOverride(inspiration_use_title_string);
-                NewFeatureDefinitions.Polymorph.transferablePowers.Add(use_power_saves);
 
                 Helpers.StringProcessing.addStringCopy(inspiration_use_title_string,
                                                       $"Reaction/&ConsumePowerUse{use_power_saves.name}Title");
@@ -1355,7 +1377,6 @@ namespace SolastaBardClass
                                                                     Helpers.Stats.Charisma,
                                                                     Helpers.Stats.Charisma
                                                                     );
-                NewFeatureDefinitions.Polymorph.transferablePowers.Add(use_power);
                 use_power.worksOnMelee = true;
                 use_power.worksOnRanged = true;
                 use_power.onlyOnFailure = true;
