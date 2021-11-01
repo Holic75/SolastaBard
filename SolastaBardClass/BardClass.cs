@@ -299,6 +299,7 @@ namespace SolastaBardClass
                                                                                               );
             bard_spellcasting.replacedSpells = new List<int> {0, 1, 1, 1, 1, 1, 1, 1, 1, 1,
                                                               1, 1, 1, 1, 1, 1, 1, 1, 1, 1};
+            bard_spellcasting.focusType = EquipmentDefinitions.FocusType.Arcane;
             jack_of_all_trades = Helpers.AbilityCheckAffinityBuilder.createAbilityCheckAffinity("BardClassJackOfAllTradesFeature",
                                                                                                  "",
                                                                                                 "Feature/&BardClassJackOfAllTradesFeatureTitle",
@@ -610,7 +611,10 @@ namespace SolastaBardClass
                                                         DatabaseHelper.SpellDefinitions.PoisonSpray,
                                                         DatabaseHelper.SpellDefinitions.Resistance,
                                                         DatabaseHelper.SpellDefinitions.Shine,
-                                                        DatabaseHelper.SpellDefinitions.Sparkle };
+                                                        DatabaseHelper.SpellDefinitions.Sparkle,
+                                                        DatabaseHelper.SpellDefinitions.Shillelagh,
+                                                        DatabaseHelper.SpellDefinitions.ProduceFlame,
+                                                        DatabaseHelper.SpellDefinitions.VenomousSpike};
 
             List<FeatureDefinition> learn_features = new List<FeatureDefinition>();
 
@@ -625,8 +629,7 @@ namespace SolastaBardClass
                 learn_features.Add(feature);
             }*/
 
-            var new_spells = new SpellDefinition[]{ NewFeatureDefinitions.SpellData.getSpell("ShillelaghSpell"),
-                                                    NewFeatureDefinitions.SpellData.getSpell("AirBlastSpell"),
+            var new_spells = new SpellDefinition[]{ NewFeatureDefinitions.SpellData.getSpell("AirBlastSpell"),
                                                     NewFeatureDefinitions.SpellData.getSpell("IceStrikeSpell"),
                                                     NewFeatureDefinitions.SpellData.getSpell("AcidClawsSpell"),
                                                   };
