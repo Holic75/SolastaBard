@@ -260,22 +260,16 @@ namespace SolastaBardClass
                                                                                 },
                                                                                 new List<SpellDefinition>
                                                                                 {
-                                                                                    DatabaseHelper.SpellDefinitions.DominatePerson,
-                                                                                    DatabaseHelper.SpellDefinitions.GreaterRestoration,
-                                                                                    DatabaseHelper.SpellDefinitions.HoldMonster,
-                                                                                    DatabaseHelper.SpellDefinitions.MassCureWounds,
-                                                                                    DatabaseHelper.SpellDefinitions.RaiseDead
-                                                                                },
-                                                                                new List<SpellDefinition>
-                                                                                {
                                                                                     DatabaseHelper.SpellDefinitions.Eyebite,
                                                                                     DatabaseHelper.SpellDefinitions.HeroesFeast,
                                                                                     DatabaseHelper.SpellDefinitions.TrueSeeing,
+                                                                                },
+                                                                                new List<SpellDefinition>{
+                                                                                    DatabaseHelper.SpellDefinitions.Resurrection,
                                                                                 }
                                                                                 );
             var new_spells = new SpellDefinition[]{ NewFeatureDefinitions.SpellData.getSpell("ViciousMockerySpell"),
                                                     NewFeatureDefinitions.SpellData.getSpell("ThunderStrikeSpell"),
-                                                    //NewFeatureDefinitions.SpellData.getSpell("HeatMetalSpell")
                                                   };
             foreach (var s in new_spells)
             {
@@ -1194,7 +1188,7 @@ namespace SolastaBardClass
                                                                              DatabaseHelper.SpellListDefinitions.SpellListCleric,
                                                                              DatabaseHelper.SpellListDefinitions.SpellListPaladin,
                                                                              DatabaseHelper.SpellListDefinitions.SpellListRanger,
-                                                                             DatabaseHelper.SpellListDefinitions.SpellListWizardGreenmage
+                                                                             DatabaseHelper.SpellListDefinitions.SpellListDruid
                                                                              );
             spelllist.SpellsByLevel[0].Spells = bard_spelllist.SpellsByLevel[0].Spells; //do not affect cantrips for the time being
             var new_spells = new SpellDefinition[]{ NewFeatureDefinitions.SpellData.getSpell("HellishRebukeSpell"),
